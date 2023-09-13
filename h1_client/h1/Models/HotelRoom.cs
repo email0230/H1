@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace h1
+namespace h1.Models
 {
     class HotelRoom
     {
@@ -13,7 +13,7 @@ namespace h1
 
         public HotelRoom() //give each room a unique ID number
         {
-            this.Id = Id_increment;
+            Id = Id_increment;
             Id_increment++;
         }
     }

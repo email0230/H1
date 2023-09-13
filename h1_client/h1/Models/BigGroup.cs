@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace h1
+namespace h1.Models
 {
     class BigGroup
     {

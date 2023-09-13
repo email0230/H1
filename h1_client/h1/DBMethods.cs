@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml.Linq;
+using h1.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -15,7 +17,7 @@ namespace h1
         static MongoClient client = new MongoClient(); 
         static IMongoDatabase database = client.GetDatabase("h1_db");
         static IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>("testCollection");
-        static IMongoCollection<Guest> GuestCollection = database.GetCollection<Guest>("testCollection");
+        static IMongoCollection<Guest> GuestCollection = database.GetCollection<Guest>("GuestCollection");
         #endregion //add public access mods if problems arise
 
         static void InsertAGuy()
@@ -38,28 +40,37 @@ namespace h1
 
             collection.InsertOne(document);
         }
-        public static void Func()
+        public static void Insert(string name, DateTime? arrivalDate, DateTime? departureDate, string roomNumber)
         {
-            //MongoClient client = new MongoClient();
-            //IMongoDatabase database = client.GetDatabase("h1_db");
-            //IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>("testCollection");
+			var formData = new FormData
+			{
+				Name = name,
+				ArrivalDate = arrivalDate.Value,
+				DepartureDate = departureDate.Value,
+				RoomNumber = roomNumber
+			};
 
+			var collection = database.GetCollection<FormData>("GuestCollection"); // Replace with your collection name
+			collection.InsertOne(formData);
+		}
+
+        public static void DebugMethod()
+        {
             //InsertAGuy();
-            
             foreach (Window window in Application.Current.Windows)
             {
                 if (window.GetType() == typeof(MainWindow))
                 {
-                    FilterDefinition<Guest> filter = Builders<Guest>.Filter.Eq("AssignedRoom", roomid);
-                    List<Guest> outputCollection = GuestCollection.Find(filter).ToList();
-                    foreach (var item in outputCollection)
-                    {
-                        //do stuff haha
-                    }
+                    //FilterDefinition<Guest> filter = Builders<Guest>.Filter.Eq("AssignedRoom", roomid);
+                    //List<Guest> outputCollection = GuestCollection.Find(filter).ToList();
+                    //foreach (var item in outputCollection)
+                    //{
+                    //    //do stuff haha
+                    //}
 
 
                     //((MainWindow)window).test_textblock.ItemsSource = outputCollection;
-                    ((MainWindow)window).test_textblock.Text = collection.ToString();
+                    //((MainWindow)window).test_textblock.Text = collection.ToString();
                 }
             }
             

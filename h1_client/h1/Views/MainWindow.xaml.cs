@@ -27,7 +27,18 @@ namespace h1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            DBMethods.Func();
+            DBMethods.DebugMethod();
         }
-    }
+
+		private void Button_Click_1(object sender, RoutedEventArgs e)
+		{
+			//open new window here, remember to dispose and close it afterwards
+			
+            // Create a new window instance
+			AddUserWindow newWindow = new AddUserWindow();
+
+			// Show the new window
+			newWindow.Show();
+		}
+	}
 }

@@ -41,7 +41,7 @@ namespace h1
 				return false;
 			}
 
-			// You can add additional room number validation here if needed (asside, will need to compare this to an array of available rooms at some point)
+			// You can add additional room number validation here if needed (asssssside, will need to compare this to an array of available rooms at some point)
 
 			return true; // All validation checks pass
 		}

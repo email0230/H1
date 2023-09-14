@@ -1,4 +1,6 @@
-﻿using System;
+﻿using h1.Models;
+using h1.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,10 +37,17 @@ namespace h1
 			//open new window here, remember to dispose and close it afterwards
 			
             // Create a new window instance
-			AddUserWindow newWindow = new AddUserWindow();
+			AddUserWindow addUserWindow = new AddUserWindow();
 
 			// Show the new window
-			newWindow.Show();
+			addUserWindow.Show();
+		}
+
+		private void HotelDesignerButton_Click(object sender, RoutedEventArgs e)
+		{
+            HotelDesignerWindow hotelDesigner = new HotelDesignerWindow();
+            hotelDesigner.Show();
+            
 		}
 	}
 }

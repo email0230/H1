@@ -26,11 +26,6 @@ namespace h1
 			InitializeComponent();
 		}
 
-		//private void Button_Click(object sender, RoutedEventArgs e)
-		//{
-  //          Close();
-		//}
-
 		private void Submit_Click(object sender, RoutedEventArgs e)
 		{
 			// Extract values from the form controls
@@ -50,9 +45,6 @@ namespace h1
 				DBMethods.Insert(name, arrivalDate, departureDate, roomNumber);
 				Close();
 			}
-
-			
-			//MessageBox.Show("Feature in Development", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
 		}
 	}
 }

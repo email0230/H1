@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:h1"
         mc:Ignorable="d"
-        Title="AddUserWindow" Height="450" Width="800">
+        Title="AddUserWindow" Height="260" Width="400">
     <Grid>
         <Label Content="Name:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"/>
         <TextBox Name="txtName" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,10,0,0" Width="250"/>

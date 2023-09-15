@@ -5,11 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:h1"
         mc:Ignorable="d"
-        Title="h1_main" Height="450" Width="800">
+        Title="Hotel Management Application" Height="450" Width="800" Background="#F2F2F2">
     <Grid>
-        <TextBlock x:Name="test_textblock" x:FieldModifier="public" HorizontalAlignment="Center" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Center" Height="114" Width="352"/>
-        <Button Content="debug button" HorizontalAlignment="Center" Margin="0,279,0,0" VerticalAlignment="Top" Height="45" Width="90" Click="Button_Click"/>
-        <Button Content="Add one" Margin="0,374,705,0" Click="Button_Click_1" HorizontalAlignment="Right" Width="55" Height="20" VerticalAlignment="Top"/>
-        <Button Content="Hotel designer" HorizontalAlignment="Left" Height="30" Margin="12,324,0,0" VerticalAlignment="Top" Width="110" Click="HotelDesignerButton_Click"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Background="#007ACC" Grid.Row="0" VerticalAlignment="Center">
+            <TextBlock Text="Hotel Management" HorizontalAlignment="Center" Foreground="White" FontSize="28" FontWeight="Bold" Margin="10"/>
+        </StackPanel>
+
+        <!-- Main Content -->
+        <StackPanel Grid.Row="1" Margin="20">
+            <Button Content="Add One" HorizontalAlignment="Center" Width="100" Height="30" Background="#007ACC" Foreground="White" Margin="0,0,0,10" Click="Button_Click_1"/>
+            <Button Content="Hotel Designer" HorizontalAlignment="Center" Width="150" Height="30" Background="#007ACC" Foreground="White" Click="HotelDesignerButton_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
+

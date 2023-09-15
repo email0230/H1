@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace h1.Models
 {
-    class Guest
+    public class Guest
     {
         //give guests ID numbers?
         public string LastName { get; set; }

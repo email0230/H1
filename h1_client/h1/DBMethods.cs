@@ -18,9 +18,10 @@ namespace h1
         static IMongoDatabase database = client.GetDatabase("h1_db");
         static IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>("testCollection");
         static IMongoCollection<Guest> GuestCollection = database.GetCollection<Guest>("GuestCollection");
-        #endregion //add public access mods if problems arise
+		static IMongoCollection<BsonDocument> HotelDatacollection = database.GetCollection<BsonDocument>("HotelDataCollection");
+		#endregion //add public access mods if problems arise
 
-        static void InsertAGuy()
+		static void InsertAGuy()
         {
             var date = new DateTime(2023, 4, 28, 14, 30, 0, DateTimeKind.Utc);
             var unixTimestamp = (long)(date - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
@@ -76,5 +77,17 @@ namespace h1
             
         }
         
-    }
+        public static void StoreHotel(string jsonInput)
+        {
+			IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>("HotelDataCollection");
+			BsonDocument bsonDocument = BsonDocument.Parse(jsonInput);
+			collection.InsertOne(bsonDocument);
+		}
+
+		public static BsonDocument GetHotel()
+        {
+            //TODO: we only want the most recent version of the hotel, either by sorting by date, or by deleting older entries
+            return HotelDatacollection.Find(new BsonDocument()).FirstOrDefault();
+        }
+	}
 }

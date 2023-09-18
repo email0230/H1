@@ -38,7 +38,7 @@ namespace h1
 			string roomNumber = selectedRoomItem?.Content.ToString(); // Use null-conditional operator
 
 			// Call the validation method from the FormValidator class
-			if (demoFormValidator.ValidateForm(name, arrivalDate, departureDate, roomNumber))
+			if (FormValidator.ValidateInsert1Form(name, arrivalDate, departureDate, roomNumber))
 			{
 				// If validation passes, continue with the submission
 				MessageBox.Show($"Hello, {name}! Arrival Date: {arrivalDate}, Departure Date: {departureDate}, Room Number: {roomNumber}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);

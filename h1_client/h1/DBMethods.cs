@@ -18,7 +18,7 @@ namespace h1
         static IMongoDatabase database = client.GetDatabase("h1_db");
         static IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>("testCollection");
         static IMongoCollection<Guest> GuestCollection = database.GetCollection<Guest>("GuestCollection");
-		static IMongoCollection<BsonDocument> HotelDatacollection = database.GetCollection<BsonDocument>("HotelDataCollection");
+		static IMongoCollection<BsonDocument> HotelDataCollection = database.GetCollection<BsonDocument>("HotelDataCollection");
 		#endregion //add public access mods if problems arise
 
 		static void InsertAGuy()
@@ -85,9 +85,12 @@ namespace h1
 		}
 
 		public static BsonDocument GetHotel()
-        {
-            //TODO: we only want the most recent version of the hotel, either by sorting by date, or by deleting older entries
-            return HotelDatacollection.Find(new BsonDocument()).FirstOrDefault();
-        }
+		{
+			// Sort the data by date in descending order (most recent first)
+			var sort = Builders<BsonDocument>.Sort.Descending("LastModifiedDate"); // Replace "DateField" with your actual date field name
+
+			// Perform the query with sorting
+			return HotelDataCollection.Find(new BsonDocument()).Sort(sort).FirstOrDefault();
+		}
 	}
 }

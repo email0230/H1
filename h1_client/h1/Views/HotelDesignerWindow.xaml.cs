@@ -22,9 +22,12 @@ namespace h1.Views
     /// </summary>
     public partial class HotelDesignerWindow : Window
     {
-        public HotelDesignerWindow()
-        {
+		Hotel hotel = Hotel.GetInstance();
+
+		public HotelDesignerWindow() //TODO: insert prior data into the textbox fields prior to pressing the submit button
+		{
             InitializeComponent();
+            HotelNameTextBox.Text = hotel.Name; //could be extracted to a separate function
         }
 
 		private void AddRoomButton_Click(object sender, RoutedEventArgs e)
@@ -34,27 +37,22 @@ namespace h1.Views
 
 		private void SubmitButton_Click(object sender, RoutedEventArgs e)
 		{
-            Hotel hotel = Hotel.GetInstance();
-
-			//TODO: insert prior data into the textbox fields prior to pressing the submit button
-
 			string name = HotelNameTextBox.Text;
             hotel.Name = name;
+            hotel.LastModifiedDate = DateTime.Now;
 
-            //mayhaps validation is in order????
-
-			MessageBox.Show("Hotel data logged", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-			string jsonHotel = Newtonsoft.Json.JsonConvert.SerializeObject(hotel);
-
-            DBMethods.StoreHotel(jsonHotel);
-
-			Close();
+            if (FormValidator.ValidateHotelForm(name))
+            {
+                // If validation passes, continue with the submission
+                string jsonHotel = Newtonsoft.Json.JsonConvert.SerializeObject(hotel);
+                DBMethods.StoreHotel(jsonHotel);
+                MessageBox.Show("Hotel data logged", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                Close();
+            }
 
             /* BIG THINGS TO DO:
-             * - validation
+             * - validation (ctnd)
              * - adding rooms in the ui
-             * - remove "location", who needs that
-             * - i want a persistent hotel that can survive an application shutdown, perhaps a local file storing a json of the relevant information??
              * - add a "room list is null!" warning
              * 
              * 

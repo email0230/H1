@@ -16,6 +16,7 @@ namespace h1.Models
 		public string Name { get; set; }
 		public int TotalRooms { get; set; }
 		public List<Room> Rooms { get; set; }
+		public DateTime LastModifiedDate { get; set; }
 
 		private Hotel() { }
 		private static Hotel _instance;

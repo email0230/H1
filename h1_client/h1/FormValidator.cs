@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml.Linq;
 
 namespace h1
 {
-	internal class demoFormValidator
+	internal class FormValidator
 	{
-		public static bool ValidateForm(string name, DateTime? arrivalDate, DateTime? departureDate, string roomNumber)
+		public static bool ValidateInsert1Form(string name, DateTime? arrivalDate, DateTime? departureDate, string roomNumber)
 		{
 			if (string.IsNullOrEmpty(name))
 			{
@@ -42,6 +43,19 @@ namespace h1
 			}
 
 			// You can add additional room number validation here if needed (asssssside, will need to compare this to an array of available rooms at some point)
+
+			return true; // All validation checks pass
+		}
+
+		public static bool ValidateHotelForm(string hotelName) //TODO: add list of rooms here later!!!
+		{
+			if (string.IsNullOrEmpty(hotelName))
+			{
+				MessageBox.Show("Please enter a name for your hotel.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return false;
+			}
+
+			//TODO: add more validation checks once the hotel implementation matures
 
 			return true; // All validation checks pass
 		}

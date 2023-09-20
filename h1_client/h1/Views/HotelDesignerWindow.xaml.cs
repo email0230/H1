@@ -74,7 +74,6 @@ namespace h1.Views
 			}
 			/* BIG THINGS TO DO:
              * - validation (ctnd)
-             * - adding rooms in the ui
              * - add a "room list is null!" warning
              * 
              * 

@@ -16,7 +16,6 @@ namespace h1.Models
 	public sealed class Hotel
 	{
 		public string Name { get; set; }
-		public int TotalRooms { get; set; }
 		public List<Room> Rooms { get; set; }
 		public DateTime LastModifiedDate { get; set; }
 

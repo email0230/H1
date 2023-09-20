@@ -1,8 +1,10 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
 using Newtonsoft.Json;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,6 +45,16 @@ namespace h1.Models
 			return hotelString != null ? BsonSerializer.Deserialize<Hotel>(hotelString) : null;
 		}
 
+		public int[] GetHotelRoomCounts()
+		{
+			int[] counts = new int[3];
+
+			counts[0] = _instance.Rooms.Count(room => room.Capacity == 1);
+			counts[1] = _instance.Rooms.Count(room => room.Capacity == 2);
+			counts[2] = _instance.Rooms.Count(room => room.Capacity == 3);
+
+			return counts;
+		}
 		public void someBusinessLogic()
 		{
 			// ...

@@ -14,20 +14,20 @@
             <TextBox Name="HotelNameTextBox" Width="200" Margin="0,0,0,10"/>
 
             <Label Content="Room Details" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
-
-            <!-- Dynamic Room Input -->
-            <StackPanel Name="RoomInputStackPanel">
-                <!-- Initial Input Field -->
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                    <TextBox Name="RoomCountTextBox" Width="40" Text="x" />
-                    <TextBlock Text="rooms that can house" Margin="5,0"/>
-                    <TextBox Name="RoomOccupancyTextBox" Width="40" Text="y" />
-                    <TextBlock Text="people each" Margin="5,0"/>
-                </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBox Name="RoomsFor1PersonTextBox" Width="40" PreviewTextInput="NumericTextBox_PreviewTextInput" />
+                <Label Content="rooms for 1 person"/>
             </StackPanel>
 
-            <!-- Button to Add More Room Inputs -->
-            <Button Content="Add Room" Click="AddRoomButton_Click" Width="80" Margin="0,10,0,0" IsEnabled="True" />
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBox Name="RoomsFor2PersonsTextBox" Width="40" PreviewTextInput="NumericTextBox_PreviewTextInput" />
+                <Label Content="rooms for 2 persons"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBox Name="RoomsFor3PersonsTextBox" Width="40" PreviewTextInput="NumericTextBox_PreviewTextInput" />
+                <Label Content="rooms for 3 persons"/>
+            </StackPanel>
 
             <!-- Submit Button -->
             <Button Content="Submit" Click="SubmitButton_Click" Width="80" Margin="0,10,0,0" IsDefault="True"/>

@@ -12,7 +12,7 @@ namespace h1.Models
     {
         public int Id { get; private set; }
 		public int Capacity { get; set; } //might need to change name to occupancy
-		public Guest[] Occupants { get; set; }
+		private List<Guest> Guests = new List<Guest>();
 		private static int INCREMENT = 1;
 
 		public Room() //give each room a unique ID number
@@ -20,5 +20,35 @@ namespace h1.Models
             Id = INCREMENT;
             INCREMENT++;
         }
-    }
+		public bool AddGuest(Guest guest)
+		{
+			if (Guests.Count < Capacity)
+			{
+				Guests.Add(guest);
+				return true; // Guest added successfully
+			}
+			else
+			{
+				return false; // Room is already at capacity
+			}
+		}
+
+		public bool RemoveGuest(Guest guest)
+		{
+			if (Guests.Contains(guest))
+			{
+				Guests.Remove(guest);
+				return true; // Guest removed successfully
+			}
+			else
+			{
+				return false; // Guest not found in the room
+			}
+		}
+
+		public List<Guest> GetGuests()
+		{
+			return Guests;
+		}
+	}
 }

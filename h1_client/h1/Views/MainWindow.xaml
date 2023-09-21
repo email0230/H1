@@ -21,6 +21,7 @@
         <StackPanel Grid.Row="1" Margin="20">
             <Button Content="Add One" HorizontalAlignment="Center" Width="100" Height="30" Background="#007ACC" Foreground="White" Margin="0,0,0,10" Click="Button_Click_1"/>
             <Button Content="Hotel Designer" HorizontalAlignment="Center" Width="150" Height="30" Background="#007ACC" Foreground="White" Click="HotelDesignerButton_Click"/>
+            <Button Content="Room Assignment" HorizontalAlignment="Center" Width="150" Height="30" Background="#007ACC" Foreground="White" Click="HotelDesignerButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

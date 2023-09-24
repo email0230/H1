@@ -49,5 +49,10 @@ namespace h1
             hotelDesigner.Show();
             
 		}
+		private void RoomAssign_Click(object sender, RoutedEventArgs e)
+		{
+            RoomAssignmentWindow assignWindow = new RoomAssignmentWindow();
+            assignWindow.Show();
+		}
 	}
 }

@@ -23,5 +23,19 @@ namespace h1.Views
 		{
 			InitializeComponent();
 		}
+
+		private void ManualRoomAssignmentButton_Click(object sender, RoutedEventArgs e)
+		{
+			// Create and set the content for View 1
+			ManualAssignmentView view1 = new ManualAssignmentView();
+			contentContainer.Content = view1;
+		}
+
+		private void AutoRoomAssignmentButton_Click(object sender, RoutedEventArgs e)
+		{
+			// Create and set the content for View 1
+			//AutoAssignmentView view1 = new AutoAssignmentView();
+			//contentContainer.Content = view1;
+		}
 	}
 }

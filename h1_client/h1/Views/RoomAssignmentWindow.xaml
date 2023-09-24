@@ -5,11 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:h1.Views"
         mc:Ignorable="d"
-        Title="RoomAssignmentWindow" Height="450" Width="800">
+        Title="Room Assignment" Height="450" Width="800">
     <Grid>
-        <Label Content="Room Assignment" HorizontalAlignment="Left" Margin="360,59,0,0" VerticalAlignment="Top"/>
-        <Button Content="manual (debug)" HorizontalAlignment="Left" Height="80" Margin="120,169,0,0" VerticalAlignment="Top" Width="105"/>
-        <Button Content="automatic (under construction)" HorizontalAlignment="Right" Height="80" Margin="0,169,180,0" VerticalAlignment="Top" Width="105"/>
+        <!-- Top Row: Title and Buttons -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
+        <StackPanel Grid.Row="0" Background="#007ACC" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <TextBlock Text="ROOM ASSIGNMENT" Foreground="White" FontWeight="Bold" FontSize="20" Margin="10" />
+            <Button x:Name="ManualRoomAssignmentButton" Content="Manual (Debug)" Width="120" Margin="5" Click="ManualRoomAssignmentButton_Click" />
+            <Button x:Name="AutoRoomAssignmentButton" Content="Automatic (Under Construction)" Width="180" Margin="5" Click="AutoRoomAssignmentButton_Click" />
+        </StackPanel>
+
+        <!-- Container for dynamic content -->
+        <ContentControl Grid.Row="1" Name="contentContainer" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+            <Label>default text here</Label>
+        </ContentControl>
     </Grid>
 </Window>

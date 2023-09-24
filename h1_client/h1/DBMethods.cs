@@ -92,5 +92,9 @@ namespace h1
 			// Perform the query with sorting
 			return HotelDataCollection.Find(new BsonDocument()).Sort(sort).FirstOrDefault();
 		}
+		public static List<Guest> GetGuests() => GuestCollection.Find(new BsonDocument()).ToList();
+
+
+
 	}
 }

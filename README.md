@@ -1,5 +1,5 @@
 # Aplikacja wspomagająca rezerwacje hotelowe
-Praca inżynierska Informatyka 22/23
+Praca inżynierska Informatyka S
 
 Filip Ryczko
-ATH Bielsko-Biała
+UBB 2023

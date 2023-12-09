@@ -42,7 +42,7 @@ namespace h1
 			{
 				// If validation passes, continue with the submission
 				MessageBox.Show($"Hello, {name}! Arrival Date: {arrivalDate}, Departure Date: {departureDate}, Room Number: {roomNumber}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-				DBMethods.Insert(name, arrivalDate, departureDate, roomNumber);
+				//DBMethods.Insert(name, arrivalDate, departureDate, roomNumber);
 				Close();
 			}
 		}

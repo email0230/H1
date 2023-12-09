@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Newtonsoft.Json;
+using h1.replaceme;
 
 namespace h1.Views
 {
@@ -23,11 +24,12 @@ namespace h1.Views
 	public partial class HotelDesignerWindow : Window
 	{
 		Hotel hotel = Hotel.GetInstance();
-		public HotelDesignerWindow()
+
+        public HotelDesignerWindow()
 		{
 			InitializeComponent();
 			SetTextBoxValuesFromHotel();
-		}
+        }
 
 		private void SetTextBoxValuesFromHotel()
 		{
@@ -54,6 +56,8 @@ namespace h1.Views
 
 		private void SubmitButton_Click(object sender, RoutedEventArgs e)
 		{
+			//_service.Create();
+
 			MessageBoxResult result = MessageBox.Show("Are you sure you want to overwrite the current hotel configuration?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
 			if (result == MessageBoxResult.Yes)

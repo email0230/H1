@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace h1.replaceme
 {
-    public interface IRepositoryService<T> where T : class
+    public interface IRepositoryService
     {
-        void Create(T entity);
-        void Read(T entity);
-        void Update(T entity);
-        void Delete(T entity);
-        //they used to be returning a "serviceresult" object, check out why that is
+        void Create();
+        void Read();
+        void Update();
+        void Delete();
+        
     }
 }

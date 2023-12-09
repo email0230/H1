@@ -9,14 +9,14 @@ namespace h1.Models
 {
     public class Guest
     {
-        //give guests ID numbers?
+        public ObjectId _id { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
-        public DateTime ArrivalDate { get; set; }
-        public DateTime DepartureDate { get; set; }
-        public int AssignedRoom { get; set; }
+        public DateTime? ArrivalDate { get; set; }
+        public DateTime? DepartureDate { get; set; }
+        //IMPORTANT: two datetime propertie above are absolutely neccessary, change it to requires instead of nullable after testing is done!
+        public int? AssignedRoomNumber { get; set; }
         #region Less important properties
-        public ObjectId _id { get; set; }
         public int? Phone { get; set; }
         public string? Email { get; set; }
         public DateTime? DateOfBirth { get; set; }

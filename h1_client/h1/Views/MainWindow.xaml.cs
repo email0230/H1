@@ -29,7 +29,7 @@ namespace h1
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            DBMethods.DebugMethod();
+            //DBMethods.DebugMethod();
         }
 
 		private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -54,5 +54,11 @@ namespace h1
             RoomAssignmentWindow assignWindow = new RoomAssignmentWindow();
             assignWindow.Show();
 		}
-	}
+
+        private void RoomList_Click(object sender, RoutedEventArgs e)
+        {
+            RoomListWindow listWindow = new RoomListWindow();
+            listWindow.Show();
+        }
+    }
 }

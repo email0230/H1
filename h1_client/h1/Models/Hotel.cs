@@ -27,7 +27,7 @@ namespace h1.Models
 			if (_instance == null)
 			{
 				//_instance = new Hotel();
-				_instance = Fetch();
+				_instance = GetHotelStateFromDB();
 			}
 			return _instance;
 		}
@@ -38,10 +38,10 @@ namespace h1.Models
 		-If there is a different object submitted in the form, h1 will STILL try to fetch the old one
 	*/
 
-		private static Hotel Fetch()
+		private static Hotel GetHotelStateFromDB()
 		{
 			BsonDocument hotelString = DBMethods.GetHotel(); //add async to db calls?
-			return hotelString != null ? BsonSerializer.Deserialize<Hotel>(hotelString) : null;
+            return hotelString != null ? BsonSerializer.Deserialize<Hotel>(hotelString) : null;
 		}
 
 		public int[] GetHotelRoomCounts()

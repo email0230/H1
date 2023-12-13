@@ -15,13 +15,61 @@
 
         <StackPanel Grid.Row="0" Background="#007ACC" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <TextBlock Text="ROOM ASSIGNMENT" Foreground="White" FontWeight="Bold" FontSize="20" Margin="10" />
-            <Button x:Name="ManualRoomAssignmentButton" Content="Manual (Debug)" Width="120" Margin="5" Click="ManualRoomAssignmentButton_Click" />
-            <Button x:Name="AutoRoomAssignmentButton" Content="Automatic (Under Construction)" Width="180" Margin="5" Click="AutoRoomAssignmentButton_Click" />
+            <!-- Add Buttons -->
+            <Button Content="Insert new Group" Margin="10" />
+            <Button Content="Display ALL guests" Margin="10" />
         </StackPanel>
 
-        <!-- Container for dynamic content -->
-        <ContentControl Grid.Row="1" Name="contentContainer" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
-            <Label>default text here</Label>
-        </ContentControl>
+        
+        
+        
+        <!-- Main Content Area: TabControl with different views -->
+        <TabControl Grid.Row="1">
+            <!-- Tab for Display ALL guests -->
+            <TabItem Header="Display ALL guests">
+                <ListView x:Name="GuestSummaryListView" Margin="20" >
+                    <!-- Define your DataTemplate here -->
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" />
+                            <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
+                            <GridViewColumn Header="Room" DisplayMemberBinding="{Binding AssignedRoomNumber}" />
+                            <!-- Add other columns as needed -->
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+            <!-- Tab for Insert new Group -->
+            <TabItem Header="Insert new Group">
+                <!-- Add content specific to Insert new Group view -->
+                <Grid>
+                    <!-- Button to add a new mini-group -->
+                    <Button Content="Add Group..." Click="AddGroupButton_Click" Margin="10,10,10,10"/>
+
+                    <!-- List of mini-groups -->
+                    <ItemsControl x:Name="MiniGroupsList" Margin="10,12,10,8">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,5">
+                                    <!-- Input fields for first and last names -->
+                                    <TextBox Text="First Name" Margin="0,0,10,0"/>
+                                    <TextBox Text="Last Name"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </TabItem>
+            <!-- 
+                looks like youve got a problem!
+                not only is it hard to picture the interface for making many groups, 
+                but its even harder to see how you pass ALL that information in code! (to builder)
+                first idea: user declares manually how many groups they intend to have, and the form is generated accordingly
+                problem with first idea: burden of passing data from dynamically generated form elements is passed onto the guest form instead.
+                possible solution here: https://chat.openai.com/share/db9f7539-b732-4e4b-8a3b-ec275df28a73
+            -->
+
+
+        </TabControl>
     </Grid>
 </Window>

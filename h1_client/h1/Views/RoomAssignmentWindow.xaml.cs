@@ -1,4 +1,5 @@
-﻿using System;
+﻿using h1.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,23 +20,23 @@ namespace h1.Views
 	/// </summary>
 	public partial class RoomAssignmentWindow : Window
 	{
+		Hotel hotel = Hotel.GetInstance();
 		public RoomAssignmentWindow()
 		{
 			InitializeComponent();
-		}
+			GetGuests();
 
-		private void ManualRoomAssignmentButton_Click(object sender, RoutedEventArgs e)
-		{
-			// Create and set the content for View 1
-			ManualAssignmentView view1 = new ManualAssignmentView();
-			contentContainer.Content = view1;
-		}
+        }
 
-		private void AutoRoomAssignmentButton_Click(object sender, RoutedEventArgs e)
+		private void GetGuests()
 		{
-			// Create and set the content for View 1
-			//AutoAssignmentView view1 = new AutoAssignmentView();
-			//contentContainer.Content = view1;
-		}
-	}
+			var guests = DBMethods.GetGuests();
+            GuestSummaryListView.ItemsSource = guests;
+        }
+
+        private void AddGroupButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+    }
 }

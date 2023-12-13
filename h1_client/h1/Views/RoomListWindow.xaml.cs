@@ -36,7 +36,7 @@ namespace h1.Views
             {
                 if (item != null)
                 {
-                    throw new NotImplementedException();
+                    //throw new NotImplementedException();
                 }
             }
             List<Room> rooms = hotel.Rooms;
@@ -78,6 +78,18 @@ namespace h1.Views
             DBMethods.Insert(testGuest);
 
             guestList.Add(testGuest);
+        }
+
+
+        //all these two functions below are for, is for them to be put in a breakpoint, so i can see their objects directly, and check if everything is in order
+        private void debug_rooms_breakpoint_button_Click(object sender, RoutedEventArgs e)
+        {
+            var rooms = hotel.Rooms;
+        }
+
+        private void debug_guests_breakpoint_button_Click(object sender, RoutedEventArgs e)
+        {
+            var guests = DBMethods.GetGuests();
         }
     }
 }

@@ -10,6 +10,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <!-- Bonus Row for Debug Buttons -->
         </Grid.RowDefinitions>
 
         <!-- Header -->
@@ -29,9 +31,13 @@
                     <!-- Add other columns as needed -->
                 </GridView>
             </ListView.View>
-
-            <!-- Add AlternationCount to enable the use of AlternationIndex in the DataTemplate -->
-            <ListView.AlternationCount>1000</ListView.AlternationCount>
         </ListView>
+
+        <!-- Bonus Row for Debug Buttons -->
+        <StackPanel Background="Orange" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button x:Name="debug_rooms_breakpoint_button" Content="Display all rooms" Margin="5" Click="debug_rooms_breakpoint_button_Click"/>
+            <Button x:Name="debug_guests_breakpoint_button" Content="Display all guests" Margin="5" Click="debug_guests_breakpoint_button_Click"/>
+            <Button x:Name="debug_test_button_3" Content="Test button 3" Margin="5"/>
+        </StackPanel>
     </Grid>
 </Window>

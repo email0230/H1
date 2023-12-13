@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace h1.Models
 {
-    class Group
+    public class Group
     {
         public Guest[] Guests { get; set; }
         public bool MyProperty { get; set; }

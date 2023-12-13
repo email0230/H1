@@ -41,35 +41,54 @@
             </TabItem>
             <!-- Tab for Insert new Group -->
             <TabItem Header="Insert new Group">
-                <!-- Add content specific to Insert new Group view -->
                 <Grid>
-                    <!-- Button to add a new mini-group -->
-                    <Button Content="Add Group..." Click="AddGroupButton_Click" Margin="10,10,10,10"/>
-
-                    <!-- List of mini-groups -->
-                    <ItemsControl x:Name="MiniGroupsList" Margin="10,12,10,8">
+                    <ItemsControl x:Name="itemsControlElement" ItemsSource="{Binding Groups}" Background="LightGray" Margin="10">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="0,5">
-                                    <!-- Input fields for first and last names -->
-                                    <TextBox Text="First Name" Margin="0,0,10,0"/>
-                                    <TextBox Text="Last Name"/>
-                                </Grid>
+                                <!-- Your dynamically generated form for each group -->
+                                <StackPanel Margin="5">
+                                    <!-- Add your form elements here -->
+                                </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+
+                    <!-- Properly styled button -->
+                    <Button x:Name="SendButton" Content="Send" Click="SendButton_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#007ACC"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Padding" Value="10"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="MinWidth" Value="80"/>
+                                <Setter Property="MinHeight" Value="30"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="3">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </Grid>
             </TabItem>
+
+
             <!-- 
                 looks like youve got a problem!
                 not only is it hard to picture the interface for making many groups, 
                 but its even harder to see how you pass ALL that information in code! (to builder)
                 first idea: user declares manually how many groups they intend to have, and the form is generated accordingly
                 problem with first idea: burden of passing data from dynamically generated form elements is passed onto the guest form instead.
-                possible solution here: https://chat.openai.com/share/db9f7539-b732-4e4b-8a3b-ec275df28a73
+                progress!
+                we can use excel to import groups, that will solve one big roadblock, but still a UI for editing is required..
             -->
-
-
         </TabControl>
     </Grid>
 </Window>

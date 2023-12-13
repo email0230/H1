@@ -1,6 +1,7 @@
 ﻿using h1.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +22,8 @@ namespace h1.Views
 	public partial class RoomAssignmentWindow : Window
 	{
 		Hotel hotel = Hotel.GetInstance();
-		public RoomAssignmentWindow()
+        public ObservableCollection<Group> Groups { get; set; } = new ObservableCollection<Group>();
+        public RoomAssignmentWindow()
 		{
 			InitializeComponent();
 			GetGuests();
@@ -37,6 +39,11 @@ namespace h1.Views
         private void AddGroupButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void SendButton_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

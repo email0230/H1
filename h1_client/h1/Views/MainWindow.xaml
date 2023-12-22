@@ -19,7 +19,6 @@
 
         <!-- Main Content -->
         <StackPanel Grid.Row="1" Margin="20">
-            <Button Content="(debug) Add One" IsEnabled="False" HorizontalAlignment="Center" Width="100" Height="30" Background="Red" Foreground="White" Margin="0,0,0,10" Click="Button_Click_1"/>
             <Button Content="Hotel Designer" HorizontalAlignment="Center" Width="150" Height="30" Background="#007ACC" Foreground="White" Click="HotelDesignerButton_Click"/>
             <Button Content="(debug) rooms list" HorizontalAlignment="Center" Width="150" Height="30" Background="#007ACC" Foreground="White" Click="RoomList_Click" />
             <Button Content="Assign guests" HorizontalAlignment="Center" Width="150" Height="30" Background="#007ACC" Foreground="White" Click="RoomAssign_Click" />

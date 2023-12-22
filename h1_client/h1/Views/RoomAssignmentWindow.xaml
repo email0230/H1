@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:h1.Views"
         mc:Ignorable="d"
-        Title="Room Assignment" Height="450" Width="800">
+        Title="Room Assignment" Height="600" Width="500">
     <Grid>
         <!-- Top Row: Title and Buttons -->
         <Grid.RowDefinitions>
@@ -15,13 +15,7 @@
 
         <StackPanel Grid.Row="0" Background="#007ACC" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <TextBlock Text="ROOM ASSIGNMENT" Foreground="White" FontWeight="Bold" FontSize="20" Margin="10" />
-            <!-- Add Buttons -->
-            <Button Content="Insert new Group" Margin="10" />
-            <Button Content="Display ALL guests" Margin="10" />
         </StackPanel>
-
-        
-        
         
         <!-- Main Content Area: TabControl with different views -->
         <TabControl Grid.Row="1">
@@ -42,40 +36,45 @@
             <!-- Tab for Insert new Group -->
             <TabItem Header="Insert new Group">
                 <Grid>
-                    <ItemsControl x:Name="itemsControlElement" ItemsSource="{Binding Groups}" Background="LightGray" Margin="10">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <!-- Your dynamically generated form for each group -->
-                                <StackPanel Margin="5">
-                                    <!-- Add your form elements here -->
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <ListView x:Name="listViewElement" ItemsSource="{Binding Groups}" Background="LightGray" Margin="10">
+                        <ListView.View>
+                            <GridView>
+                                <!-- Columns in the ListView -->
+                                <GridViewColumn Header="Test">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <!-- Your data binding here, for example: -->
+                                                <Image Source="../Assets/baseline_group_black_24dp.png" MaxHeight="20"/>
+                                                <TextBlock Text="{Binding DebugString}" />
 
-                    <!-- Properly styled button -->
-                    <Button x:Name="SendButton" Content="Send" Click="SendButton_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="#007ACC"/>
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="Padding" Value="10"/>
-                                <Setter Property="FontWeight" Value="Bold"/>
-                                <Setter Property="FontSize" Value="14"/>
-                                <Setter Property="MinWidth" Value="80"/>
-                                <Setter Property="MinHeight" Value="30"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="3">
-                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Style>
-                    </Button>
+                                                <!-- Nested ItemsControl for Guests -->
+                                                <ItemsControl ItemsSource="{Binding Guests}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Image Source="../Assets/baseline_face_black_24dp.png"/>
+                                                                <TextBox Text="{Binding FirstName}" Margin="0,0,10,0" Width="80"/>
+                                                                <TextBox Text="{Binding LastName}" Width="80"/>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                                <Button Content="Add New Guest" Click="AddNewGuestButton_Click" Margin="5" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                                                <Button Content="🛠" Click="GroupSettingsButton_Click" Margin="5" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <!-- Button to add a new object -->
+                    <Button Content="Add New Object" Click="AddNewObjectButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
+                    <Button x:Name="DebugButtonElement" Content="Debug display group object" Click="DebugButtonClicked" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="105,0,0,10" FontWeight="Bold"/>
+                    <Button x:Name="SendButton" Content="Send" Click="SendButton_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
+
                 </Grid>
             </TabItem>
 

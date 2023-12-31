@@ -16,7 +16,7 @@
         <StackPanel Grid.Row="0" Background="#007ACC" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <TextBlock Text="ROOM ASSIGNMENT" Foreground="White" FontWeight="Bold" FontSize="20" Margin="10" />
         </StackPanel>
-        
+
         <!-- Main Content Area: TabControl with different views -->
         <TabControl Grid.Row="1">
             <!-- Tab for Display ALL guests -->
@@ -71,8 +71,8 @@
                     </ListView>
 
                     <!-- Button to add a new object -->
-                    <Button Content="Add New Object" Click="AddNewObjectButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
-                    <Button x:Name="DebugButtonElement" Content="Debug display group object" Click="DebugButtonClicked" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="105,0,0,10" FontWeight="Bold"/>
+                    <Button Content="Add New Group 👨‍👩‍👦" Click="AddNewObjectButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
+                    <Button x:Name="DebugButtonElement" Content="Debug display group object" Click="DebugButtonClicked" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="175,0,0,11" FontWeight="Bold"/>
                     <Button x:Name="SendButton" Content="Send" Click="SendButton_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
 
                 </Grid>

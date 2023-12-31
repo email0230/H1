@@ -25,16 +25,16 @@ namespace h1.Views
     /// </summary>
     public partial class RoomAssignmentWindow : Window
 	{
-		Hotel hotel = Hotel.GetInstance();
+		Hotel hotel = Hotel.GetInstance(); //probably useless
         public ObservableCollection<Group> Groups { get; set; } = new ObservableCollection<Group>();
         public RoomAssignmentWindow()
 		{
 			InitializeComponent();
-			GetGuests();
+			PopulateListWithGuests();
             DataContext = this;
         }
 
-		private void GetGuests()
+		private void PopulateListWithGuests()
 		{
 			var guests = DBMethods.GetGuests();
             GuestSummaryListView.ItemsSource = guests;
@@ -56,128 +56,70 @@ namespace h1.Views
             // Assuming you have a ViewModel with an ObservableCollection named "Groups"
             if (DataContext is RoomAssignmentWindow viewModel)
             {
-                ObservableCollection<Guest> guests = new ObservableCollection<Guest>
-                {
-                    new Guest{LastName = "Nowakowski", FirstName = "Piotr" },
-                };
-
-                // Add a new object to the ObservableCollection
-                Group groupAdded = new Group(guests, "Group name here!");
-                viewModel.Groups.Add(groupAdded); //add a thing with a debug string and array of guests
+                AddGroupTicket(viewModel);
 
                 DebugPrintGroupsVarStatus();
             }
         }
 
+        static void AddGroupTicket(RoomAssignmentWindow viewModel)
+        {
+            ObservableCollection<Guest> guests = new ObservableCollection<Guest>
+            {
+                new Guest{LastName = "Nowakowski", FirstName = "Piotr" },
+            };
+            int groupIndexNumber = GetIndexNumberForGroup(viewModel);
+            Group groupAdded = new Group(guests, $"group #{groupIndexNumber}");
+            viewModel.Groups.Add(groupAdded); //add a thing with a debug string and array of guests
+        }
+
+        private static int GetIndexNumberForGroup(RoomAssignmentWindow viewModel)
+        {
+            int length = viewModel.Groups.Count;
+            
+            Debug.WriteLine($"Group.Count is now {length}, returning {length+1}");
+
+            return length + 1;
+        }
+
         private void GroupSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Find the corresponding Group object to which the button belongs
+            //find the corresponding Group object to which the button belongs
             if (sender is FrameworkElement element && element.DataContext is Group group)
             {
-                // Create a new instance of the settings window
                 GroupSettingsWindow settingsWindow = new GroupSettingsWindow();
-
-                // Set the DataContext of the settings window to the Group object
-                settingsWindow.DataContext = group;
-
-                // Show the settings window
+                settingsWindow.DataContext = group; //make sure the window uses the group selected
                 settingsWindow.ShowDialog();
             }
         }
-
-        private void DebugPrintGroupsVarStatus()
-        {
-            Debug.WriteLine("========================debuggin=======================");
-            Debug.WriteLine("ACTIVE GROUPS WITHIN GROUPS - OBSERVABLE COLLECTION");
-            foreach (var item in Groups)
-            {
-                Debug.WriteLine($"Amount of guests in group *{item.DebugString}*:{item.Guests.Count}");
-                foreach (var g in item.Guests)
-                {
-                    Debug.WriteLine($"Guest: {g.FirstName}, {g.LastName}");
-                }
-            }
-            Debug.WriteLine("========================endebuggin=====================");
-        }
-
-        private void DebugButtonClicked(object sender, RoutedEventArgs e) //good candidate to get trashed soonish
-        {
-            var a = Groups;
-            ObservableCollection<Guest>? b = null;
-            foreach (var group in a)
-            {
-                group.Guests = b;
-                string? test = group.ToString();
-            }
-        }
-
-        //private void AddNewGuestButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    Debug.WriteLine("New guest added...");
-        //    DebugPrintGroupsVarStatus();
-        //    //DebugRestartContext();
-
-        //    if (DataContext is RoomAssignmentWindow viewModel)
-        //    {
-        //        // Create a new guest
-        //        Guest newGuest = new Guest { FirstName = "It", LastName = "Works!" };
-
-        //        Group selectedGroup = GetSelectedGroup();
-
-        //        // Check if the selected group and guest are not null
-        //        if (selectedGroup != null && newGuest != null)
-        //        {
-        //            selectedGroup.Guests.Add(newGuest);
-        //        }
-        //        else
-        //        {
-        //            MessageBox.Show("Guest not added! Selected group or guest is null.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        //        }
-        //    }
-        //}
 
         private void AddNewGuestButton_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("New guest added...");
             DebugPrintGroupsVarStatus();
 
-            if (DataContext is RoomAssignmentWindow viewModel)
+            if (GetSelectedGroup() == null)
             {
-                // Check if there is a selected group
-                if (GetSelectedGroup() != null)
-                {
-                    if (ButtonBelongsToCorrectGroupTicket(sender))
-                    {
-                        AddGuestToGroupTicket();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Button does not belong to the selected group.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("No group selected. \nSelect a group by double-clicking it!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
-                }
+                MessageBox.Show("No group selected. \nSelect a group by double-clicking it!", "Selection Required", MessageBoxButton.OK, MessageBoxImage.Information);
+                Debug.WriteLine("Early return called - SelectedGroup was null.");
+                return;
             }
+
+            if (!ButtonBelongsToCorrectGroupTicket(sender))
+            {
+                MessageBox.Show("Please select the group before adding more guests to it.", "Group Selection Required", MessageBoxButton.OK, MessageBoxImage.Information);
+                Debug.WriteLine("Early return called - pressed button was in the wrong group.");
+                return;
+            }
+            
+            AddGuestToGroupTicket();
         }
         private void AddGuestToGroupTicket()
         {
-            // Create a new guest
-            Guest newGuest = new Guest { FirstName = "It", LastName = "Works!" };
-
+            Guest newGuest = new Guest { FirstName = "...", LastName = "..." };
             Group selectedGroup = GetSelectedGroup();
-
-            // Check if the selected group and guest are not null
-            if (selectedGroup != null && newGuest != null)
-            {
-                selectedGroup.Guests.Add(newGuest);
-            }
-            else
-            {
-                MessageBox.Show("Guest not added! Selected group or guest is null.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            
+            selectedGroup.Guests.Add(newGuest);
         }
 
         #region Checking if button is in the selected ticket
@@ -195,10 +137,6 @@ namespace h1.Views
                     if (GetButtonGroupTicket(sender) == selectedGroup)
                     {
                         return true;
-                    }
-                    else
-                    {
-                        MessageBox.Show("DEBUG: Button does not belong to the correct group ticket.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
                 else
@@ -243,10 +181,8 @@ namespace h1.Views
         {
             Group selectedGroup = null;
 
-            // Check if there is a selected item
             if (listViewElement.SelectedItem != null)
             {
-                // Assuming your Group object is stored in the DataContext of the selected ListViewItem
                 if (listViewElement.SelectedItem is Group group)
                 {
                     selectedGroup = group;
@@ -256,18 +192,43 @@ namespace h1.Views
                     MessageBox.Show("Failed to retrieve selected group.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-
             return selectedGroup;
         }
 
+        #region debug
+        private void DebugPrintGroupsVarStatus()
+        {
+            Debug.WriteLine("========================debuggin=======================");
+            Debug.WriteLine("ACTIVE GROUPS WITHIN GROUPS - OBSERVABLE COLLECTION");
+            Debug.Indent();
+            foreach (var item in Groups)
+            {
+                Debug.WriteLine($"Amount of guests in group named \"{item.DebugString}\": {item.Guests.Count}");
+                Debug.Indent();
+                foreach (var g in item.Guests)
+                {
+                    Debug.WriteLine($"Guest: {g.FirstName}, {g.LastName}");
+                }
+                Debug.Unindent();
+            }
+            Debug.Unindent();
+            Debug.WriteLine("========================endebuggin=====================");
+        }
+
+        private void DebugButtonClicked(object sender, RoutedEventArgs e) //good candidate to get trashed soonish
+        {
+            var a = Groups;
+            ObservableCollection<Guest>? b = null;
+            foreach (var group in a)
+            {
+                group.Guests = b;
+                string? test = group.ToString();
+            }
+        }
+        #endregion
+
         //todo:
-        /* add numbering to groups added
-         * handle guest addition
-         * fix the looks
-         * make the buttons less obtrusive
-         * make the fields (in the ui) not readonly
-         * get on reading the contents of the groups after you do that, to verify wether observablecollection works
-         * possible dropdown, to hide guests?
+        /* possible dropdown, to hide guests?
          */
     }
 }

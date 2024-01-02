@@ -9,7 +9,6 @@ namespace h1.Models
     public class Group : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
         private ObservableCollection<Guest> guests;
         public ObservableCollection<Guest> Guests
         {
@@ -24,7 +23,7 @@ namespace h1.Models
             }
         }
 
-        private bool myProperty;
+        private bool myProperty; //likely to get removed soon
         public bool MyProperty
         {
             get { return myProperty; }
@@ -35,21 +34,28 @@ namespace h1.Models
             }
         }
 
-        private string? debugString;
-        public string? DebugString
+        private string? groupName;
+        public string? GroupName
         {
-            get { return debugString; }
+            get { return groupName; }
             set
             {
-                debugString = value;
+                groupName = value;
                 OnPropertyChanged();
             }
         }
+        public bool WantGroupToStayTogether { get; set; }
+        public bool WantNoiseReduction { get; set; }
+        public bool WantSecurityFeatures { get; set; }
+        public bool WantSmartLighting { get; set; }
+        public bool WantBalcony { get; set; }
+        public bool WantModularFurniture { get; set; }
+
 
         public Group(ObservableCollection<Guest> guestsInput, string? debugStringInput)
         {
             Guests = guestsInput;
-            DebugString = debugStringInput;
+            GroupName = debugStringInput;
         }
 
         //public bool CheckIfGuestExists(Guest input)

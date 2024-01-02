@@ -45,11 +45,27 @@ namespace h1.Views
             var formData = Groups;
             //validate, and send?
             DebugPrintGroupsVarStatus();
+            DebugPrintGroupProperties();
             throw new NotImplementedException();
         }
+
+        
+
         private void AddNewObjectButton_Click(object sender, RoutedEventArgs e)
         {
             CreateGroupElement();
+        }
+
+        private void RemoveGroupButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button removeButton && removeButton.DataContext is Group groupToRemove)
+            {
+                if (MessageBox.Show($"Are you sure you want to remove the group '{groupToRemove.GroupName}'?", "Confirm Removal", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    Groups.Remove(groupToRemove);
+                    DebugPrintGroupsVarStatus(); // Optionally print the updated status
+                }
+            }
         }
         private void CreateGroupElement()
         {
@@ -203,7 +219,7 @@ namespace h1.Views
             Debug.Indent();
             foreach (var item in Groups)
             {
-                Debug.WriteLine($"Amount of guests in group named \"{item.DebugString}\": {item.Guests.Count}");
+                Debug.WriteLine($"Amount of guests in group named \"{item.GroupName}\": {item.Guests.Count}");
                 Debug.Indent();
                 foreach (var g in item.Guests)
                 {
@@ -225,6 +241,27 @@ namespace h1.Views
                 string? test = group.ToString();
             }
         }
+
+        private void DebugPrintGroupProperties()
+        {
+            Debug.WriteLine("Printing group properties:");
+            Debug.Indent();
+            foreach (var item in Groups)
+            {
+                Debug.WriteLine($"{item.GroupName}");
+                Debug.Indent();
+                Debug.WriteLine($"GroupToStayTogether: {item.WantGroupToStayTogether}");
+                Debug.WriteLine($"NoiseReduction: {item.WantNoiseReduction}");
+                Debug.WriteLine($"SecurityFeatures: {item.WantSecurityFeatures}");
+                Debug.WriteLine($"SmartLighting: {item.WantSmartLighting}");
+                Debug.WriteLine($"Balcony: {item.WantBalcony}");
+                Debug.WriteLine($"ModularFurniture: {item.WantModularFurniture}");
+                Debug.Unindent();
+            }
+            Debug.Unindent();
+        }
+
+
         #endregion
 
         //todo:

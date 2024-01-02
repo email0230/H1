@@ -15,7 +15,13 @@ namespace h1.Models
 		private List<Guest> Guests = new List<Guest>();
 		private static int INCREMENT = 1;
 
-		public Room() //give each room a unique ID number
+        public bool NoiseReduction { get; set; }
+        public bool SecurityFeatures { get; set; }
+        public bool SmartLighting { get; set; }
+        public bool Balcony { get; set; }
+        public bool ModularFurniture { get; set; }
+
+        public Room() //give each room a unique ID number
         {
             Id = INCREMENT;
             INCREMENT++;

@@ -5,13 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:h1.Views"
         mc:Ignorable="d"
-        Title="Group Settings" Height="300" Width="400">
+        Title="Group Settings" SizeToContent="WidthAndHeight" ResizeMode="NoResize">
     <Grid>
         <StackPanel>
             <!-- Add UI elements to edit Group properties -->
-            <TextBlock Text="Group Settings" FontWeight="Bold" Margin="10"/>
-            <TextBox Text="{Binding DebugString, UpdateSourceTrigger=PropertyChanged}" Margin="10"/>
-            <!-- Add more UI elements as needed -->
+            <TextBlock FontWeight="Bold" Margin="10" Text="{Binding GroupName, StringFormat='Group Settings ({0})'}"/>
+
+            <GroupBox Header="Group Requirements" Margin="10">
+                <StackPanel>
+                    <!-- Keep members together CheckBox -->
+                    <CheckBox Content="Keep members of this group together [at all costs]" IsChecked="{Binding WantGroupToStayTogether}" FontWeight="Bold" Margin="5"/>
+
+                    <!-- Noise Reduction Checkbox -->
+                    <CheckBox Content="Noise Reduction" IsChecked="{Binding WantNoiseReduction}" Margin="5"/>
+
+                    <!-- Security Features Checkbox -->
+                    <CheckBox Content="Security Features" IsChecked="{Binding WantSecurityFeatures}" Margin="5"/>
+
+                    <!-- Smart Lighting Checkbox -->
+                    <CheckBox Content="Smart Lighting" IsChecked="{Binding WantSmartLighting}" Margin="5"/>
+
+                    <!-- Balcony Checkbox -->
+                    <CheckBox Content="Balcony" IsChecked="{Binding WantBalcony}" Margin="5"/>
+
+                    <!-- Modular Furniture Checkbox -->
+                    <CheckBox Content="Modular Furniture" IsChecked="{Binding WantModularFurniture}" Margin="5"/>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Add any other UI elements as needed -->
+
             <Button Content="Save" Click="SaveButton_Click" Margin="10"/>
         </StackPanel>
     </Grid>

@@ -33,6 +33,7 @@
                     </ListView.View>
                 </ListView>
             </TabItem>
+
             <!-- Tab for Insert new Group -->
             <TabItem Header="Insert new Group">
                 <Grid>
@@ -40,29 +41,49 @@
                         <ListView.View>
                             <GridView>
                                 <!-- Columns in the ListView -->
-                                <GridViewColumn Header="Test">
+                                <GridViewColumn Header="Actions">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <StackPanel>
-                                                <!-- Your data binding here, for example: -->
-                                                <Image Source="../Assets/baseline_group_black_24dp.png" MaxHeight="20"/>
-                                                <TextBlock Text="{Binding DebugString}" />
+                                            <Grid>
+                                                <!-- Rows for group icon and name, guests, and buttons -->
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
 
-                                                <!-- Nested ItemsControl for Guests -->
-                                                <ItemsControl ItemsSource="{Binding Guests}">
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <StackPanel Orientation="Horizontal">
-                                                                <Image Source="../Assets/baseline_face_black_24dp.png"/>
-                                                                <TextBox Text="{Binding FirstName}" Margin="0,0,10,0" Width="80"/>
-                                                                <TextBox Text="{Binding LastName}" Width="80"/>
-                                                            </StackPanel>
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </ItemsControl>
-                                                <Button Content="Add New Guest" Click="AddNewGuestButton_Click" Margin="5" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-                                                <Button Content="🛠" Click="GroupSettingsButton_Click" Margin="5" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-                                            </StackPanel>
+                                                <!-- Row for group icon and name -->
+                                                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                                    <Image Source="../Assets/baseline_group_black_24dp.png" MaxHeight="20"/>
+                                                    <TextBlock Text="{Binding GroupName}" Margin="5,0,0,0"/>
+                                                </StackPanel>
+
+                                                <!-- Row for guests -->
+                                                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                                    <!-- Nested ItemsControl for Guests -->
+                                                    <ItemsControl ItemsSource="{Binding Guests}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Image Source="../Assets/baseline_face_black_24dp.png"/>
+                                                                    <TextBox Text="{Binding FirstName}" Margin="0,0,10,0" Width="80"/>
+                                                                    <TextBox Text="{Binding LastName}" Width="80"/>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </StackPanel>
+
+                                                <!-- Row for buttons inside a GroupBox -->
+                                                <GroupBox Header="Options" Grid.Row="2" Margin="3,0,85,3">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Button Content="➕" Click="AddNewGuestButton_Click" Margin="5" Background="Transparent"/>
+                                                        <Button Content="🛠" Click="GroupSettingsButton_Click" Margin="5"/>
+                                                        <Button Content="❌" Click="RemoveGroupButton_Click" Margin="5"/>
+                                                    </StackPanel>
+                                                </GroupBox>
+                                            </Grid>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -74,9 +95,14 @@
                     <Button Content="Add New Group 👨‍👩‍👦" Click="AddNewObjectButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
                     <Button x:Name="DebugButtonElement" Content="Debug display group object" Click="DebugButtonClicked" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="175,0,0,11" FontWeight="Bold"/>
                     <Button x:Name="SendButton" Content="Send" Click="SendButton_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
-
                 </Grid>
             </TabItem>
+
+
+
+
+
+
 
 
             <!-- 

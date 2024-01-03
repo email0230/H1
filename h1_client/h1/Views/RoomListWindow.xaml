@@ -27,8 +27,13 @@
                 <GridView>
                     <GridViewColumn Header="Room ID" DisplayMemberBinding="{Binding Id}" />
                     <GridViewColumn Header="Occupancy" DisplayMemberBinding="{Binding Capacity}" />
-                    <!--<GridViewColumn Header="Current Occupants" DisplayMemberBinding="{Binding CurrentOccupants}" />-->
-                    <!-- Add other columns as needed -->
+                    <GridViewColumn Header="Settings">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="🛠" Click="RoomSettingsButton_Click" Tag="{Binding Id}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

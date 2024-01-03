@@ -30,7 +30,7 @@ namespace h1.Views
         }
         private void PassRoomsToListView()
         {
-            //this entire thing is vestigial from when i tried to adda  guest to see if tehre are any immidate issues. feel free to trash this!
+            //this entire thing is vestigial from when i tried to add a guest to see if tehre are any immidate issues. feel free to trash this!
             List<Guest> guests = GuestDebugMethod();
             foreach (var item in guests)
             {
@@ -42,6 +42,18 @@ namespace h1.Views
             List<Room> rooms = hotel.Rooms;
             RoomsListView.ItemsSource = rooms;
         }
+
+        private void RoomSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is int roomId) //room datacontext not called; possible solution - pass the room object instead of its Id
+            {
+                RoomSettingsWindow settingsWindow = new RoomSettingsWindow();
+                //settingsWindow.DataContext = room; //make sure the window uses the room selected
+                settingsWindow.ShowDialog();
+            }
+        }
+
+
         private List<Guest> GuestDebugMethod()
         {
             List<Guest> guestList = DBMethods.GetGuests();

@@ -56,8 +56,6 @@ namespace h1.Views
 
 		private void SubmitButton_Click(object sender, RoutedEventArgs e)
 		{
-			//_service.Create();
-
 			MessageBoxResult result = MessageBox.Show("Are you sure you want to overwrite the current hotel configuration?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
 			if (result == MessageBoxResult.Yes)
@@ -67,25 +65,46 @@ namespace h1.Views
 				hotel.LastModifiedDate = DateTime.Now;
 				hotel.Rooms = GetRooms();
 
-				if (FormValidator.ValidateHotelForm(name))
-				{
-					// If validation passes, continue with the submission
-					string jsonHotel = Newtonsoft.Json.JsonConvert.SerializeObject(hotel);
-					DBMethods.StoreHotel(jsonHotel);
-					MessageBox.Show("Hotel data logged", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-					Close();
-				}
-			}
+                if (FormValidator.ValidateHotelForm(name))
+                {
+                    SendHotelToDB();
+                    PromptForRoomEdit();
+
+                    Close();
+                }
+            }
 			/* BIG THINGS TO DO:
              * - validation (ctnd)
              * - add a "room list is null!" warning
-             * 
-             * 
-             * 
              */
 		}
 
-		private List<Room> GetRooms()
+        private void SendHotelToDB()
+        {
+            string jsonHotel = Newtonsoft.Json.JsonConvert.SerializeObject(hotel);
+            DBMethods.StoreHotel(jsonHotel);
+        }
+
+        private void PromptForRoomEdit()
+        {
+            // Show a confirmation dialog with custom message and options
+            MessageBoxResult editRoomResult = MessageBox.Show(
+                "Hotel data saved successfully. Would you like to edit the room data now?",
+                "Success",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Information);
+
+            if (editRoomResult == MessageBoxResult.Yes)
+                SummonRoomList();
+        }
+
+        private void SummonRoomList()
+        {
+            RoomListWindow listWindow = new RoomListWindow();
+            listWindow.Show();
+        }
+
+        private List<Room> GetRooms()
 		{
 			string roomsFor1Person = RoomsFor1PersonTextBox.Text;
 			string roomsFor2Persons = RoomsFor2PersonsTextBox.Text;

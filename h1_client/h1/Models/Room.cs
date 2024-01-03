@@ -21,12 +21,12 @@ namespace h1.Models
         public bool Balcony { get; set; }
         public bool ModularFurniture { get; set; }
 
-        public Room() //give each room a unique ID number
+        public Room() // Give each room a unique ID number
         {
             Id = INCREMENT;
             INCREMENT++;
         }
-		public bool AddGuest(Guest guest)
+        public bool AddGuest(Guest guest)
 		{
 			if (Guests.Count < Capacity)
 			{

@@ -1,6 +1,8 @@
 ﻿using h1.Models;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,15 +47,15 @@ namespace h1.Views
 
         private void RoomSettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Tag is int roomId) //room datacontext not called; possible solution - pass the room object instead of its Id
+            if (sender is Button button && button.DataContext is Room room) //room datacontext not called; possible solution - pass the room object instead of its Id
             {
                 RoomSettingsWindow settingsWindow = new RoomSettingsWindow();
-                //settingsWindow.DataContext = room; //make sure the window uses the room selected
+                settingsWindow.DataContext = room; //make sure the window uses the room selected
                 settingsWindow.ShowDialog();
             }
         }
 
-
+        #region thomas
         private List<Guest> GuestDebugMethod()
         {
             List<Guest> guestList = DBMethods.GetGuests();
@@ -90,8 +92,8 @@ namespace h1.Views
             DBMethods.Insert(testGuest);
 
             guestList.Add(testGuest);
-        }
-
+        } 
+        #endregion
 
         //all these two functions below are for, is for them to be put in a breakpoint, so i can see their objects directly, and check if everything is in order
         private void debug_rooms_breakpoint_button_Click(object sender, RoutedEventArgs e)
@@ -102,6 +104,30 @@ namespace h1.Views
         private void debug_guests_breakpoint_button_Click(object sender, RoutedEventArgs e)
         {
             var guests = DBMethods.GetGuests();
+        }
+
+        private void debug_test_button_3_Click(object sender, RoutedEventArgs e)
+        {
+            DebugPrintRoomStatus();
+        }
+
+        private void DebugPrintRoomStatus()
+        {
+            var a = hotel.Rooms;
+            Debug.WriteLine("Debug - displaying room properties");
+            Debug.Indent();
+            foreach (var item in hotel.Rooms)
+            {
+                Debug.WriteLine($"Room #{item.Id}");
+                Debug.Indent();
+                Debug.WriteLine($"NoiseReduction: {item.NoiseReduction}");
+                Debug.WriteLine($"SecurityFeatures: {item.SecurityFeatures}");
+                Debug.WriteLine($"SmartLighting: {item.SmartLighting}");
+                Debug.WriteLine($"Balcony: {item.Balcony}");
+                Debug.WriteLine($"ModularFurniture: {item.ModularFurniture}");
+                Debug.Unindent();
+            }
+            Debug.Unindent();
         }
     }
 }

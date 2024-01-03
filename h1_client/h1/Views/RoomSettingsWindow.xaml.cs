@@ -21,13 +21,10 @@ namespace h1.Views
         public RoomSettingsWindow()
         {
             InitializeComponent();
-            // Assuming you set the DataContext to an instance of RoomSettingsViewModel in the constructor or elsewhere.
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
-            // You should have a RoomSettingsViewModel as the DataContext. Cast DataContext accordingly.
             if (DataContext is RoomSettingsWindow roomSettingsViewModel)
             {
                 // Perform save operation or update the corresponding Room model
@@ -50,6 +47,8 @@ namespace h1.Views
                 // Close the window after saving
                 Close();
             }
+
+            Close(); //remove this one after validation has been implemented
         }
     }
 }

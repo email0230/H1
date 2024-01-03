@@ -9,7 +9,7 @@
     <Grid>
         <StackPanel>
             <!-- Add UI elements to edit Room properties -->
-            <TextBlock FontWeight="Bold" Margin="10" Text="{Binding RoomId, StringFormat='Room Settings ({0})'}"/>
+            <TextBlock FontWeight="Bold" Margin="10" Text="{Binding Id, StringFormat='Room #{0} Settings '}"/>
 
             <GroupBox Header="Room Features" Margin="10">
                 <StackPanel>

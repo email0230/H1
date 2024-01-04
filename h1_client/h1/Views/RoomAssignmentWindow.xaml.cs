@@ -49,8 +49,6 @@ namespace h1.Views
             throw new NotImplementedException();
         }
 
-        
-
         private void AddNewObjectButton_Click(object sender, RoutedEventArgs e)
         {
             CreateGroupElement();
@@ -63,13 +61,12 @@ namespace h1.Views
                 if (MessageBox.Show($"Are you sure you want to remove the group '{groupToRemove.GroupName}'?", "Confirm Removal", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     Groups.Remove(groupToRemove);
-                    DebugPrintGroupsVarStatus(); // Optionally print the updated status
+                    DebugPrintGroupsVarStatus();
                 }
             }
         }
         private void CreateGroupElement()
         {
-            // Assuming you have a ViewModel with an ObservableCollection named "Groups"
             if (DataContext is RoomAssignmentWindow viewModel)
             {
                 AddGroupTicket(viewModel);

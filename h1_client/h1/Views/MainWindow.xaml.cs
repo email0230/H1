@@ -61,7 +61,7 @@ namespace h1
         {
             ObservableCollection<Group> groups = DebugInitGroupCollection();
 
-            DLVHandler.GenerateDLVFile(groups);
+            DLVHandler.GenerateQuery(groups);
         }
 
         private static ObservableCollection<Group> DebugInitGroupCollection()

@@ -4,11 +4,13 @@ using SharpCompress.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 
 namespace h1
 {
@@ -27,24 +29,32 @@ namespace h1
 
         private static Dictionary<Guest,int> GuestDict { get; set; }
         
-        private static readonly string GROUPS_FILEPATH = @"dlvStuff/target/groups.txt";
-        private static readonly string ROOMS_FILEPATH = @"dlvStuff/target/rooms.txt";
-        private static readonly string MODEL_FILEPATH = @"dlvStuff/target/model.txt";
+        private static readonly string GROUPS_FILEPATH = @"dlvStuff/assets/groups.txt";
+        private static readonly string ROOMS_FILEPATH = @"dlvStuff/assets/rooms.txt";
+        private static readonly string MODEL_FILEPATH = @"dlvStuff/assets/model.txt";
+        private static readonly string QUERY_FILEPATH = @"dlvStuff/solver/query.dl";
+        private static readonly string SOLVER_FILEPATH = @"dlvStuff/solver/dlv-2.1.2-win64.exe";
+        private static readonly string SOLUTION_FILEPATH = @"dlvStuff/target/solution.txt";
         private static readonly int TOGETHER_RULE_WEIGHT = 100;
         private static readonly int NO_TOGETHER_RULE_WEIGHT = 1;
 
 
-        #region group handling
-        private static string ParseGroupsToString(ObservableCollection<Group> inputGroupCollection, string path)
+        private static void CheckIfFileExists(string path)
         {
             if (File.Exists(path))
             {
                 File.Delete(path);
             }
+        }
+
+        #region group handling
+        private static void ParseGroupsToString(ObservableCollection<Group> inputGroupCollection, string path)
+        {
+            CheckIfFileExists(path);
 
             using (StreamWriter writer = new StreamWriter(path, true, Encoding.UTF8)) //might need to use the simpler version to reduce indentation
             {
-                writer.WriteLine("% AUTOMATICALLY GENERATED\n");
+                writer.WriteLine("% AUTOMATICALLY GENERATED | GUEST GROUPS\n");
 
                 BuildGroups(inputGroupCollection, writer);
                 BuildGroupProps(inputGroupCollection, writer);
@@ -52,7 +62,6 @@ namespace h1
 
                 writer.Close();
             }
-            return null;
         }
 
         private static void BuildGroups(ObservableCollection<Group> inputGroupCollection, StreamWriter writer)
@@ -149,42 +158,131 @@ namespace h1
 
         #endregion
 
-        private static string ParseRoomsToString(string path)
+        #region room handling
+        private static void ParseRoomsToString(string path)
         {
             Hotel hotel = Hotel.GetInstance();
             List<Room> rooms = hotel.Rooms;
 
+            CheckIfFileExists(path);
+
             using (StreamWriter writer = new StreamWriter(path, true, Encoding.UTF8))
             {
-                //INTRO
+                writer.WriteLine("% AUTOMATICALLY GENERATED | ROOMS\n");
 
-                //ROOMS
+                BuildRooms(rooms, writer); //hehe
+                BuildRoomProps(rooms, writer);
 
-                //ROOM PROPS
-
-
-                foreach (var room in rooms)
-                {
-                    writer.WriteLine($"room({room.Id},{room.Capacity})."); //roomid might need to get normalized
-                }
+                writer.Close();
             }
-
-            return "haha";
         }
+
+        private static void BuildRoomProps(List<Room> rooms, StreamWriter writer)
+        {
+            foreach (var room in rooms)
+            {
+                WriteRoomProperty(writer, room.Id, room.NoiseReduction, "prop1");
+                WriteRoomProperty(writer, room.Id, room.SecurityFeatures, "prop2");
+                WriteRoomProperty(writer, room.Id, room.SmartLighting, "prop3");
+                WriteRoomProperty(writer, room.Id, room.Balcony, "prop4");
+                WriteRoomProperty(writer, room.Id, room.ModularFurniture, "prop5");
+            }
+        }
+
+        private static void WriteRoomProperty(StreamWriter writer, int roomId, bool hasProperty, string propName)
+        {
+            if (hasProperty)
+            {
+                writer.WriteLine($"has_{propName}({roomId}).");
+            }
+        }
+
+
+        private static void BuildRooms(List<Room> rooms, StreamWriter writer)
+        {
+            foreach (var room in rooms)
+            {
+                writer.WriteLine($"room({room.Id},{room.Capacity})."); //roomid might need to get normalized
+            }
+        } 
+        #endregion
+
         public static string GenerateQuery(ObservableCollection<Group> input)
         {
-            
-            string groupsString = ParseGroupsToString(input, GROUPS_FILEPATH);
-            string roomsString = ParseRoomsToString(ROOMS_FILEPATH);
-
-            //include the model string here!
-            return "haha";
+            ParseGroupsToString(input, GROUPS_FILEPATH);
+            ParseRoomsToString(ROOMS_FILEPATH);
+            string groupsString = File.ReadAllText(GROUPS_FILEPATH);
+            string roomsString = File.ReadAllText(ROOMS_FILEPATH);
+            string modelString = File.ReadAllText(MODEL_FILEPATH);
+            string query = $"{groupsString}\n\n{roomsString}\n\n{modelString}";
+           
+            File.WriteAllText(QUERY_FILEPATH, query); //get the file to the solver folder for easy access
+            return query;
         }
 
         public static string GetSolutionFromSolver(string query)
         {
             //call ".\dlv-2.1.2-win64.exe --filter=guest_in_room/2 hotel3.dl" here! (but better)
-            return "haha";
+
+            // Specify the command-line parameters
+            string parameters = @"--filter=guest_in_room/2 query.dl";
+
+            // Start the process
+            StartProcess(SOLVER_FILEPATH, parameters, SOLUTION_FILEPATH);
+
+            return File.ReadAllText(SOLVER_FILEPATH);
+        }
+
+        static void StartProcess(string executablePath, string parameters, string outputPath)
+        {
+            try
+            {
+                // Create a new process start info
+                //ProcessStartInfo processStartInfo = new ProcessStartInfo(executablePath, parameters);
+                ProcessStartInfo processStartInfo = new ProcessStartInfo
+                {
+                    FileName = executablePath,
+                    Arguments = parameters
+                };
+                // Redirect standard output to a StreamWriter
+                processStartInfo.RedirectStandardOutput = true;
+
+                // Set UseShellExecute to false to redirect input/output
+                processStartInfo.UseShellExecute = false;
+
+                // Create a new process and start it
+                using (Process process = new Process())
+                {
+                    process.StartInfo = processStartInfo;
+
+                    Debug.WriteLine(processStartInfo.Arguments);
+                    // Start the process and redirect standard output
+                    process.Start();
+
+                    // Read the standard output and save it to the specified file
+                    using (StreamWriter writer = new StreamWriter(outputPath))
+                    {
+                        while (!process.StandardOutput.EndOfStream)
+                        {
+                            string line = process.StandardOutput.ReadLine();
+                            Debug.WriteLine($"DEBUG: NOW DISPLAYING:{line}");
+                            writer.WriteLine(line);
+                        }
+                        writer.Close();
+                    }
+
+                    // Wait for the process to exit
+                    process.WaitForExit();
+
+                    // Optionally, handle process exit code or other tasks
+                    int exitCode = process.ExitCode;
+                    Debug.WriteLine($"Process exited with code {exitCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"An error occurred: {ex.Message}");
+            }
         }
     }
 }

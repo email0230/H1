@@ -61,7 +61,8 @@ namespace h1
         {
             ObservableCollection<Group> groups = DebugInitGroupCollection();
 
-            string a = DLVHandler.GenerateQuery(groups);
+            string query = DLVHandler.GenerateQuery(groups);
+            string solution = DLVHandler.GetSolutionFromSolver(query);
         }
 
         private static ObservableCollection<Group> DebugInitGroupCollection()

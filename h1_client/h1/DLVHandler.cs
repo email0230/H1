@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
 
@@ -16,28 +17,17 @@ namespace h1
 {
     public static class DLVHandler
     {
-        //TODO:
-        /*give groups numbers
-         * give guests numbers
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
-         */
-
-        private static Dictionary<Guest,int> GuestDict { get; set; }
-        
+        #region Constants
         private static readonly string GROUPS_FILEPATH = @"dlvStuff/assets/groups.txt";
         private static readonly string ROOMS_FILEPATH = @"dlvStuff/assets/rooms.txt";
         private static readonly string MODEL_FILEPATH = @"dlvStuff/assets/model.txt";
-        private static readonly string QUERY_FILEPATH = @"dlvStuff/solver/query.dl";
+        private static readonly string QUERY_FILEPATH = @"dlvStuff/assets/query.dl";
         private static readonly string SOLVER_FILEPATH = @"dlvStuff/solver/dlv-2.1.2-win64.exe";
-        private static readonly string SOLUTION_FILEPATH = @"dlvStuff/target/solution.txt";
+        private static readonly string SOLUTION_FILEPATH = @"dlvStuff/target/solver_output.txt";
         private static readonly int TOGETHER_RULE_WEIGHT = 100;
         private static readonly int NO_TOGETHER_RULE_WEIGHT = 1;
-
+        #endregion
+        private static Dictionary<Guest, int> GuestDict { get; set; }
 
         private static void CheckIfFileExists(string path)
         {
@@ -48,7 +38,7 @@ namespace h1
         }
 
         #region group handling
-        private static void ParseGroupsToString(ObservableCollection<Group> inputGroupCollection, string path)
+        private static void ParseGroupsToString(ObservableCollection<Models.Group> inputGroupCollection, string path)
         {
             CheckIfFileExists(path);
 
@@ -64,14 +54,14 @@ namespace h1
             }
         }
 
-        private static void BuildGroups(ObservableCollection<Group> inputGroupCollection, StreamWriter writer)
+        private static void BuildGroups(ObservableCollection<Models.Group> inputGroupCollection, StreamWriter writer)
         {
             writer.WriteLine("% Groups:");
 
             byte counter = 0;
             byte guestCounter = 0;
             GuestDict = new Dictionary<Guest, int>(); //might need to move up a scope to be visible to the other method...
-            foreach (Group group in inputGroupCollection)
+            foreach (Models.Group group in inputGroupCollection)
             {
                 counter++;
                 group.GroupName = counter.ToString();
@@ -88,10 +78,10 @@ namespace h1
             }
         }
 
-        private static void BuildGroupProps(ObservableCollection<Group> inputGroupCollection, StreamWriter writer)
+        private static void BuildGroupProps(ObservableCollection<Models.Group> inputGroupCollection, StreamWriter writer)
         {
             writer.WriteLine("% Group Properties:");
-            foreach (Group group in inputGroupCollection)
+            foreach (Models.Group group in inputGroupCollection)
             {
                 WriteGroupPropertyIfTrue(group.WantNoiseReduction, $"want_prop1({group.GroupName}).", writer);
                 WriteGroupPropertyIfTrue(group.WantSecurityFeatures, $"want_prop2({group.GroupName}).", writer);
@@ -109,11 +99,11 @@ namespace h1
             }
         }
 
-        private static void BuildTogetherStatements(ObservableCollection<Group> inputGroupCollection, StreamWriter writer)
+        private static void BuildTogetherStatements(ObservableCollection<Models.Group> inputGroupCollection, StreamWriter writer)
         {
             writer.WriteLine("% Together statements:");
 
-            foreach (Group group in inputGroupCollection)
+            foreach (Models.Group group in inputGroupCollection)
             {
                 List<int> guestNumbers = GetGuestNumbers(group);
 
@@ -126,9 +116,9 @@ namespace h1
             }
         }
 
-        private static int DetermineWeight(Group group) => group.WantGroupToStayTogether ? TOGETHER_RULE_WEIGHT : NO_TOGETHER_RULE_WEIGHT;
+        private static int DetermineWeight(Models.Group group) => group.WantGroupToStayTogether ? TOGETHER_RULE_WEIGHT : NO_TOGETHER_RULE_WEIGHT;
 
-        private static List<int> GetGuestNumbers(Group group)
+        private static List<int> GetGuestNumbers(Models.Group group)
         {
             List<int> numbers = new List<int>();
 
@@ -207,7 +197,7 @@ namespace h1
         } 
         #endregion
 
-        public static string GenerateQuery(ObservableCollection<Group> input)
+        public static string GenerateQuery(ObservableCollection<Models.Group> input)
         {
             ParseGroupsToString(input, GROUPS_FILEPATH);
             ParseRoomsToString(ROOMS_FILEPATH);
@@ -222,50 +212,72 @@ namespace h1
 
         public static string GetSolutionFromSolver(string query)
         {
-            //call ".\dlv-2.1.2-win64.exe --filter=guest_in_room/2 hotel3.dl" here! (but better)
+            string cmd_args = $"--filter=guest_in_room/2 {QUERY_FILEPATH}";
 
-            // Specify the command-line parameters
-            string parameters = @"--filter=guest_in_room/2 query.dl";
+            StartProcess(SOLVER_FILEPATH, cmd_args, SOLUTION_FILEPATH);
+            List<Tuple<int, int>> assignments = InterpretSolution(SOLUTION_FILEPATH);
+            //this list, along with the guest dict can be passed to a different class that can assign these guests as a part of transaction.
 
-            // Start the process
-            StartProcess(SOLVER_FILEPATH, parameters, SOLUTION_FILEPATH);
-
-            return File.ReadAllText(SOLVER_FILEPATH);
+            return "xd";
         }
 
-        static void StartProcess(string executablePath, string parameters, string outputPath)
+        private static List<Tuple<int, int>> InterpretSolution(string path)
+        {
+            var pairs = new List<Tuple<int, int>>();
+
+            var input = File.ReadAllText(path);
+
+            //regex: get stuff from between curly braces
+            Match match = Regex.Match(input, @"\{([^}]*)\}");
+
+            if (match.Success)
+            {
+                // Extract the content within standard brackets from the curly braces content
+                string contentWithinBraces = match.Groups[1].Value;
+
+                //regex: get stuff from between brackets
+                MatchCollection numberMatches = Regex.Matches(contentWithinBraces, @"\((\d+),(\d+)\)");
+
+                foreach (Match numberMatch in numberMatches)
+                {
+                    int firstNumber = int.Parse(numberMatch.Groups[1].Value);
+                    int secondNumber = int.Parse(numberMatch.Groups[2].Value);
+                    pairs.Add(new Tuple<int, int>(firstNumber, secondNumber));
+                }
+            }
+            else
+            {
+                Debug.WriteLine("No match found within curly braces.");
+            }
+
+            return pairs;
+        }
+
+        //silly todo: put the model somewhere where git will find it, same with the solver
+
+        static void StartProcess(string executablePath, string args, string outputPath) //can be improved tremenodus
         {
             try
             {
-                // Create a new process start info
-                //ProcessStartInfo processStartInfo = new ProcessStartInfo(executablePath, parameters);
                 ProcessStartInfo processStartInfo = new ProcessStartInfo
                 {
                     FileName = executablePath,
-                    Arguments = parameters
+                    Arguments = args,
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false
                 };
-                // Redirect standard output to a StreamWriter
-                processStartInfo.RedirectStandardOutput = true;
-
-                // Set UseShellExecute to false to redirect input/output
-                processStartInfo.UseShellExecute = false;
 
                 // Create a new process and start it
                 using (Process process = new Process())
                 {
                     process.StartInfo = processStartInfo;
-
-                    Debug.WriteLine(processStartInfo.Arguments);
-                    // Start the process and redirect standard output
                     process.Start();
 
-                    // Read the standard output and save it to the specified file
                     using (StreamWriter writer = new StreamWriter(outputPath))
                     {
                         while (!process.StandardOutput.EndOfStream)
                         {
                             string line = process.StandardOutput.ReadLine();
-                            Debug.WriteLine($"DEBUG: NOW DISPLAYING:{line}");
                             writer.WriteLine(line);
                         }
                         writer.Close();
@@ -274,7 +286,7 @@ namespace h1
                     // Wait for the process to exit
                     process.WaitForExit();
 
-                    // Optionally, handle process exit code or other tasks
+                    //this one might need to go
                     int exitCode = process.ExitCode;
                     Debug.WriteLine($"Process exited with code {exitCode}");
                 }

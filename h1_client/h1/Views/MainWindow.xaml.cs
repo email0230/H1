@@ -59,10 +59,18 @@ namespace h1
 
         private void debugDlvButton_Click(object sender, RoutedEventArgs e)
         {
+            //all this: debug, just to see if it works well with a sample set. in actual program this needs to be put in guest assignment after validation passes etc
+
             ObservableCollection<Group> groups = DebugInitGroupCollection();
 
-            string query = DLVHandler.GenerateQuery(groups);
-            string solution = DLVHandler.GetSolutionFromSolver(query);
+            // Instantiate SolutionInputBuilder
+            SolutionInputBuilder builder = new SolutionInputBuilder();
+
+            string query = builder.GenerateQuery(groups);
+            List<Tuple<int, int>> solution = DLVHandler.GetSolutionFromSolver(query);
+            Dictionary<Guest, int> dictionary = builder.GetGuestDict();
+
+            //AssignRooms(solution, builder.GetGuestDict());
         }
 
         private static ObservableCollection<Group> DebugInitGroupCollection()

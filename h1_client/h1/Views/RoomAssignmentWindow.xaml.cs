@@ -60,7 +60,9 @@ namespace h1.Views
 
             hotel.LastModifiedDate = DateTime.Now; //so that db may find it, can be removed if a better way of getting most recent hotel is found
             
-            SendHotelToDB();
+            SendHotelToDB(); //it seems the hotel bit that is sent to the db doesnt contain hotel> guests information...
+
+            Close();
         }
 
         private void SendHotelToDB() //this is a triplicate from the one present in roomlist... gott afigure out a better way to outsource hotel related functions!!
@@ -95,22 +97,44 @@ namespace h1.Views
             if (guest.AssignedRoomNumber.HasValue)
                 throw new InvalidOperationException($"Guest {guest.FirstName} {guest.LastName} is already assigned to room {guest.AssignedRoomNumber}.");
             
-            var room = hotel.FindRoomById(roomId);
+            Room room = hotel.FindRoomById(roomId);
 
             // Check if the room exists
-            if (room != null)
+            if (room == null)
             {
-                // Try to add the guest to the room
-                if (room.AddGuest(guest))
+                throw new InvalidOperationException();
+            }
+            
+            // Try to add the guest to the room
+            if (!room.AddGuest(guest))
+            {
+                throw new InvalidOperationException("Guest addition failed!");
+            }
+            // Set the room information for the guest
+            guest.AssignedRoomNumber = roomId;
+
+            //maybe send guests to the guiest collection in db here????
+
+            // Notify UI elements of the AssignedRoomNumber change
+            guest.NotifyAssignedRoomNumberChanged();
+
+            CheckIfRoomsInHotelHaveGuests();
+        }
+
+        private void CheckIfRoomsInHotelHaveGuests()
+        {
+            var a = hotel.Rooms;
+            foreach (var room in a)
+            {
+                List<Guest> aaa = room.GetGuests();
+
+                Debug.WriteLine($"DISPLAYING ROOM NR {room.Id}");
+                Debug.Indent();
+                foreach (var item in aaa)
                 {
-                    // Set the room information for the guest
-                    guest.AssignedRoomNumber = roomId;
-
-                    // Optionally, perform additional actions or validation here.
-
-                    // Notify UI elements of the AssignedRoomNumber change
-                    guest.NotifyAssignedRoomNumberChanged();
+                    Debug.WriteLine($"found a guest: {item.LastName} {item.FirstName}");
                 }
+                Debug.Unindent();
             }
         }
 

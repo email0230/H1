@@ -1,4 +1,5 @@
 ﻿using h1.Models;
+using MongoDB.Bson;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -43,10 +44,74 @@ namespace h1.Views
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             ObservableCollection<Group> formData = Groups;
+
             //validate, and send?
             DebugPrintGroupsVarStatus();
             DebugPrintGroupProperties();
-            throw new NotImplementedException();
+
+            // Instantiate SolutionInputBuilder
+            SolutionInputBuilder builder = new SolutionInputBuilder();
+
+            string query = builder.GenerateQuery(formData);
+            List<Tuple<int, int>> solution = DLVHandler.GetSolutionFromSolver(query);
+            Dictionary<Guest, int> dictionary = builder.GetGuestDict();
+
+            AssignRooms(solution, builder.GetGuestDict());
+
+            hotel.LastModifiedDate = DateTime.Now; //so that db may find it, can be removed if a better way of getting most recent hotel is found
+            
+            SendHotelToDB();
+        }
+
+        private void SendHotelToDB() //this is a triplicate from the one present in roomlist... gott afigure out a better way to outsource hotel related functions!!
+        {
+            string jsonHotel = Newtonsoft.Json.JsonConvert.SerializeObject(hotel);
+            DBMethods.StoreHotel(jsonHotel);
+        }
+
+        private void AssignRooms(List<Tuple<int, int>> solution, Dictionary<Guest, int> dictionary)
+        {
+            foreach (var tuple in solution)
+            {
+                int guestNumber = tuple.Item1;
+                int roomId = tuple.Item2;
+
+                // Assuming the structure is Dictionary<Guest, int> where int is the numerical representation
+                foreach (var kvp in dictionary)
+                {
+                    if (kvp.Value == guestNumber)
+                    {
+                        // The guest with the matching numerical representation is found
+                        AssignGuest(kvp.Key, roomId);
+                        break;  // Break the loop once the guest is found
+                    }
+                }
+            }
+        }
+
+        private void AssignGuest(Guest guest, int roomId)
+        {
+            // Check if the guest is already assigned to a room
+            if (guest.AssignedRoomNumber.HasValue)
+                throw new InvalidOperationException($"Guest {guest.FirstName} {guest.LastName} is already assigned to room {guest.AssignedRoomNumber}.");
+            
+            var room = hotel.FindRoomById(roomId);
+
+            // Check if the room exists
+            if (room != null)
+            {
+                // Try to add the guest to the room
+                if (room.AddGuest(guest))
+                {
+                    // Set the room information for the guest
+                    guest.AssignedRoomNumber = roomId;
+
+                    // Optionally, perform additional actions or validation here.
+
+                    // Notify UI elements of the AssignedRoomNumber change
+                    guest.NotifyAssignedRoomNumberChanged();
+                }
+            }
         }
 
         private void AddNewObjectButton_Click(object sender, RoutedEventArgs e)

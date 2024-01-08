@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,10 +42,31 @@ namespace h1.Models
 		private static Hotel GetHotelStateFromDB()
 		{
 			BsonDocument hotelString = DBMethods.GetHotel(); //add async to db calls?
-            return hotelString != null ? BsonSerializer.Deserialize<Hotel>(hotelString) : null;
+			var a = hotelString != null ? BsonSerializer.Deserialize<Hotel>(hotelString) : null;
+			CheckIfRoomsHaveProps(a);
+
+            return a;
 		}
 
-		public int[] GetHotelRoomCounts()
+        private static void CheckIfRoomsHaveProps(Hotel? a)
+        {
+            Debug.WriteLine("Debug - displaying room properties");
+            Debug.Indent();
+            foreach (var item in a.Rooms)
+            {
+                Debug.WriteLine($"Room #{item.Id}");
+                Debug.Indent();
+                Debug.WriteLine($"NoiseReduction: {item.NoiseReduction}");
+                Debug.WriteLine($"SecurityFeatures: {item.SecurityFeatures}");
+                Debug.WriteLine($"SmartLighting: {item.SmartLighting}");
+                Debug.WriteLine($"Balcony: {item.Balcony}");
+                Debug.WriteLine($"ModularFurniture: {item.ModularFurniture}");
+                Debug.Unindent();
+            }
+            Debug.Unindent();
+        }
+
+        public int[] GetHotelRoomCounts()
 		{
 			int[] counts = new int[3];
 
@@ -54,10 +76,22 @@ namespace h1.Models
 
 			return counts;
 		}
-		public void someBusinessLogic()
-		{
-			// ...
-		}
-	}
+        public Room FindRoomById(int roomId)
+        {
+            // Iterate through all rooms in the hotel
+            foreach (var room in Rooms)
+            {
+                // Check if the current room's RoomId matches the given roomId
+                if (room.Id == roomId)
+                {
+                    // Return the room if found
+                    return room;
+                }
+            }
+
+            // Return null if no room with the specified roomId is found
+            return null;
+        }
+    }
 
 }

@@ -30,6 +30,28 @@ namespace h1.Views
             InitializeComponent();
             PassRoomsToListView();
         }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var TERRIBLEVARIABLENAM = hotel.Rooms;
+            DebugPrintRoomStatus();
+
+            hotel.LastModifiedDate = DateTime.Now; //so that db may find it, can be removed if a better way of getting most recent hotel is found
+
+            if (true) //validate here?
+            {
+                SendHotelToDB();
+                Close();
+            }
+            
+        }
+
+        private void SendHotelToDB() //this is a duplicate from the one present in hoteldesigner... gott afigure out a better way to outsource hotel related functions!!
+        {
+            string jsonHotel = Newtonsoft.Json.JsonConvert.SerializeObject(hotel);
+            DBMethods.StoreHotel(jsonHotel);
+        }
+
         private void PassRoomsToListView()
         {
             //this entire thing is vestigial from when i tried to add a guest to see if tehre are any immidate issues. feel free to trash this!

@@ -38,6 +38,10 @@
             </ListView.View>
         </ListView>
 
+        <!-- Save Button -->
+        <Button Content="Save" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,21,21" Click="SaveButton_Click"/>
+
+
         <!-- Bonus Row for Debug Buttons -->
         <StackPanel Background="Orange" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Button x:Name="debug_rooms_breakpoint_button" Content="Display all rooms" Margin="5" Click="debug_rooms_breakpoint_button_Click"/>

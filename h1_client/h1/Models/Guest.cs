@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -35,17 +36,25 @@ namespace h1.Models
             }
         }
 
+        //public int GuestId { get; set; }
+        [BsonId]
         public ObjectId _id { get; set; }
         public DateTime? ArrivalDate { get; set; }
         public DateTime? DepartureDate { get; set; }
         //IMPORTANT: two datetime propertie above are absolutely neccessary, change it to requires instead of nullable after testing is done!
         public int? AssignedRoomNumber { get; set; }
         //other properties might also need to use onpropchanged, but only if they are meant to be displayed in a UI
+
         #region Less important properties
         public int? Phone { get; set; }
         public string? Email { get; set; }
         public DateTime? DateOfBirth { get; set; }
         #endregion
+
+        public void NotifyAssignedRoomNumberChanged()
+        {
+            OnPropertyChanged(nameof(AssignedRoomNumber));
+        }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

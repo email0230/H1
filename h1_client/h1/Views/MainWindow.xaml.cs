@@ -2,6 +2,7 @@
 using h1.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,6 +55,51 @@ namespace h1
         {
             RoomListWindow listWindow = new RoomListWindow();
             listWindow.Show();
+        }
+
+        private void debugDlvButton_Click(object sender, RoutedEventArgs e)
+        {
+            //all this: debug, just to see if it works well with a sample set. in actual program this needs to be put in guest assignment after validation passes etc
+
+            ObservableCollection<Group> groups = DebugInitGroupCollection();
+
+            // Instantiate SolutionInputBuilder
+            SolutionInputBuilder builder = new SolutionInputBuilder();
+
+            string query = builder.GenerateQuery(groups);
+            List<Tuple<int, int>> solution = DLVHandler.GetSolutionFromSolver(query);
+            Dictionary<Guest, int> dictionary = builder.GetGuestDict();
+
+            //AssignRooms(solution, builder.GetGuestDict());
+        }
+
+        private static ObservableCollection<Group> DebugInitGroupCollection()
+        {
+            ObservableCollection<Group> groups = new ObservableCollection<Group>();
+
+            // Declare and add statically 2-3 groups, each with 2 guests
+            ObservableCollection<Guest> guests1 = new ObservableCollection<Guest>
+            {
+                new Guest{LastName = "Nowakowski", FirstName = "Piotr" },
+                new Guest{LastName = "adasd", FirstName = "ssss" }
+            };
+            Group group1 = new Group(guests1, "aa");
+            groups.Add(group1);
+
+            ObservableCollection<Guest> guests2 = new ObservableCollection<Guest>
+            {
+                new Guest{LastName = "sddd", FirstName = "aaaa" },
+                new Guest{LastName = "bbb", FirstName = "pitor" }
+            };
+            Group group2 = new Group(guests2, "grr");
+            groups.Add(group2);
+
+            group1.WantGroupToStayTogether = true;
+            group1.WantNoiseReduction = true;
+            group2.WantModularFurniture = true;
+            group2.WantSecurityFeatures = true;
+
+            return groups;
         }
     }
 }

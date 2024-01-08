@@ -1,0 +1,26 @@
+﻿% GUEST ASSIGNMENT MODEL,
+
+% declaring guests "backwards" (wyłuskiwanie gości)
+guest(G) :- group(_, G).
+
+% the goal variable, the one we filter for
+guest_in_room(G, R) | -guest_in_room(G, R) :- guest(G), room(R,_). 
+% a guest may not be in the two different rooms at any one time
+:- guest(G), guest_in_room(G, R1), guest_in_room(G, R2), R1 != R2.
+
+% definition of checked
+checked(G) :- guest(G), guest_in_room(G, R).
+:- guest(G), not checked(G).
+
+% this method makes sure there are no rooms filled beyond their capacity; C for capacity
+:- room(R, C), #count{G : guest_in_room(G,R)} > C. 
+
+% definition of "together"
+together(G1, G2) :- guest(G1), guest(G2), G1 < G2, guest_in_room(G1, R), guest_in_room(G2, R).
+
+%prop handling
+:~ group(N,G), want_prop1(N), guest_in_room(G, R), not has_prop1(R). [5]
+:~ group(N,G), want_prop2(N), guest_in_room(G, R), not has_prop2(R). [5]
+:~ group(N,G), want_prop3(N), guest_in_room(G, R), not has_prop3(R). [5]
+:~ group(N,G), want_prop4(N), guest_in_room(G, R), not has_prop4(R). [5]
+:~ group(N,G), want_prop5(N), guest_in_room(G, R), not has_prop5(R). [5]

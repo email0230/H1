@@ -22,6 +22,7 @@
             <Button Content="Hotel Designer" HorizontalAlignment="Center" Width="150" Height="30" Background="#007ACC" Foreground="White" Click="HotelDesignerButton_Click"/>
             <Button Content="(debug) rooms list" HorizontalAlignment="Center" Width="150" Height="30" Background="#007ACC" Foreground="White" Click="RoomList_Click" />
             <Button Content="Assign guests" HorizontalAlignment="Center" Width="150" Height="30" Background="#007ACC" Foreground="White" Click="RoomAssign_Click" />
+            <Button x:Name="debugDlvButton" Content="Button" Height="45" Width="149" Click="debugDlvButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>

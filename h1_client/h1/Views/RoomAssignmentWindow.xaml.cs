@@ -42,7 +42,7 @@ namespace h1.Views
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
-            var formData = Groups;
+            ObservableCollection<Group> formData = Groups;
             //validate, and send?
             DebugPrintGroupsVarStatus();
             DebugPrintGroupProperties();

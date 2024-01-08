@@ -45,7 +45,7 @@ namespace h1
 
             if (match.Success)
             {
-                // Extract the content within standard brackets from the curly braces content
+                //use the first regex expression
                 string contentWithinBraces = match.Groups[1].Value;
 
                 //regex: get stuff from between brackets
@@ -80,7 +80,6 @@ namespace h1
                     UseShellExecute = false
                 };
 
-                // Create a new process and start it
                 using (Process process = new Process())
                 {
                     process.StartInfo = processStartInfo;
@@ -96,10 +95,9 @@ namespace h1
                         writer.Close();
                     }
 
-                    // Wait for the process to exit
                     process.WaitForExit();
 
-                    //this one might need to go
+                    //this one might need to go for release
                     int exitCode = process.ExitCode;
                     Debug.WriteLine($"Process exited with code {exitCode}");
                 }

@@ -17,8 +17,6 @@ namespace h1
         private static readonly int TOGETHER_RULE_WEIGHT = 100;
         private static readonly int NO_TOGETHER_RULE_WEIGHT = 1;
         #endregion
-        //public static Dictionary<Guest, int> GuestDict { get; set; }
-
 
         private Dictionary<Guest, int> GuestDict;
 
@@ -58,7 +56,6 @@ namespace h1
                 for (int i = 0; i < group.Guests.Count; i++)
                 {
                     guestCounter++;
-                    // Get i'th guest
                     Guest currentGuest = group.Guests[i];
                     GuestDict.Add(currentGuest, guestCounter);
 
@@ -113,8 +110,6 @@ namespace h1
             return output.ToString();
         }
 
-        private static int DetermineWeight(Group group) => group.WantGroupToStayTogether ? TOGETHER_RULE_WEIGHT : NO_TOGETHER_RULE_WEIGHT;
-
         private List<int> GetGuestNumbers(Group group)
         {
             List<int> numbers = new List<int>();
@@ -143,6 +138,8 @@ namespace h1
             return pairs;
         }
 
+        private static int DetermineWeight(Group group) => group.WantGroupToStayTogether ? TOGETHER_RULE_WEIGHT : NO_TOGETHER_RULE_WEIGHT;
+
         #endregion
 
         #region room handling
@@ -154,7 +151,6 @@ namespace h1
             StringBuilder output = new StringBuilder();
             output.AppendLine("% AUTOMATICALLY GENERATED | ROOMS\n");
 
-            // Append the outputs directly to the StringBuilder
             output.AppendLine(BuildRooms(rooms));
             output.AppendLine(BuildRoomProps(rooms));
 
@@ -198,16 +194,11 @@ namespace h1
 
         public string GenerateQuery(ObservableCollection<Group> input)
         {
-            //string groupsString = File.ReadAllText(GROUPS_FILEPATH);
-            //string roomsString = File.ReadAllText(ROOMS_FILEPATH);
-
             string groupsString = ParseGroupsToString(input);
             string roomsString = ParseRoomsToString();
             string modelString = File.ReadAllText(MODEL_FILEPATH);
-            string query = $"{groupsString}\n\n{roomsString}\n\n{modelString}";
 
-            //File.WriteAllText(QUERY_FILEPATH, query); //possibly need to get rid of that one
-            return query;
+            return $"{groupsString}\n\n\n{roomsString}\n\n\n{modelString}";
         }
     }
 }

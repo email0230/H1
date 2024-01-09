@@ -51,15 +51,15 @@ namespace h1.Views
 
             // Instantiate SolutionInputBuilder
             SolutionInputBuilder builder = new SolutionInputBuilder();
-
-            string query = builder.GenerateQuery(formData, hotel.Rooms); //here, rooms passed might need to get checked for any disabled rooms!!
+            var rawRooms = hotel.Rooms;
+            //Dictionary<int, int> roomDict = GetRoomDict();
+            //List<Room> cleanRooms = RemoveInvalidRooms(rawRooms);
+            string query = builder.GenerateQuery(formData, rawRooms); //here, rooms passed might need to get checked for any disabled rooms!!
             List<Tuple<int, int>> solution = DLVHandler.GetSolutionFromSolver(query);
 
             AssignRooms(solution, builder.GetGuestDict());
 
-            //hotel.LastModifiedDate = DateTime.Now; //so that db may find it, can be removed if a better way of getting most recent hotel is found
-
-            //SendHotelToDB(); //it seems the hotel bit that is sent to the db doesnt contain hotel> guests information...
+            SendHotelToDB(); 
             
             var rooms = hotel.Rooms;
             CheckIfRoomsInHotelHaveGuests(rooms);
@@ -67,6 +67,11 @@ namespace h1.Views
             //SaveRoomsToDB(rooms);
             
             Close();
+        }
+
+        private List<Room> RemoveInvalidRooms(List<Room> rooms)
+        {
+            throw new NotImplementedException();
         }
 
         //private void SaveRoomsToDB(List<Room> rooms)

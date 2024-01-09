@@ -167,6 +167,11 @@ namespace h1
             StringBuilder output = new StringBuilder();
             foreach (var room in rooms)
             {
+                if (room.IsRoomOccupied())
+                {
+                    continue;
+                }
+
                 AppendRoomProperty(output, room.Id, room.NoiseReduction, "prop1");
                 AppendRoomProperty(output, room.Id, room.SecurityFeatures, "prop2");
                 AppendRoomProperty(output, room.Id, room.SmartLighting, "prop3");
@@ -190,11 +195,24 @@ namespace h1
             StringBuilder output = new StringBuilder();
             foreach (var room in rooms)
             {
-                output.AppendLine($"room({room.Id},{room.Capacity})."); //roomid might need to get normalized
+                if (!room.IsRoomOccupied())
+                {
+                    output.AppendLine($"room({room.Id},{room.Capacity})."); //roomid might need to get normalized
+                }
+               
             }
 
             return output.ToString();
         }
+
+        //private static bool RoomIsOccupied(Room room)
+        //{
+        //    if (room.Guests.Count != 0)
+        //    {
+        //        return false;
+        //    }
+        //    return true;
+        //}
         #endregion
 
         public string GenerateQuery(ObservableCollection<Group> input, List<Room> rooms)

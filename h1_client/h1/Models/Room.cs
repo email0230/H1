@@ -56,5 +56,11 @@ namespace h1.Models
 		{
 			return Guests;
 		}
+
+		public bool IsRoomOccupied()
+		{
+			return Guests.Count >= 1;
+		}
+			
 	}
 }

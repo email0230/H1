@@ -20,7 +20,7 @@ namespace h1
         static IMongoCollection<Guest> GuestCollection = database.GetCollection<Guest>("GuestCollection");
         static IMongoCollection<BsonDocument> HotelDataCollection = database.GetCollection<BsonDocument>("HotelDataCollection");
         static IMongoCollection<BsonDocument> HotelRoomCollection = database.GetCollection<BsonDocument>("HotelRoomCollection");
-        #endregion //add public access mods if problems arise
+        #endregion
 
         public static void Insert(Guest guest)
         {
@@ -36,15 +36,6 @@ namespace h1
             BsonDocument bsonDocument = BsonDocument.Parse(jsonInput);
             HotelDataCollection.InsertOne(bsonDocument);
         }
-
-        //public static BsonDocument GetHotel()
-        //{
-        //	// Sort the data by date in descending order (most recent first)
-        //	var sort = Builders<BsonDocument>.Sort.Descending("LastModifiedDate"); // Replace "DateField" with your actual date field name
-
-        //	// Perform the query with sorting
-        //	return HotelDataCollection.Find(new BsonDocument()).Sort(sort).FirstOrDefault();
-        //}
 
         public static BsonDocument GetHotel()
         {

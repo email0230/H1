@@ -52,7 +52,7 @@ namespace h1.Views
             // Instantiate SolutionInputBuilder
             SolutionInputBuilder builder = new SolutionInputBuilder();
 
-            string query = builder.GenerateQuery(formData);
+            string query = builder.GenerateQuery(formData, hotel.Rooms); //here, rooms passed might need to get checked for any disabled rooms!!
             List<Tuple<int, int>> solution = DLVHandler.GetSolutionFromSolver(query);
 
             AssignRooms(solution, builder.GetGuestDict());

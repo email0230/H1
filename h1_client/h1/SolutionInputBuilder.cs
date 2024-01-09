@@ -26,7 +26,7 @@ namespace h1
         }
 
         #region group handling
-        private string ParseGroupsToString(ObservableCollection<Group> inputGroupCollection)
+        public string ParseGroupsToString(ObservableCollection<Group> inputGroupCollection)
         {
             StringBuilder output = new StringBuilder();
             output.AppendLine("% AUTOMATICALLY GENERATED | GUEST GROUPS\n");
@@ -39,7 +39,7 @@ namespace h1
             return output.ToString();
         }
 
-        private string BuildGroups(ObservableCollection<Group> inputGroupCollection)
+        public string BuildGroups(ObservableCollection<Group> inputGroupCollection)
         {
             StringBuilder output = new StringBuilder();
             output.AppendLine("% Groups:");
@@ -66,7 +66,7 @@ namespace h1
             return output.ToString();
         }
 
-        private static string BuildGroupProps(ObservableCollection<Group> inputGroupCollection)
+        public static string BuildGroupProps(ObservableCollection<Group> inputGroupCollection)
         {
             StringBuilder output = new StringBuilder();
             output.AppendLine("% Group Properties:");
@@ -83,7 +83,7 @@ namespace h1
             return output.ToString();
         }
 
-        private static void AppendGroupPropertyIfTrue(bool condition, string property, StringBuilder output)
+        public static void AppendGroupPropertyIfTrue(bool condition, string property, StringBuilder output)
         {
             if (condition)
             {
@@ -91,7 +91,7 @@ namespace h1
             }
         }
 
-        private string BuildTogetherStatements(ObservableCollection<Group> inputGroupCollection)
+        public string BuildTogetherStatements(ObservableCollection<Group> inputGroupCollection)
         {
             StringBuilder output = new StringBuilder();
             output.AppendLine("% Together statements:");
@@ -110,7 +110,7 @@ namespace h1
             return output.ToString();
         }
 
-        private List<int> GetGuestNumbers(Group group)
+        public List<int> GetGuestNumbers(Group group)
         {
             List<int> numbers = new List<int>();
 
@@ -124,7 +124,7 @@ namespace h1
             return numbers;
         }
 
-        private static List<Tuple<int, int>> FindAllPairs(List<int> guests)
+        public static List<Tuple<int, int>> FindAllPairs(List<int> guests)
         {
             List<Tuple<int, int>> pairs = new List<Tuple<int, int>>();
 
@@ -138,15 +138,15 @@ namespace h1
             return pairs;
         }
 
-        private static int DetermineWeight(Group group) => group.WantGroupToStayTogether ? TOGETHER_RULE_WEIGHT : NO_TOGETHER_RULE_WEIGHT;
+        public static int DetermineWeight(Group group) => group.WantGroupToStayTogether ? TOGETHER_RULE_WEIGHT : NO_TOGETHER_RULE_WEIGHT;
 
         #endregion
 
         #region room handling
-        private static string ParseRoomsToString()
+        public static string ParseRoomsToString(List<Room> rooms)
         {
-            Hotel hotel = Hotel.GetInstance();
-            List<Room> rooms = hotel.Rooms;
+
+            //RemoveOccupiedRooms();
 
             StringBuilder output = new StringBuilder();
             output.AppendLine("% AUTOMATICALLY GENERATED | ROOMS\n");
@@ -157,7 +157,12 @@ namespace h1
             return output.ToString();
         }
 
-        private static string BuildRoomProps(List<Room> rooms)
+        public static void RemoveOccupiedRooms()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static string BuildRoomProps(List<Room> rooms)
         {
             StringBuilder output = new StringBuilder();
             foreach (var room in rooms)
@@ -172,7 +177,7 @@ namespace h1
             return output.ToString();
         }
 
-        private static void AppendRoomProperty(StringBuilder output, int roomId, bool hasProperty, string propName)
+        public static void AppendRoomProperty(StringBuilder output, int roomId, bool hasProperty, string propName)
         {
             if (hasProperty)
             {
@@ -180,7 +185,7 @@ namespace h1
             }
         }
 
-        private static string BuildRooms(List<Room> rooms)
+        public static string BuildRooms(List<Room> rooms)
         {
             StringBuilder output = new StringBuilder();
             foreach (var room in rooms)
@@ -192,10 +197,10 @@ namespace h1
         }
         #endregion
 
-        public string GenerateQuery(ObservableCollection<Group> input)
+        public string GenerateQuery(ObservableCollection<Group> input, List<Room> rooms)
         {
             string groupsString = ParseGroupsToString(input);
-            string roomsString = ParseRoomsToString();
+            string roomsString = ParseRoomsToString(rooms);
             string modelString = File.ReadAllText(MODEL_FILEPATH);
 
             return $"{groupsString}\n\n\n{roomsString}\n\n\n{modelString}";

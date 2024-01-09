@@ -54,16 +54,28 @@ namespace h1.Views
 
             string query = builder.GenerateQuery(formData);
             List<Tuple<int, int>> solution = DLVHandler.GetSolutionFromSolver(query);
-            Dictionary<Guest, int> dictionary = builder.GetGuestDict();
 
             AssignRooms(solution, builder.GetGuestDict());
 
-            hotel.LastModifiedDate = DateTime.Now; //so that db may find it, can be removed if a better way of getting most recent hotel is found
-            
-            SendHotelToDB(); //it seems the hotel bit that is sent to the db doesnt contain hotel> guests information...
+            //hotel.LastModifiedDate = DateTime.Now; //so that db may find it, can be removed if a better way of getting most recent hotel is found
 
+            //SendHotelToDB(); //it seems the hotel bit that is sent to the db doesnt contain hotel> guests information...
+            
+            var rooms = hotel.Rooms;
+            CheckIfRoomsInHotelHaveGuests(rooms);
+            DBMethods.StoreRooms(rooms);
+            //SaveRoomsToDB(rooms);
+            
             Close();
         }
+
+        //private void SaveRoomsToDB(List<Room> rooms)
+        //{
+
+
+        //    string json = Newtonsoft.Json.JsonConvert.SerializeObject(rooms);
+        //    DBMethods.StoreRooms(json);
+        //}
 
         private void SendHotelToDB() //this is a triplicate from the one present in roomlist... gott afigure out a better way to outsource hotel related functions!!
         {
@@ -95,36 +107,36 @@ namespace h1.Views
         {
             // Check if the guest is already assigned to a room
             if (guest.AssignedRoomNumber.HasValue)
+            {
                 throw new InvalidOperationException($"Guest {guest.FirstName} {guest.LastName} is already assigned to room {guest.AssignedRoomNumber}.");
-            
+            }
+
             Room room = hotel.FindRoomById(roomId);
 
             // Check if the room exists
             if (room == null)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException($"Room with ID {roomId} not found.");
             }
-            
+
             // Try to add the guest to the room
             if (!room.AddGuest(guest))
             {
                 throw new InvalidOperationException("Guest addition failed!");
             }
+
             // Set the room information for the guest
             guest.AssignedRoomNumber = roomId;
 
-            //maybe send guests to the guiest collection in db here????
+            DBMethods.StoreGuest(guest);
 
             // Notify UI elements of the AssignedRoomNumber change
             guest.NotifyAssignedRoomNumberChanged();
-
-            CheckIfRoomsInHotelHaveGuests();
         }
 
-        private void CheckIfRoomsInHotelHaveGuests()
+        private void CheckIfRoomsInHotelHaveGuests(List<Room> input)
         {
-            var a = hotel.Rooms;
-            foreach (var room in a)
+            foreach (var room in input)
             {
                 List<Guest> aaa = room.GetGuests();
 

@@ -12,7 +12,7 @@ namespace h1.Models
     {
         public int Id { get; private set; }
 		public int Capacity { get; set; } //might need to change name to occupancy
-		private List<Guest> Guests = new List<Guest>();
+		public List<Guest> Guests = new List<Guest>();
 		private static int INCREMENT = 1;
 
         public bool NoiseReduction { get; set; }

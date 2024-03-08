@@ -1,5 +1,6 @@
 ﻿using h1.Models;
 using h1.Views;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -44,7 +45,11 @@ namespace h1
             //check if hotel exists yet
             if (HotelExists())
             {
-                MessageBoxResult result = MessageBox.Show("Warning!! This action will remove the guests currently within the system! (applies on confirmation)", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBoxResult result = MessageBox.Show(
+                    "Warning!! This action will remove the guests currently within the system! (applies on confirmation)",
+                    "Warning", 
+                    MessageBoxButton.OK, 
+                    MessageBoxImage.Warning);
             }
 
             HotelDesignerWindow hotelDesigner = new HotelDesignerWindow();
@@ -54,9 +59,8 @@ namespace h1
 
         private bool HotelExists()
         {
-            var a = DBMethods.GetHotel();
-            //return false if a is empty/blank, else return true
-            return true;
+            BsonDocument a = DBMethods.GetHotel();
+            return !(a == null || a.IsBsonNull);
         }
 
         private void RoomAssign_Click(object sender, RoutedEventArgs e)

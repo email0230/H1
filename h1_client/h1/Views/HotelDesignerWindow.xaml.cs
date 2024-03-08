@@ -14,7 +14,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Newtonsoft.Json;
-using h1.replaceme;
 
 namespace h1.Views
 {
@@ -49,10 +48,10 @@ namespace h1.Views
 			}
 		}
 
-		private void AddRoomButton_Click(object sender, RoutedEventArgs e)
-		{
-			throw new NotImplementedException();
-		}
+		//private void AddRoomButton_Click(object sender, RoutedEventArgs e)
+		//{
+		//	throw new NotImplementedException();
+		//}
 
 		private void SubmitButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -60,7 +59,6 @@ namespace h1.Views
 
 			if (result == MessageBoxResult.Yes)
             {
-
                 DBMethods.DeleteAllGuests();
                 SubmitHotelForm();
             }
@@ -69,11 +67,6 @@ namespace h1.Views
              * - add a "room list is null!" warning
              */
         }
-
-        //private void PurgeGuests()
-        //{
-			
-        //}
 
         private void SubmitHotelForm()
         {

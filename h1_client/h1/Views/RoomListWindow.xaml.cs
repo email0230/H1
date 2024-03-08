@@ -29,11 +29,23 @@ namespace h1.Views
         {
             InitializeComponent();
             PassRoomsToListView();
+            GetHotelOccupancyStatus();
+        }
+
+        private void GetHotelOccupancyStatus()
+        {
+            int guestCount = DBMethods.GetGuests().Count;
+            int roomSpotsCount = 0;
+            foreach (var room in hotel.Rooms)
+            {
+                roomSpotsCount += room.Capacity;
+            }
+            double result = guestCount / roomSpotsCount;
+            NumericalDisplay.Text = result.ToString();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            var TERRIBLEVARIABLENAM = hotel.Rooms;
             DebugPrintRoomStatus();
 
             hotel.LastModifiedDate = DateTime.Now; //so that db may find it, can be removed if a better way of getting most recent hotel is found
@@ -43,7 +55,6 @@ namespace h1.Views
                 SendHotelToDB();
                 Close();
             }
-            
         }
 
         private void SendHotelToDB() //this is a duplicate from the one present in hoteldesigner... gott afigure out a better way to outsource hotel related functions!!
@@ -54,17 +65,7 @@ namespace h1.Views
 
         private void PassRoomsToListView()
         {
-            //this entire thing is vestigial from when i tried to add a guest to see if tehre are any immidate issues. feel free to trash this!
-            List<Guest> guests = GuestDebugMethod();
-            foreach (var item in guests)
-            {
-                if (item != null)
-                {
-                    //throw new NotImplementedException();
-                }
-            }
-            List<Room> rooms = hotel.Rooms;
-            RoomsListView.ItemsSource = rooms;
+            RoomsListView.ItemsSource = hotel.Rooms;
         }
 
         private void RoomSettingsButton_Click(object sender, RoutedEventArgs e)
@@ -77,47 +78,8 @@ namespace h1.Views
             }
         }
 
-        #region thomas
-        private List<Guest> GuestDebugMethod()
-        {
-            List<Guest> guestList = DBMethods.GetGuests();
-            bool thomasExists = false;
-            thomasExists = CheckListForThomas(guestList, thomasExists);
-            if (!thomasExists)
-                AddThomas(guestList);
-
-            return guestList;
-        }
-
-        private static bool CheckListForThomas(List<Guest> guestList, bool doesExist)
-        {
-            foreach (var guest in guestList)
-            {
-                if (guest.LastName == "Thomas" && guest.FirstName == "Test")
-                {
-                    doesExist = true;
-                    break;
-                }
-            }
-
-            return doesExist;
-        }
-
-        private static void AddThomas(List<Guest> guestList)
-        {
-            Guest testGuest = new Guest
-            {
-                LastName = "Thomas",
-                FirstName = "Test",
-                //AssignedRoomNumber = 1,
-            };
-            DBMethods.Insert(testGuest);
-
-            guestList.Add(testGuest);
-        } 
-        #endregion
-
         //all these two functions below are for, is for them to be put in a breakpoint, so i can see their objects directly, and check if everything is in order
+        #region debug
         private void debug_rooms_breakpoint_button_Click(object sender, RoutedEventArgs e)
         {
             var rooms = hotel.Rooms;
@@ -135,7 +97,6 @@ namespace h1.Views
 
         private void DebugPrintRoomStatus()
         {
-            var a = hotel.Rooms;
             Debug.WriteLine("Debug - displaying room properties");
             Debug.Indent();
             foreach (var item in hotel.Rooms)
@@ -150,6 +111,7 @@ namespace h1.Views
                 Debug.Unindent();
             }
             Debug.Unindent();
-        }
+        } 
+        #endregion
     }
 }

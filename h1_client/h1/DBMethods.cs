@@ -82,5 +82,10 @@ namespace h1
                 throw new InvalidOperationException($"Guest with _id {guest._id} not found for deletion.");
             }
         }
+
+        public static void DeleteAllGuests()
+        {
+            GuestCollection.DeleteMany(FilterDefinition<Guest>.Empty);
+        }
     }
 }

@@ -36,7 +36,6 @@ namespace h1.Models
             }
         }
 
-        //public int GuestId { get; set; }
         [BsonId]
         public ObjectId _id { get; set; }
         public DateTime? ArrivalDate { get; set; }

@@ -18,11 +18,11 @@
         </StackPanel>
 
         <!-- Main Content Area: TabControl with different views -->
-        <TabControl Grid.Row="1">
-            <!-- Tab for Display ALL guests -->
-            <TabItem Header="Display ALL guests">
+        <TabControl Grid.Row="1" SelectionChanged="TabControl_SelectionChanged">
+
+            <TabItem Header="Display ALL guests" Margin="-3,-2,-1,0">
                 <ListView x:Name="GuestSummaryListView" Margin="20" >
-                    <!-- Define your DataTemplate here -->
+                    <!-- Add a ProgressBar to represent hotel occupancy -->
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" />
@@ -30,8 +30,10 @@
                             <GridViewColumn Header="Room" DisplayMemberBinding="{Binding AssignedRoomNumber}" />
                             <!-- Add other columns as needed -->
                         </GridView>
+                        
                     </ListView.View>
                 </ListView>
+                
             </TabItem>
 
             <!-- Tab for Insert new Group -->

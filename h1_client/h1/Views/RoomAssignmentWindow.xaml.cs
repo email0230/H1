@@ -364,6 +364,11 @@ namespace h1.Views
             Debug.Unindent();
         }
 
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
 
         #endregion
 

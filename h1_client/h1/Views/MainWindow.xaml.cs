@@ -41,12 +41,25 @@ namespace h1
 
 		private void HotelDesignerButton_Click(object sender, RoutedEventArgs e)
 		{
+            //check if hotel exists yet
+            if (HotelExists())
+            {
+                MessageBoxResult result = MessageBox.Show("Warning!! This action will remove the guests currently within the system! (applies on confirmation)", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
             HotelDesignerWindow hotelDesigner = new HotelDesignerWindow();
             hotelDesigner.Show();
             
 		}
 
-		private void RoomAssign_Click(object sender, RoutedEventArgs e)
+        private bool HotelExists()
+        {
+            var a = DBMethods.GetHotel();
+            //return false if a is empty/blank, else return true
+            return true;
+        }
+
+        private void RoomAssign_Click(object sender, RoutedEventArgs e)
 		{
             RoomAssignmentWindow assignWindow = new RoomAssignmentWindow();
             assignWindow.Show();

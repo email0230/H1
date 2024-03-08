@@ -59,25 +59,37 @@ namespace h1.Views
 			MessageBoxResult result = MessageBox.Show("Are you sure you want to overwrite the current hotel configuration?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
 			if (result == MessageBoxResult.Yes)
-			{
-				string name = HotelNameTextBox.Text;
-				hotel.Name = name;
-				hotel.LastModifiedDate = DateTime.Now;
-				hotel.Rooms = GetRooms();
+            {
 
-                if (FormValidator.ValidateHotelForm(name))
-                {
-                    SendHotelToDB();
-                    PromptForRoomEdit();
-
-                    Close();
-                }
+                DBMethods.DeleteAllGuests();
+                SubmitHotelForm();
             }
-			/* BIG THINGS TO DO:
+            /* BIG THINGS TO DO:
              * - validation (ctnd)
              * - add a "room list is null!" warning
              */
-		}
+        }
+
+        //private void PurgeGuests()
+        //{
+			
+        //}
+
+        private void SubmitHotelForm()
+        {
+            string name = HotelNameTextBox.Text;
+            hotel.Name = name;
+            hotel.LastModifiedDate = DateTime.Now;
+            hotel.Rooms = GetRooms();
+
+            if (FormValidator.ValidateHotelForm(name))
+            {
+                SendHotelToDB();
+                PromptForRoomEdit();
+
+                Close();
+            }
+        }
 
         private void SendHotelToDB()
         {

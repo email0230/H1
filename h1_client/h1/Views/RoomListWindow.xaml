@@ -80,6 +80,8 @@
         <!-- Save Button -->
         <Button Content="Save" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,21,21" Click="SaveButton_Click"/>
 
+        <!-- Numerical Display at Bottom Right Corner -->
+        <TextBlock x:Name="NumericalDisplay" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
 
         <!-- Bonus Row for Debug Buttons -->
         <StackPanel Background="Orange" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">

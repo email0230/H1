@@ -52,10 +52,10 @@ namespace h1.Models
         public bool WantModularFurniture { get; set; }
 
 
-        public Group(ObservableCollection<Guest> guestsInput, string? groupNameInput)
+        public Group(ObservableCollection<Guest> guestsInput, string? groupName)
         {
             Guests = guestsInput;
-            GroupName = groupNameInput;
+            GroupName = groupName;
         }
 
         //public bool CheckIfGuestExists(Guest input)

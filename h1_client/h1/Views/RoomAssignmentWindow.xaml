@@ -7,7 +7,6 @@
         mc:Ignorable="d"
         Title="Room Assignment" Height="600" Width="500">
     <Grid>
-        <!-- Top Row: Title and Buttons -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -17,10 +16,9 @@
             <TextBlock Text="ROOM ASSIGNMENT" Foreground="White" FontWeight="Bold" FontSize="20" Margin="10" />
         </StackPanel>
 
-        <!-- Main Content Area: TabControl with different views -->
         <TabControl Grid.Row="1" SelectionChanged="TabControl_SelectionChanged">
 
-            <TabItem Header="Display ALL guests" Margin="-3,-2,-1,0">
+            <TabItem Header="Display Hotel guests" Margin="-3,-2,-1,0">
                 <ListView x:Name="GuestSummaryListView" Margin="20" >
                     <!-- Add a ProgressBar to represent hotel occupancy -->
                     <ListView.View>
@@ -28,7 +26,6 @@
                             <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" />
                             <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
                             <GridViewColumn Header="Room" DisplayMemberBinding="{Binding AssignedRoomNumber}" />
-                            <!-- Add other columns as needed -->
                         </GridView>
                         
                     </ListView.View>
@@ -36,18 +33,15 @@
                 
             </TabItem>
 
-            <!-- Tab for Insert new Group -->
             <TabItem Header="Insert new Group">
                 <Grid>
                     <ListView x:Name="listViewElement" ItemsSource="{Binding Groups}" Background="LightGray" Margin="10">
                         <ListView.View>
                             <GridView>
-                                <!-- Columns in the ListView -->
                                 <GridViewColumn Header="Actions">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Grid>
-                                                <!-- Rows for group icon and name, guests, and buttons -->
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto"/>
                                                     <RowDefinition Height="Auto"/>
@@ -55,13 +49,11 @@
                                                     <RowDefinition Height="Auto"/>
                                                 </Grid.RowDefinitions>
 
-                                                <!-- Row for group icon and name -->
                                                 <StackPanel Orientation="Horizontal" Grid.Row="0">
                                                     <Image Source="../Assets/baseline_group_black_24dp.png" MaxHeight="20"/>
                                                     <TextBlock Text="{Binding GroupName}" Margin="5,0,0,0"/>
                                                 </StackPanel>
 
-                                                <!-- Row for guests -->
                                                 <StackPanel Orientation="Horizontal" Grid.Row="1">
                                                     <!-- Nested ItemsControl for Guests -->
                                                     <ItemsControl ItemsSource="{Binding Guests}">
@@ -93,29 +85,11 @@
                         </ListView.View>
                     </ListView>
 
-                    <!-- Button to add a new object -->
                     <Button Content="Add New Group 👨‍👩‍👦" Click="AddNewObjectButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
-                    <Button x:Name="DebugButtonElement" Content="Debug display group object" Click="DebugButtonClicked" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="175,0,0,11" FontWeight="Bold"/>
+                    <Button x:Name="DebugButtonElement" Content="Debug display group object" Background="Orange" Click="DebugButtonClicked" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="175,0,0,11" FontWeight="Bold"/>
                     <Button x:Name="SendButton" Content="Send" Click="SendButton_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
                 </Grid>
             </TabItem>
-
-
-
-
-
-
-
-
-            <!-- 
-                looks like youve got a problem!
-                not only is it hard to picture the interface for making many groups, 
-                but its even harder to see how you pass ALL that information in code! (to builder)
-                first idea: user declares manually how many groups they intend to have, and the form is generated accordingly
-                problem with first idea: burden of passing data from dynamically generated form elements is passed onto the guest form instead.
-                progress!
-                we can use excel to import groups, that will solve one big roadblock, but still a UI for editing is required..
-            -->
         </TabControl>
     </Grid>
 </Window>

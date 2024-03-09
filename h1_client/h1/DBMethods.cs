@@ -16,7 +16,7 @@ namespace h1
         #region Fields 
         static MongoClient client = new MongoClient();
         static IMongoDatabase database = client.GetDatabase("h1_db");
-        static IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>("testCollection");
+        //static IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>("testCollection");
         static IMongoCollection<Guest> GuestCollection = database.GetCollection<Guest>("GuestCollection");
         static IMongoCollection<BsonDocument> HotelDataCollection = database.GetCollection<BsonDocument>("HotelDataCollection");
         static IMongoCollection<BsonDocument> HotelRoomCollection = database.GetCollection<BsonDocument>("HotelRoomCollection");
@@ -30,7 +30,6 @@ namespace h1
 
         public static void StoreHotel(string jsonInput)
         {
-            // Clear the collection
             HotelDataCollection.DeleteMany(FilterDefinition<BsonDocument>.Empty);
 
             BsonDocument bsonDocument = BsonDocument.Parse(jsonInput);
@@ -41,8 +40,6 @@ namespace h1
         {
             return HotelDataCollection.Find(new BsonDocument()).FirstOrDefault();
         }
-
-        public static List<Guest> GetGuests() => GuestCollection.Find(new BsonDocument()).ToList();
 
         public static void StoreRooms(List<Room> rooms)
         {
@@ -55,6 +52,8 @@ namespace h1
             // Insert the list of BsonDocument into the collection
             HotelRoomCollection.InsertMany(bsonDocuments);
         }
+
+        public static List<Guest> GetGuests() => GuestCollection.Find(new BsonDocument()).ToList();
 
         public static void StoreGuest(Guest guest)
         {
@@ -83,9 +82,6 @@ namespace h1
             }
         }
 
-        public static void DeleteAllGuests()
-        {
-            GuestCollection.DeleteMany(FilterDefinition<Guest>.Empty);
-        }
+        public static void DeleteAllGuests() => GuestCollection.DeleteMany(FilterDefinition<Guest>.Empty);
     }
 }

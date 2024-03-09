@@ -27,7 +27,9 @@ namespace h1.Views
     public partial class RoomAssignmentWindow : Window
 	{
 		Hotel hotel = Hotel.GetInstance(); //probably useless
+
         public ObservableCollection<Group> Groups { get; set; } = new ObservableCollection<Group>();
+
         public RoomAssignmentWindow()
 		{
 			InitializeComponent();
@@ -37,10 +39,11 @@ namespace h1.Views
 
 		private void PopulateListWithGuests()
 		{
-			var guests = DBMethods.GetGuests();
+			List<Guest> guests = DBMethods.GetGuests();
             GuestSummaryListView.ItemsSource = guests;
         }
 
+        #region guest assignment
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             ObservableCollection<Group> formData = Groups;
@@ -49,23 +52,20 @@ namespace h1.Views
             DebugPrintGroupsVarStatus();
             DebugPrintGroupProperties();
 
-            // Instantiate SolutionInputBuilder
             SolutionInputBuilder builder = new SolutionInputBuilder();
             var rawRooms = hotel.Rooms;
-            //Dictionary<int, int> roomDict = GetRoomDict();
             //List<Room> cleanRooms = RemoveInvalidRooms(rawRooms);
             string query = builder.GenerateQuery(formData, rawRooms); //here, rooms passed might need to get checked for any disabled rooms!!
             List<Tuple<int, int>> solution = DLVHandler.GetSolutionFromSolver(query);
 
-            AssignRooms(solution, builder.GetGuestDict());
+            MatchGuestsToRooms(solution, builder.GetGuestDict());
 
-            SendHotelToDB(); 
-            
+            SendHotelToDB();
+
             var rooms = hotel.Rooms;
-            CheckIfRoomsInHotelHaveGuests(rooms);
+            DebugCheckIfRoomsInHotelHaveGuests(rooms);
             DBMethods.StoreRooms(rooms);
-            //SaveRoomsToDB(rooms);
-            
+
             Close();
         }
 
@@ -74,35 +74,26 @@ namespace h1.Views
             throw new NotImplementedException();
         }
 
-        //private void SaveRoomsToDB(List<Room> rooms)
-        //{
-
-
-        //    string json = Newtonsoft.Json.JsonConvert.SerializeObject(rooms);
-        //    DBMethods.StoreRooms(json);
-        //}
-
         private void SendHotelToDB() //this is a triplicate from the one present in roomlist... gott afigure out a better way to outsource hotel related functions!!
         {
             string jsonHotel = Newtonsoft.Json.JsonConvert.SerializeObject(hotel);
             DBMethods.StoreHotel(jsonHotel);
         }
 
-        private void AssignRooms(List<Tuple<int, int>> solution, Dictionary<Guest, int> dictionary)
+        private void MatchGuestsToRooms(List<Tuple<int, int>> solution, Dictionary<Guest, int> dictionary)
         {
             foreach (var tuple in solution)
             {
                 int guestNumber = tuple.Item1;
                 int roomId = tuple.Item2;
 
-                // Assuming the structure is Dictionary<Guest, int> where int is the numerical representation
                 foreach (var kvp in dictionary)
                 {
                     if (kvp.Value == guestNumber)
                     {
                         // The guest with the matching numerical representation is found
                         AssignGuest(kvp.Key, roomId);
-                        break;  // Break the loop once the guest is found
+                        break;
                     }
                 }
             }
@@ -130,16 +121,17 @@ namespace h1.Views
                 throw new InvalidOperationException("Guest addition failed!");
             }
 
-            // Set the room information for the guest
             guest.AssignedRoomNumber = roomId;
 
             DBMethods.StoreGuest(guest);
 
-            // Notify UI elements of the AssignedRoomNumber change
+            //notify UI elements
             guest.NotifyAssignedRoomNumberChanged();
-        }
+        } 
 
-        private void CheckIfRoomsInHotelHaveGuests(List<Room> input)
+        #endregion
+
+        private void DebugCheckIfRoomsInHotelHaveGuests(List<Room> input)
         {
             foreach (var room in input)
             {
@@ -157,7 +149,11 @@ namespace h1.Views
 
         private void AddNewObjectButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateGroupElement();
+            if (DataContext is RoomAssignmentWindow viewModel)
+            {
+                AddGroupTicket(viewModel);
+                //DebugPrintGroupsVarStatus();
+            }
         }
 
         private void RemoveGroupButton_Click(object sender, RoutedEventArgs e)
@@ -171,35 +167,20 @@ namespace h1.Views
                 }
             }
         }
-        private void CreateGroupElement()
-        {
-            if (DataContext is RoomAssignmentWindow viewModel)
-            {
-                AddGroupTicket(viewModel);
-
-                DebugPrintGroupsVarStatus();
-            }
-        }
-
+   
         static void AddGroupTicket(RoomAssignmentWindow viewModel)
         {
             ObservableCollection<Guest> guests = new ObservableCollection<Guest>
             {
-                new Guest{LastName = "Nowakowski", FirstName = "Piotr" },
+                new Guest{LastName = "Guest", FirstName = "Sample" },
             };
             int groupIndexNumber = GetIndexNumberForGroup(viewModel);
-            Group groupAdded = new Group(guests, $"group #{groupIndexNumber}");
-            viewModel.Groups.Add(groupAdded); //add a thing with a debug string and array of guests
+
+            Group groupAdded = new Group(guests, $"Group #{groupIndexNumber}");
+            viewModel.Groups.Add(groupAdded);
         }
 
-        private static int GetIndexNumberForGroup(RoomAssignmentWindow viewModel)
-        {
-            int length = viewModel.Groups.Count;
-            
-            Debug.WriteLine($"Group.Count is now {length}, returning {length+1}");
-
-            return length + 1;
-        }
+        private static int GetIndexNumberForGroup(RoomAssignmentWindow viewModel) => viewModel.Groups.Count + 1;
 
         private void GroupSettingsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -214,26 +195,22 @@ namespace h1.Views
 
         private void AddNewGuestButton_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("New guest added...");
-            DebugPrintGroupsVarStatus();
-
             if (GetSelectedGroup() == null)
             {
                 MessageBox.Show("No group selected. \nSelect a group by double-clicking it!", "Selection Required", MessageBoxButton.OK, MessageBoxImage.Information);
-                Debug.WriteLine("Early return called - SelectedGroup was null.");
                 return;
             }
 
             if (!ButtonBelongsToCorrectGroupTicket(sender))
             {
                 MessageBox.Show("Please select the group before adding more guests to it.", "Group Selection Required", MessageBoxButton.OK, MessageBoxImage.Information);
-                Debug.WriteLine("Early return called - pressed button was in the wrong group.");
                 return;
             }
             
-            AddGuestToGroupTicket();
+            AddBlankGuestToGroupTicket();
         }
-        private void AddGuestToGroupTicket()
+
+        private void AddBlankGuestToGroupTicket()
         {
             Guest newGuest = new Guest { FirstName = "...", LastName = "..." };
             Group selectedGroup = GetSelectedGroup();
@@ -241,34 +218,44 @@ namespace h1.Views
             selectedGroup.Guests.Add(newGuest);
         }
 
-        #region Checking if button is in the selected ticket
-        private bool ButtonBelongsToCorrectGroupTicket(object sender)
+        private Group GetSelectedGroup()
         {
-            // Check if there is a selected item
+            Group selectedGroup = null;
+
             if (listViewElement.SelectedItem != null)
             {
-                // Assuming your Group object is stored in the DataContext of the selected ListViewItem
-                if (listViewElement.SelectedItem is Group selectedGroup)
+                if (listViewElement.SelectedItem is Group group)
                 {
-                    // Now you have the selected Group object
-
-                    // Check if the button belongs to the correct group ticket
-                    if (GetButtonGroupTicket(sender) == selectedGroup)
-                    {
-                        return true;
-                    }
+                    selectedGroup = group;
                 }
                 else
                 {
-                    MessageBox.Show("DEBUG: Failed to retrieve selected group.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Failed to retrieve selected group.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-            else
+            return selectedGroup;
+        }
+
+        #region Checking if button is in the selected ticket
+        private bool ButtonBelongsToCorrectGroupTicket(object sender)
+        {
+            // Assuming your Group object is stored in the DataContext of the selected ListViewItem
+            if (!(listViewElement.SelectedItem is Group selectedGroup))
             {
-                MessageBox.Show("No item selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("DEBUG: Failed to retrieve selected group.",
+                    "Error", 
+                    MessageBoxButton.OK, 
+                    MessageBoxImage.Error);
+                return false;
             }
 
-            return false;
+            if (GetButtonGroupTicket(sender) != selectedGroup)
+            {
+                return false;
+            }
+
+            //all checks passed, let it through
+            return true;
         }
 
         private Group GetButtonGroupTicket(object sender)
@@ -295,24 +282,6 @@ namespace h1.Views
             return null;
         }
         #endregion
-
-        private Group GetSelectedGroup()
-        {
-            Group selectedGroup = null;
-
-            if (listViewElement.SelectedItem != null)
-            {
-                if (listViewElement.SelectedItem is Group group)
-                {
-                    selectedGroup = group;
-                }
-                else
-                {
-                    MessageBox.Show("Failed to retrieve selected group.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-            return selectedGroup;
-        }
 
         #region debug
         private void DebugPrintGroupsVarStatus()

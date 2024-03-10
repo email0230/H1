@@ -26,7 +26,7 @@ namespace h1.Views
     /// </summary>
     public partial class RoomAssignmentWindow : Window
 	{
-		Hotel hotel = Hotel.GetInstance(); //probably useless
+		Hotel hotel = Hotel.GetInstance();
 
         public ObservableCollection<Group> Groups { get; set; } = new ObservableCollection<Group>();
 
@@ -60,7 +60,8 @@ namespace h1.Views
 
             MatchGuestsToRooms(solution, builder.GetGuestDict());
 
-            SendHotelToDB();
+            //SendHotelToDB();
+            DBMethods.StoreHotel(hotel);
 
             var rooms = hotel.Rooms;
             DebugCheckIfRoomsInHotelHaveGuests(rooms);
@@ -69,16 +70,10 @@ namespace h1.Views
             Close();
         }
 
-        private List<Room> RemoveInvalidRooms(List<Room> rooms)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void SendHotelToDB() //this is a triplicate from the one present in roomlist... gott afigure out a better way to outsource hotel related functions!!
-        {
-            string jsonHotel = Newtonsoft.Json.JsonConvert.SerializeObject(hotel);
-            DBMethods.StoreHotel(jsonHotel);
-        }
+        //private List<Room> RemoveInvalidRooms(List<Room> rooms)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         private void MatchGuestsToRooms(List<Tuple<int, int>> solution, Dictionary<Guest, int> dictionary)
         {
@@ -131,28 +126,13 @@ namespace h1.Views
 
         #endregion
 
-        private void DebugCheckIfRoomsInHotelHaveGuests(List<Room> input)
-        {
-            foreach (var room in input)
-            {
-                List<Guest> aaa = room.GetGuests();
-
-                Debug.WriteLine($"DISPLAYING ROOM NR {room.Id}");
-                Debug.Indent();
-                foreach (var item in aaa)
-                {
-                    Debug.WriteLine($"found a guest: {item.LastName} {item.FirstName}");
-                }
-                Debug.Unindent();
-            }
-        }
+        
 
         private void AddNewObjectButton_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is RoomAssignmentWindow viewModel)
             {
                 AddGroupTicket(viewModel);
-                //DebugPrintGroupsVarStatus();
             }
         }
 
@@ -174,13 +154,13 @@ namespace h1.Views
             {
                 new Guest{LastName = "Guest", FirstName = "Sample" },
             };
-            int groupIndexNumber = GetIndexNumberForGroup(viewModel);
+
+            //int groupIndexNumber = GetIndexNumberForGroup(viewModel);
+            int groupIndexNumber = viewModel.Groups.Count + 1;
 
             Group groupAdded = new Group(guests, $"Group #{groupIndexNumber}");
             viewModel.Groups.Add(groupAdded);
         }
-
-        private static int GetIndexNumberForGroup(RoomAssignmentWindow viewModel) => viewModel.Groups.Count + 1;
 
         private void GroupSettingsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -284,6 +264,24 @@ namespace h1.Views
         #endregion
 
         #region debug
+        //TODO: delete these before release
+
+        private void DebugCheckIfRoomsInHotelHaveGuests(List<Room> input)
+        {
+            foreach (var room in input)
+            {
+                List<Guest> aaa = room.GetGuests();
+
+                Debug.WriteLine($"DISPLAYING ROOM NR {room.Id}");
+                Debug.Indent();
+                foreach (var item in aaa)
+                {
+                    Debug.WriteLine($"found a guest: {item.LastName} {item.FirstName}");
+                }
+                Debug.Unindent();
+            }
+        }
+
         private void DebugPrintGroupsVarStatus()
         {
             Debug.WriteLine("========================debuggin=======================");

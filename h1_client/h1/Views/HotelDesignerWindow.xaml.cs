@@ -48,11 +48,6 @@ namespace h1.Views
 			}
 		}
 
-		//private void AddRoomButton_Click(object sender, RoutedEventArgs e)
-		//{
-		//	throw new NotImplementedException();
-		//}
-
 		private void SubmitButton_Click(object sender, RoutedEventArgs e)
 		{
 			MessageBoxResult result = MessageBox.Show("Are you sure you want to overwrite the current hotel configuration?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -62,10 +57,47 @@ namespace h1.Views
                 DBMethods.DeleteAllGuests();
                 SubmitHotelForm();
             }
+			//TODO: PROPER VALIDATION
+
             /* BIG THINGS TO DO:
              * - validation (ctnd)
              * - add a "room list is null!" warning
              */
+        }
+        private List<Room> GetRooms()
+        {
+            string roomsFor1Person = RoomsFor1PersonTextBox.Text;
+            string roomsFor2Persons = RoomsFor2PersonsTextBox.Text;
+            string roomsFor3Persons = RoomsFor3PersonsTextBox.Text;
+
+            List<Room> roomsList = new List<Room>();
+
+            if (int.TryParse(roomsFor1Person, out int rooms1Person) &&
+                int.TryParse(roomsFor2Persons, out int rooms2Persons) &&
+                int.TryParse(roomsFor3Persons, out int rooms3Persons))
+            {
+                for (int i = 0; i < rooms1Person; i++)
+                {
+                    Room room = new Room { Capacity = 1 };
+                    roomsList.Add(room);
+                }
+                for (int i = 0; i < rooms2Persons; i++)
+                {
+                    Room room = new Room { Capacity = 2 };
+                    roomsList.Add(room);
+                }
+                for (int i = 0; i < rooms3Persons; i++)
+                {
+                    Room room = new Room { Capacity = 3 };
+                    roomsList.Add(room);
+                }
+            }
+            else
+            {
+                // Handle the case where parsing fails (non-numeric input)
+                throw new NotImplementedException();
+            }
+            return roomsList;
         }
 
         private void SubmitHotelForm()
@@ -77,22 +109,16 @@ namespace h1.Views
 
             if (FormValidator.ValidateHotelForm(name))
             {
-                SendHotelToDB();
-                PromptForRoomEdit();
-
+                DBMethods.StoreHotel(hotel);
+                
+                if (PromptForRoomEdit())
+					SummonRoomList();
                 Close();
             }
         }
 
-        private void SendHotelToDB()
+        private bool PromptForRoomEdit()
         {
-            string jsonHotel = Newtonsoft.Json.JsonConvert.SerializeObject(hotel);
-            DBMethods.StoreHotel(jsonHotel);
-        }
-
-        private void PromptForRoomEdit()
-        {
-            // Show a confirmation dialog with custom message and options
             MessageBoxResult editRoomResult = MessageBox.Show(
                 "Hotel data saved successfully. Would you like to edit the room data now?",
                 "Success",
@@ -100,7 +126,8 @@ namespace h1.Views
                 MessageBoxImage.Information);
 
             if (editRoomResult == MessageBoxResult.Yes)
-                SummonRoomList();
+                return true;
+			return false;
         }
 
         private void SummonRoomList()
@@ -108,41 +135,5 @@ namespace h1.Views
             RoomListWindow listWindow = new RoomListWindow();
             listWindow.Show();
         }
-
-        private List<Room> GetRooms()
-		{
-			string roomsFor1Person = RoomsFor1PersonTextBox.Text;
-			string roomsFor2Persons = RoomsFor2PersonsTextBox.Text;
-			string roomsFor3Persons = RoomsFor3PersonsTextBox.Text;
-
-			List<Room> roomsList = new List<Room>();
-
-			if (int.TryParse(roomsFor1Person, out int rooms1Person) &&
-				int.TryParse(roomsFor2Persons, out int rooms2Persons) &&
-				int.TryParse(roomsFor3Persons, out int rooms3Persons))
-			{
-				for (int i = 0; i < rooms1Person; i++)
-				{
-					Room room = new Room { Capacity = 1 };
-					roomsList.Add(room);
-				}
-				for (int i = 0; i < rooms2Persons; i++)
-				{
-					Room room = new Room { Capacity = 2 };
-					roomsList.Add(room); 
-				}
-				for (int i = 0; i < rooms3Persons; i++)
-				{
-					Room room = new Room { Capacity = 3 };
-					roomsList.Add(room);
-				}
-			}
-			else
-			{
-				// Handle the case where parsing fails (non-numeric input)
-				throw new NotImplementedException();
-			}
-			return roomsList;
-		}
-	}
+    }
 }

@@ -33,22 +33,22 @@ namespace h1.Models
 			return _instance;
 		}
 
-	/*
+        /*
 		NOTES:
 		-Hotel gets made at the very start of the cycle, before it gets the value from the text box
-		-If there is a different object submitted in the form, h1 will STILL try to fetch the old one
-	*/
+		-If there is a different object submitted in the form, h1 will STILL try to fetch the old one (10/03, probably outdated)
+	    */
 
 		private static Hotel GetHotelStateFromDB()
 		{
 			BsonDocument hotelString = DBMethods.GetHotel(); //add async to db calls?
 			var a = hotelString != null ? BsonSerializer.Deserialize<Hotel>(hotelString) : null;
-			CheckIfRoomsHaveProps(a);
+			DebugCheckIfRoomsHaveProps(a);
 
             return a;
 		}
 
-        private static void CheckIfRoomsHaveProps(Hotel? a)
+        private static void DebugCheckIfRoomsHaveProps(Hotel? a)
         {
             Debug.WriteLine("Debug - displaying room properties");
             Debug.Indent();

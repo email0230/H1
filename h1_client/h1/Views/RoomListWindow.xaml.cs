@@ -28,7 +28,7 @@ namespace h1.Views
         public RoomListWindow()
         {
             InitializeComponent();
-            PassRoomsToListView();
+            RoomsListView.ItemsSource = hotel.Rooms;
             GetHotelOccupancyStatus();
         }
 
@@ -50,22 +50,11 @@ namespace h1.Views
 
             hotel.LastModifiedDate = DateTime.Now; //so that db may find it, can be removed if a better way of getting most recent hotel is found
 
-            if (true) //validate here?
+            if (true) //TODO: validation
             {
-                SendHotelToDB();
+                DBMethods.StoreHotel(hotel);
                 Close();
             }
-        }
-
-        private void SendHotelToDB() //this is a duplicate from the one present in hoteldesigner... gott afigure out a better way to outsource hotel related functions!!
-        {
-            string jsonHotel = Newtonsoft.Json.JsonConvert.SerializeObject(hotel);
-            DBMethods.StoreHotel(jsonHotel);
-        }
-
-        private void PassRoomsToListView()
-        {
-            RoomsListView.ItemsSource = hotel.Rooms;
         }
 
         private void RoomSettingsButton_Click(object sender, RoutedEventArgs e)
@@ -80,6 +69,7 @@ namespace h1.Views
 
         //all these two functions below are for, is for them to be put in a breakpoint, so i can see their objects directly, and check if everything is in order
         #region debug
+        //TODO: delete these before release
         private void debug_rooms_breakpoint_button_Click(object sender, RoutedEventArgs e)
         {
             var rooms = hotel.Rooms;

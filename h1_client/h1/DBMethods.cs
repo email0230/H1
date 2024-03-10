@@ -36,6 +36,12 @@ namespace h1
             HotelDataCollection.InsertOne(bsonDocument);
         }
 
+        public static void StoreHotel(Hotel input)
+        {
+            string jsonHotel = Newtonsoft.Json.JsonConvert.SerializeObject(input);
+            StoreHotel(jsonHotel);
+        }
+
         public static BsonDocument GetHotel()
         {
             return HotelDataCollection.Find(new BsonDocument()).FirstOrDefault();
@@ -55,10 +61,9 @@ namespace h1
 
         public static List<Guest> GetGuests() => GuestCollection.Find(new BsonDocument()).ToList();
 
-        public static void StoreGuest(Guest guest)
-        {
-            GuestCollection.InsertOne(guest);
-        }
+        public static void StoreGuest(Guest guest) => GuestCollection.InsertOne(guest);
+
+        //TODO: find a use for this one, or delete it
         public static void DeleteGuest(Guest guest)
         {
             // Check if the guest has a valid _id

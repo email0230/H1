@@ -89,6 +89,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Label x:Name="OccupancyLabel" Content="Occupancy:" HorizontalAlignment="Left" Margin="24,19,0,0" Grid.Row="1" VerticalAlignment="Top" Height="25" Width="88"/>
+        <Label x:Name="OccupancyLabel" Content="Occupancy:" HorizontalAlignment="Left" Margin="24,19,0,0" Grid.Row="1" VerticalAlignment="Top" Height="25" Width="137"/>
     </Grid>
 </Window>

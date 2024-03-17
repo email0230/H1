@@ -34,15 +34,32 @@ namespace h1.Views
 		{
 			InitializeComponent();
 			PopulateListWithGuests();
-            UpdateOccupancyLabel();
+            double percentage = GetOccupancyDecimalValue();
+            OccupancyLabel.Content = $"Occupancy: {percentage}%";
             DataContext = this;
         }
 
-        private void UpdateOccupancyLabel()
+        private double GetOccupancyDecimalValue()
         {
-            throw new NotImplementedException();
+            int totalCapacity = 0, totalOccupancy = 0;
+            foreach (var room in hotel.Rooms)
+            {
+                room.Capacity += totalCapacity;
+                room.Occupancy += totalOccupancy;
+            }
 
-
+            // Handle division by zero
+            try
+            {
+                return Math.Round((double)totalOccupancy / totalCapacity, 2);
+            }
+            catch (DivideByZeroException ex)
+            {
+                // Log the exception or handle it appropriately
+                Debug.WriteLine("Division by zero occurred: " + ex.Message);
+                // Return NaN as a default value or re-throw the exception
+                return double.NaN;
+            }
         }
 
         private void PopulateListWithGuests()

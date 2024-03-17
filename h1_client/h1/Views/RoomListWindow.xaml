@@ -26,7 +26,22 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Room ID" DisplayMemberBinding="{Binding Id}" />
-                    <GridViewColumn Header="Capacity" DisplayMemberBinding="{Binding Capacity}" />
+
+                    <GridViewColumn Header="Occupancy">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0}/{1}">
+                                            <Binding Path="Occupancy" />
+                                            <Binding Path="Capacity" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
                     <GridViewColumn Header="Settings">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -34,6 +49,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
+                    
                     <GridViewColumn Header="N">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>

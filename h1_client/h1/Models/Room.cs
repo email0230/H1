@@ -1,18 +1,38 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace h1.Models
 {
 	[BsonIgnoreExtraElements] //my beloved
-	public class Room
+	public class Room : INotifyPropertyChanged
     {
+		public event PropertyChangedEventHandler PropertyChanged;
         public int Id { get; private set; }
-		public int Capacity { get; set; } //might need to change name to occupancy
-		public List<Guest> Guests = new List<Guest>();
+		public int Capacity { get; set; } //max capacity of a room
+
+        private int _occupancy;
+
+        public int Occupancy
+        {
+            get => _occupancy;
+            set
+            {
+                if (_occupancy != value)
+                {
+                    _occupancy = value;
+                    OnPropertyChanged(nameof(Occupancy));
+                }
+            }
+        }
+
+        public List<Guest> Guests { get; set; }
+        //public List<Guest> Guests = new List<Guest>();
 		private static int INCREMENT = 1;
 
         public bool NoiseReduction { get; set; }
@@ -25,7 +45,12 @@ namespace h1.Models
         {
             Id = INCREMENT;
             INCREMENT++;
+
+            Guests = new List<Guest>();
+            Occupancy = Guests.Count;
         }
+
+        
         public bool AddGuest(Guest guest)
 		{
 			if (Guests.Count < Capacity)
@@ -61,6 +86,10 @@ namespace h1.Models
 		{
 			return Guests.Count >= 1;
 		}
-			
-	}
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
 }

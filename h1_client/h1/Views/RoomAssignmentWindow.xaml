@@ -16,21 +16,19 @@
             <TextBlock Text="ROOM ASSIGNMENT" Foreground="White" FontWeight="Bold" FontSize="20" Margin="10" />
         </StackPanel>
 
-        <TabControl Grid.Row="1" SelectionChanged="TabControl_SelectionChanged">
+        <TabControl Grid.Row="1">
 
             <TabItem Header="Display Hotel guests" Margin="-3,-2,-1,0">
                 <ListView x:Name="GuestSummaryListView" Margin="20" >
-                    <!-- Add a ProgressBar to represent hotel occupancy -->
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" />
                             <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
                             <GridViewColumn Header="Room" DisplayMemberBinding="{Binding AssignedRoomNumber}" />
                         </GridView>
-                        
                     </ListView.View>
                 </ListView>
-                
+
             </TabItem>
 
             <TabItem Header="Insert new Group">
@@ -91,5 +89,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <Label x:Name="OccupancyLabel" Content="Occupancy:" HorizontalAlignment="Left" Margin="24,19,0,0" Grid.Row="1" VerticalAlignment="Top" Height="25" Width="88"/>
     </Grid>
 </Window>

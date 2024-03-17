@@ -34,10 +34,18 @@ namespace h1.Views
 		{
 			InitializeComponent();
 			PopulateListWithGuests();
+            UpdateOccupancyLabel();
             DataContext = this;
         }
 
-		private void PopulateListWithGuests()
+        private void UpdateOccupancyLabel()
+        {
+            throw new NotImplementedException();
+
+
+        }
+
+        private void PopulateListWithGuests()
 		{
 			List<Guest> guests = DBMethods.GetGuests();
             GuestSummaryListView.ItemsSource = guests;
@@ -49,6 +57,8 @@ namespace h1.Views
             ObservableCollection<Group> formData = Groups;
 
             //validate, and send?
+
+            //TODO: remove these two debug methods
             DebugPrintGroupsVarStatus();
             DebugPrintGroupProperties();
 
@@ -330,12 +340,6 @@ namespace h1.Views
             }
             Debug.Unindent();
         }
-
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
 
         #endregion
 

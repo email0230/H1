@@ -32,16 +32,19 @@ namespace h1.Views
             GetHotelOccupancyStatus();
         }
 
-        private void GetHotelOccupancyStatus()
+        //todo: handle this bit of occupancy display
+        private void GetHotelOccupancyStatus() //old, new version in asignmentwindow, or rather *newer*
         {
-            int guestCount = DBMethods.GetGuests().Count;
-            int roomSpotsCount = 0;
-            foreach (var room in hotel.Rooms)
-            {
-                roomSpotsCount += room.Capacity;
-            }
-            double result = guestCount / roomSpotsCount;
-            NumericalDisplay.Text = result.ToString();
+            NumericalDisplay.Text = "HANDLE ME AAAAAAAAAAA";
+
+            //int guestCount = DBMethods.GetGuests().Count;
+            //int roomSpotsCount = 0;
+            //foreach (var room in hotel.Rooms)
+            //{
+            //    roomSpotsCount += room.Capacity;
+            //}
+            //double result = guestCount / roomSpotsCount;
+            //NumericalDisplay.Text = result.ToString();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)

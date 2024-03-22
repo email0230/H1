@@ -20,7 +20,19 @@ namespace h1.Models
 
         public int Occupancy
         {
-            get => _occupancy;
+            get
+            {
+                //TODO: simplify/cut out useless checks
+                if (this.Guests?.Any() == true)
+                {
+                    return this.Guests.Count();
+                }
+                else
+                {
+                    // Default occupancy if no Guests property or empty list
+                    return _occupancy;
+                }
+            }
             set
             {
                 if (_occupancy != value)

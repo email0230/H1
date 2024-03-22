@@ -31,21 +31,28 @@ namespace h1.Views
         public ObservableCollection<Group> Groups { get; set; } = new ObservableCollection<Group>();
 
         public RoomAssignmentWindow()
-		{
-			InitializeComponent();
-			PopulateListWithGuests();
-            double percentage = GetOccupancyDecimalValue();
-            OccupancyLabel.Content = $"Occupancy: {percentage}%";
+        {
+            InitializeComponent();
+            PopulateListWithGuests();
+            HandleOccupancyDisplay();
             DataContext = this;
         }
 
-        private double GetOccupancyDecimalValue()
+        private void HandleOccupancyDisplay()
+        {
+            var hotelRoomsFull = DBMethods.GetFullListOfRooms();
+            double percentage = GetOccupancyDecimalValue(hotelRoomsFull) * 100;
+            OccupancyLabel.Content = $"Occupancy: {percentage}%";
+        }
+
+        private double GetOccupancyDecimalValue(List<Room> inputList)
         {
             int totalCapacity = 0, totalOccupancy = 0;
-            foreach (var room in hotel.Rooms)
+
+            foreach (var room in inputList)
             {
-                room.Capacity += totalCapacity;
-                room.Occupancy += totalOccupancy;
+                totalCapacity += room.Capacity;
+                totalOccupancy += room.Occupancy;
             }
 
             // Handle division by zero
@@ -55,9 +62,7 @@ namespace h1.Views
             }
             catch (DivideByZeroException ex)
             {
-                // Log the exception or handle it appropriately
-                Debug.WriteLine("Division by zero occurred: " + ex.Message);
-                // Return NaN as a default value or re-throw the exception
+                Debug.WriteLine("occupancy returned zero -_-: " + ex.Message); //todo: remove this :D
                 return double.NaN;
             }
         }

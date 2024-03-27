@@ -42,7 +42,7 @@ namespace h1.Views
         {
             var hotelRoomsFull = DBMethods.GetFullListOfRooms();
             double percentage = GetOccupancyDecimalValue(hotelRoomsFull) * 100;
-            OccupancyLabel.Content = $"Occupancy: {percentage}%";
+            OccupancyTextBlock.Text = $"Occupancy: {percentage}%";
         }
 
         private double GetOccupancyDecimalValue(List<Room> inputList)
@@ -55,7 +55,6 @@ namespace h1.Views
                 totalOccupancy += room.Occupancy;
             }
 
-            // Handle division by zero
             try
             {
                 return Math.Round((double)totalOccupancy / totalCapacity, 2);

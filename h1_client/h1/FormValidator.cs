@@ -47,7 +47,7 @@ namespace h1
 			return true; // All validation checks pass
 		}
 
-		public static bool ValidateHotelForm(string hotelName) //TODO: add list of rooms here later!!!
+		public static bool ValidateHotelForm(string hotelName, string r1, string r2, string r3)
 		{
 			if (string.IsNullOrEmpty(hotelName))
 			{
@@ -55,9 +55,24 @@ namespace h1
 				return false;
 			}
 
-			//TODO: add more validation checks once the hotel implementation matures
+			int rooms1Person = Int32.Parse(r1);
+            int rooms2Persons = Int32.Parse(r1);
+            int rooms3Persons = Int32.Parse(r1);
 
-			return true; // All validation checks pass
+            if (rooms1Person == 0 && rooms2Persons == 0 && rooms3Persons == 0)
+            {
+                ShowNoRoomsErrorPrompt();
+				return false;
+            }
+
+            //TODO: add more validation checks once the hotel implementation matures
+
+            return true; // All validation checks pass
 		}
-	}
+
+        private static void ShowNoRoomsErrorPrompt()
+        {
+            MessageBox.Show("A hotel must have some rooms.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
 }

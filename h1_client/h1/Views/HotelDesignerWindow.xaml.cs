@@ -76,6 +76,8 @@ namespace h1.Views
                 int.TryParse(roomsFor2Persons, out int rooms2Persons) &&
                 int.TryParse(roomsFor3Persons, out int rooms3Persons))
             {
+                
+
                 for (int i = 0; i < rooms1Person; i++)
                 {
                     Room room = new Room { Capacity = 1 };
@@ -100,6 +102,8 @@ namespace h1.Views
             return roomsList;
         }
 
+      
+
         private void SubmitHotelForm()
         {
             string name = HotelNameTextBox.Text;
@@ -107,17 +111,17 @@ namespace h1.Views
             hotel.LastModifiedDate = DateTime.Now;
             hotel.Rooms = GetRooms();
 
-            if (FormValidator.ValidateHotelForm(name))
+            if (FormValidator.ValidateHotelForm(name, RoomsFor1PersonTextBox.Text, RoomsFor2PersonsTextBox.Text, RoomsFor3PersonsTextBox.Text))
             {
                 DBMethods.StoreHotel(hotel);
                 
-                if (PromptForRoomEdit())
-					SummonRoomList();
+                if (PromptForRoomEdit()) //todo: move this later, after any potential errors would pop up
+                    SummonRoomList();
                 Close();
             }
         }
 
-        private bool PromptForRoomEdit()
+        private bool PromptForRoomEdit() 
         {
             MessageBoxResult editRoomResult = MessageBox.Show(
                 "Hotel data saved successfully. Would you like to edit the room data now?",

@@ -16,22 +16,26 @@
             <TextBlock Text="ROOM ASSIGNMENT" Foreground="White" FontWeight="Bold" FontSize="20" Margin="10" />
         </StackPanel>
 
-        <TabControl Grid.Row="1" SelectionChanged="TabControl_SelectionChanged">
+        <TabControl Grid.Row="1">
 
             <TabItem Header="Display Hotel guests" Margin="-3,-2,-1,0">
-                <ListView x:Name="GuestSummaryListView" Margin="20" >
-                    <!-- Add a ProgressBar to represent hotel occupancy -->
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" />
-                            <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
-                            <GridViewColumn Header="Room" DisplayMemberBinding="{Binding AssignedRoomNumber}" />
-                        </GridView>
-                        
-                    </ListView.View>
-                </ListView>
-                
-            </TabItem>
+    <!-- Container for multiple elements -->
+    <Grid>
+        <!-- TextBlock element similar to the Label -->
+        <TextBlock x:Name="OccupancyTextBlock" Text="Occupancy:" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top"/>
+
+        <!-- The ListView -->
+        <ListView x:Name="GuestSummaryListView" Margin="20,50,20,20">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" />
+                    <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
+                    <GridViewColumn Header="Room" DisplayMemberBinding="{Binding AssignedRoomNumber}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</TabItem>
 
             <TabItem Header="Insert new Group">
                 <Grid>
@@ -91,5 +95,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        
     </Grid>
 </Window>

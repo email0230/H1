@@ -26,7 +26,22 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Room ID" DisplayMemberBinding="{Binding Id}" />
-                    <GridViewColumn Header="Occupancy" DisplayMemberBinding="{Binding Capacity}" />
+
+                    <GridViewColumn Header="Occupancy">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0}/{1}">
+                                            <Binding Path="Occupancy" />
+                                            <Binding Path="Capacity" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
                     <GridViewColumn Header="Settings">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -34,6 +49,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
+                    
                     <GridViewColumn Header="N">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -81,7 +97,7 @@
         <Button Content="Save" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,21,21" Click="SaveButton_Click"/>
 
         <!-- Numerical Display at Bottom Right Corner -->
-        <TextBlock x:Name="NumericalDisplay" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
+        <TextBlock x:Name="NumericalDisplay" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
 
         <!-- Bonus Row for Debug Buttons -->
         <StackPanel Background="Orange" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">

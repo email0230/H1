@@ -32,16 +32,34 @@ namespace h1.Views
             GetHotelOccupancyStatus();
         }
 
-        private void GetHotelOccupancyStatus()
+        //todo: make sure this looks alright after removing the debug buttons row
+
+        private void GetHotelOccupancyStatus() //duplicate of the one in assignment window TODO: make this better :)
         {
-            int guestCount = DBMethods.GetGuests().Count;
-            int roomSpotsCount = 0;
-            foreach (var room in hotel.Rooms)
+            var hotelRoomsFull = DBMethods.GetFullListOfRooms();
+            double percentage = GetOccupancyDecimalValue(hotelRoomsFull) * 100;
+            NumericalDisplay.Text = $"Occupancy: {percentage}%";
+        }
+
+        private double GetOccupancyDecimalValue(List<Room> inputList)
+        {
+            int totalCapacity = 0, totalOccupancy = 0;
+
+            foreach (var room in inputList)
             {
-                roomSpotsCount += room.Capacity;
+                totalCapacity += room.Capacity;
+                totalOccupancy += room.Occupancy;
             }
-            double result = guestCount / roomSpotsCount;
-            NumericalDisplay.Text = result.ToString();
+
+            try
+            {
+                return Math.Round((double)totalOccupancy / totalCapacity, 2);
+            }
+            catch (DivideByZeroException ex)
+            {
+                Debug.WriteLine("occupancy returned zero -_-: " + ex.Message); //todo: remove this too :D
+                return double.NaN;
+            }
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)

@@ -31,13 +31,42 @@ namespace h1.Views
         public ObservableCollection<Group> Groups { get; set; } = new ObservableCollection<Group>();
 
         public RoomAssignmentWindow()
-		{
-			InitializeComponent();
-			PopulateListWithGuests();
+        {
+            InitializeComponent();
+            PopulateListWithGuests();
+            HandleOccupancyDisplay();
             DataContext = this;
         }
 
-		private void PopulateListWithGuests()
+        private void HandleOccupancyDisplay()
+        {
+            var hotelRoomsFull = DBMethods.GetFullListOfRooms();
+            double percentage = GetOccupancyDecimalValue(hotelRoomsFull) * 100;
+            OccupancyTextBlock.Text = $"Occupancy: {percentage}%";
+        }
+
+        private double GetOccupancyDecimalValue(List<Room> inputList)
+        {
+            int totalCapacity = 0, totalOccupancy = 0;
+
+            foreach (var room in inputList)
+            {
+                totalCapacity += room.Capacity;
+                totalOccupancy += room.Occupancy;
+            }
+
+            try
+            {
+                return Math.Round((double)totalOccupancy / totalCapacity, 2);
+            }
+            catch (DivideByZeroException ex)
+            {
+                Debug.WriteLine("occupancy returned zero -_-: " + ex.Message); //todo: remove this :D
+                return double.NaN;
+            }
+        }
+
+        private void PopulateListWithGuests()
 		{
 			List<Guest> guests = DBMethods.GetGuests();
             GuestSummaryListView.ItemsSource = guests;
@@ -49,6 +78,8 @@ namespace h1.Views
             ObservableCollection<Group> formData = Groups;
 
             //validate, and send?
+
+            //TODO: remove these two debug methods
             DebugPrintGroupsVarStatus();
             DebugPrintGroupProperties();
 
@@ -330,12 +361,6 @@ namespace h1.Views
             }
             Debug.Unindent();
         }
-
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
 
         #endregion
 

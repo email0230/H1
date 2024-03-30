@@ -19,7 +19,7 @@ namespace h1
         //static IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>("testCollection");
         static IMongoCollection<Guest> GuestCollection = database.GetCollection<Guest>("GuestCollection");
         static IMongoCollection<BsonDocument> HotelDataCollection = database.GetCollection<BsonDocument>("HotelDataCollection");
-        static IMongoCollection<BsonDocument> HotelRoomCollection = database.GetCollection<BsonDocument>("HotelRoomCollection");
+        static IMongoCollection<Room> HotelRoomCollection = database.GetCollection<Room>("HotelRoomCollection");
         #endregion
 
         public static void Insert(Guest guest)
@@ -50,13 +50,18 @@ namespace h1
         public static void StoreRooms(List<Room> rooms)
         {
             // Convert the list of Room objects to a list of BsonDocument
-            List<BsonDocument> bsonDocuments = rooms.Select(room => room.ToBsonDocument()).ToList();
+            //List<BsonDocument> bsonDocuments = rooms.Select(room => room.ToBsonDocument()).ToList();
 
             // Clear the collection
-            HotelRoomCollection.DeleteMany(FilterDefinition<BsonDocument>.Empty);
+            HotelRoomCollection.DeleteMany(FilterDefinition<Room>.Empty);
 
             // Insert the list of BsonDocument into the collection
-            HotelRoomCollection.InsertMany(bsonDocuments);
+            //HotelRoomCollection.InsertMany(bsonDocuments);
+
+            foreach (var room in rooms)
+            {
+                HotelRoomCollection.InsertOne(room);
+            }
         }
 
         public static List<Guest> GetGuests() => GuestCollection.Find(new BsonDocument()).ToList();
@@ -88,5 +93,12 @@ namespace h1
         }
 
         public static void DeleteAllGuests() => GuestCollection.DeleteMany(FilterDefinition<Guest>.Empty);
+
+        public static List<Room> GetFullListOfRooms()
+        {
+            List<Room> output;
+            output = HotelRoomCollection.Find(new BsonDocument()).ToList();
+            return output;
+        }
     }
 }

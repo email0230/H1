@@ -78,7 +78,7 @@ namespace h1.Views
             ObservableCollection<Group> formData = Groups;
 
             //validate, and send?
-
+            //todo: check if group is bigger than max available room before enabling keep together checkbox
             //TODO: remove these two debug methods
             DebugPrintGroupsVarStatus();
             DebugPrintGroupProperties();
@@ -144,6 +144,7 @@ namespace h1.Views
             // Try to add the guest to the room
             if (!room.AddGuest(guest))
             {
+                Debug.WriteLine("Error: room at capacity!");
                 throw new InvalidOperationException("Guest addition failed!");
             }
 

@@ -9,9 +9,12 @@ namespace h1
 {
     public static class DLVHandler
     {
+
+        //C:\Users\email0230\Documents\GitHub\h1\H1\h1_client\h1\Assets\Solver\dlv-2.1.2-win64.exe
         #region Constants
         private static readonly string QUERY_FILEPATH = @"dlvStuff/assets/query.dl";
-        private static readonly string SOLVER_FILEPATH = @"dlvStuff/solver/dlv-2.1.2-win64.exe";
+        private static readonly string SOLVER_FILEPATH = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"../", @"../", @"../", @"Assets\", "Solver", "dlv-2.1.2-win64.exe"));
+        private static readonly string FULL_SOLVER_FILEPATH = @"C:\Users\email0230\Documents\GitHub\h1\H1\h1_client\h1\Assets\Solver\dlv-2.1.2-win64.exe";
         private static readonly string SOLUTION_FILEPATH = @"dlvStuff/target/solver_output.txt";
         #endregion
 
@@ -72,6 +75,8 @@ namespace h1
         {
             try
             {
+
+                DebugPaths(executablePath, outputPath);
                 ProcessStartInfo processStartInfo = new ProcessStartInfo
                 {
                     FileName = executablePath,
@@ -105,7 +110,16 @@ namespace h1
             catch (Exception ex)
             {
                 Debug.WriteLine($"An error occurred: {ex.Message}");
+                throw;
             }
+        }
+
+        private static void DebugPaths(string executablePath, string outputPath)
+        {
+            Debug.WriteLine("PATHS AS SEEN IN THE PROCESS RUNNING DLV:");
+            Debug.Indent();
+            Debug.WriteLine($"exe: {executablePath}");
+            Debug.WriteLine($"output: {outputPath}");
         }
     }
 }

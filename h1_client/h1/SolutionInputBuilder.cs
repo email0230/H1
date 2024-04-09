@@ -190,6 +190,8 @@ namespace h1
             }
         }
 
+        //todo: handle guests coming in over capacity
+
         public static string BuildRooms(List<Room> rooms)
         {
             StringBuilder output = new StringBuilder();
@@ -199,7 +201,6 @@ namespace h1
                 {
                     output.AppendLine($"room({room.Id},{room.Capacity})."); //roomid might need to get normalized
                 }
-               
             }
 
             return output.ToString();

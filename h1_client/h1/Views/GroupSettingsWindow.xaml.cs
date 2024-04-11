@@ -20,9 +20,34 @@ namespace h1.Views
     /// </summary>
     public partial class GroupSettingsWindow : Window
     {
-        public GroupSettingsWindow()
+        public GroupSettingsWindow(Group a)
         {
             InitializeComponent();
+            if (CheckIfGroupSizeAboveMax(a))
+            {
+                TurnOffTogetherCheckbox(); //check if this instatiates properly
+            }
+        }
+
+        private bool CheckIfGroupSizeAboveMax(Group? group)
+        {
+            if (group.Guests.Count > GetBiggestRoomCapacity())
+            {
+                return true;
+            }
+            
+            return false;
+        }
+
+        private int GetBiggestRoomCapacity()
+        {
+            //todo: implement this :D
+            return 3;
+        }
+
+        private void TurnOffTogetherCheckbox()
+        {
+            KeepTogetherCheckbox.IsEnabled = false;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)

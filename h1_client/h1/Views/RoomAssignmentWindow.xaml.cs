@@ -199,7 +199,7 @@ namespace h1.Views
             //find the corresponding Group object to which the button belongs
             if (sender is FrameworkElement element && element.DataContext is Group group)
             {
-                GroupSettingsWindow settingsWindow = new GroupSettingsWindow();
+                GroupSettingsWindow settingsWindow = new GroupSettingsWindow(group);
                 settingsWindow.DataContext = group; //make sure the window uses the group selected
                 settingsWindow.ShowDialog();
             }

@@ -23,28 +23,12 @@ namespace h1.Views
             InitializeComponent();
         }
 
+     
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is RoomSettingsWindow roomSettingsViewModel)
             {
-                // Perform save operation or update the corresponding Room model
-                // Access roomSettingsViewModel properties to get the updated values
-
-                // For example:
-                //Room roomToUpdate = new Room
-                //{
-                //    Capacity = roomSettingsViewModel.Capacity,
-                //    NoiseReduction = roomSettingsViewModel.NoiseReduction,
-                //    SecurityFeatures = roomSettingsViewModel.SecurityFeatures,
-                //    SmartLighting = roomSettingsViewModel.SmartLighting,
-                //    Balcony = roomSettingsViewModel.Balcony,
-                //    ModularFurniture = roomSettingsViewModel.ModularFurniture
-                //};
-
-                // Now you can save the updated Room model or perform any necessary operations.
-                // You might want to use a service or repository to handle the actual save operation.
-
-                // Close the window after saving
+                //todo: clean up haha
                 Close();
             }
 

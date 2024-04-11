@@ -15,9 +15,7 @@ namespace h1.Models
 		public event PropertyChangedEventHandler PropertyChanged;
         public int Id { get; private set; }
 		public int Capacity { get; set; } //max capacity of a room
-
         private int _occupancy;
-
         public int Occupancy
         {
             get

@@ -57,12 +57,6 @@ namespace h1.Views
                 DBMethods.DeleteAllGuests();
                 SubmitHotelForm();
             }
-			//TODO: PROPER VALIDATION
-
-            /* BIG THINGS TO DO:
-             * - validation (ctnd)
-             * - add a "room list is null!" warning
-             */
         }
         private List<Room> GetRooms()
         {

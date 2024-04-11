@@ -14,7 +14,7 @@
             <GroupBox Header="Group Requirements" Margin="10">
                 <StackPanel>
                     <!-- Keep members together CheckBox -->
-                    <CheckBox Content="Keep members of this group together [at all costs]" IsChecked="{Binding WantGroupToStayTogether}" FontWeight="Bold" Margin="5"/>
+                    <CheckBox x:Name="KeepTogetherCheckbox" Content="Keep members of this group together [at all costs]" IsChecked="{Binding WantGroupToStayTogether}" FontWeight="Bold" Margin="5"/>
 
                     <!-- Noise Reduction Checkbox -->
                     <CheckBox Content="Noise Reduction" IsChecked="{Binding WantNoiseReduction}" Margin="5"/>

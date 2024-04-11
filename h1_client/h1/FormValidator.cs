@@ -65,8 +65,6 @@ namespace h1
 				return false;
             }
 
-            //TODO: add more validation checks once the hotel implementation matures
-
             return true; // All validation checks pass
 		}
 

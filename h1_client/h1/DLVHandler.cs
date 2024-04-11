@@ -69,8 +69,6 @@ namespace h1
             return pairs;
         }
 
-        //silly todo: put the model somewhere where git will find it, same with the solver
-
         static void StartProcess(string executablePath, string args, string outputPath) //can be improved tremenodus
         {
             try

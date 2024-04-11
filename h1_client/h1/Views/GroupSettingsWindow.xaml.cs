@@ -25,12 +25,13 @@ namespace h1.Views
             InitializeComponent();
             if (CheckIfGroupSizeAboveMax(a))
             {
-                TurnOffTogetherCheckbox(); //check if this instatiates properly
+                TurnOffTogetherCheckbox(a); //check if this instatiates properly
             }
         }
 
         private bool CheckIfGroupSizeAboveMax(Group? group)
         {
+
             if (group.Guests.Count > GetBiggestRoomCapacity())
             {
                 return true;
@@ -38,15 +39,15 @@ namespace h1.Views
             
             return false;
         }
-
         private int GetBiggestRoomCapacity()
         {
             //todo: implement this :D
             return 3;
         }
 
-        private void TurnOffTogetherCheckbox()
+        private void TurnOffTogetherCheckbox(Group a)
         {
+            a.WantGroupToStayTogether = false; //todo: verify whether "keep together" property is properly removed
             KeepTogetherCheckbox.IsEnabled = false;
         }
 

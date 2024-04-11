@@ -77,6 +77,8 @@ namespace h1.Views
         {
             ObservableCollection<Group> formData = Groups;
 
+            //todo: move "check if group size exceeds maximum" check from gropu settings window here!
+
             //validate, and send?
             //todo: check if group is bigger than max available room before enabling keep together checkbox
             //TODO: remove these two debug methods

@@ -20,18 +20,19 @@ namespace h1.Views
     /// </summary>
     public partial class GroupSettingsWindow : Window
     {
-        public GroupSettingsWindow(Group a)
+        public Group group { get; set; }
+        public GroupSettingsWindow(Group inputGroup)
         {
             InitializeComponent();
-            if (CheckIfGroupSizeAboveMax(a))
+            group = inputGroup;
+            if (CheckIfGroupSizeAboveMax(group))
             {
-                TurnOffTogetherCheckbox(a); //check if this instatiates properly
+                TurnOffTogetherCheckbox(group); //check if this instatiates properly
             }
         }
 
         private bool CheckIfGroupSizeAboveMax(Group? group)
         {
-
             if (group.Guests.Count > GetBiggestRoomCapacity())
             {
                 return true;
@@ -39,6 +40,7 @@ namespace h1.Views
             
             return false;
         }
+
         private int GetBiggestRoomCapacity()
         {
             //todo: implement this :D
@@ -47,7 +49,7 @@ namespace h1.Views
 
         private void TurnOffTogetherCheckbox(Group a)
         {
-            a.WantGroupToStayTogether = false; //todo: verify whether "keep together" property is properly removed
+            a.WantGroupToStayTogether = false;
             KeepTogetherCheckbox.IsEnabled = false;
         }
 

@@ -76,11 +76,8 @@ namespace h1.Views
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             ObservableCollection<Group> formData = Groups;
-
-            //todo: move "check if group size exceeds maximum" check from gropu settings window here!
-
             //validate, and send?
-            //todo: check if group is bigger than max available room before enabling keep together checkbox
+            
             //TODO: remove these two debug methods
             DebugPrintGroupsVarStatus();
             DebugPrintGroupProperties();
@@ -93,7 +90,6 @@ namespace h1.Views
 
             MatchGuestsToRooms(solution, builder.GetGuestDict());
 
-            //SendHotelToDB();
             DBMethods.StoreHotel(hotel);
 
             var rooms = hotel.Rooms;
@@ -102,11 +98,6 @@ namespace h1.Views
 
             Close();
         }
-
-        //private List<Room> RemoveInvalidRooms(List<Room> rooms)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         private void MatchGuestsToRooms(List<Tuple<int, int>> solution, Dictionary<Guest, int> dictionary)
         {
@@ -209,7 +200,8 @@ namespace h1.Views
 
         private void AddNewGuestButton_Click(object sender, RoutedEventArgs e)
         {
-            if (GetSelectedGroup() == null)
+            Group selected = GetSelectedGroup();
+            if (selected == null)
             {
                 MessageBox.Show("No group selected. \nSelect a group by double-clicking it!", "Selection Required", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
@@ -220,8 +212,28 @@ namespace h1.Views
                 MessageBox.Show("Please select the group before adding more guests to it.", "Group Selection Required", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
-            
+
+            if(selected.WantGroupToStayTogether && selected.Guests.Count >= GetBiggestRoomCapacity())
+            {
+                //todo: make this line do nothing and skip to line 239. and generally make this less repetitive
+            }
+
             AddBlankGuestToGroupTicket();
+
+            //lock button afterwards if at capacity
+            if (selected.WantGroupToStayTogether && selected.Guests.Count >= GetBiggestRoomCapacity())
+            {
+                ToolTipService.SetShowOnDisabled((Button)sender, true); //jank
+
+                //todo: create a warning tooltip explaining that a group cannot be bigger than 1 room, AND still want to be together
+                ((Button)sender).ToolTip = "no bueno max group size reached!";
+                ((Button)sender).IsEnabled = false;
+            }
+            else
+            {
+                ((Button)sender).IsEnabled = true;
+                ((Button)sender).ToolTip = "Add Guest";
+            }
         }
 
         private void AddBlankGuestToGroupTicket()
@@ -370,5 +382,35 @@ namespace h1.Views
         //todo:
         /* possible dropdown, to hide guests?
          */
+
+
+        //todo: remove redundant code
+        private void DisableAddingToATicket()
+        {
+            foreach (var group in Groups)
+            {
+                if (group.Guests.Count >= GetBiggestRoomCapacity() && group.WantGroupToStayTogether)
+                {
+                    
+                }
+            }
+        }
+
+        private bool CheckIfGroupSizeAboveMax(Group? group)
+        {
+            if (group.Guests.Count > GetBiggestRoomCapacity())
+            {
+                return true;
+            }
+            
+            return false;
+        }
+
+        private int GetBiggestRoomCapacity()
+        {
+            //todo: implement this :D
+            return 3;
+        }
+
     }
 }

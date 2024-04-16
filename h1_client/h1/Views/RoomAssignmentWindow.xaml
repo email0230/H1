@@ -19,25 +19,23 @@
         <TabControl Grid.Row="1">
 
             <TabItem Header="Display Hotel guests" Margin="-3,-2,-1,0">
-    <!-- Container for multiple elements -->
-    <Grid>
-        
-        <!-- TextBlock element similar to the Label todo:add column for group of guests  -->
-        <TextBlock x:Name="OccupancyTextBlock" Text="Occupancy:" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top"/>
+                <!-- Container for multiple elements -->
+                <Grid>
+                    <!-- TextBlock element similar to the Label todo:add column for group of guests  -->
+                    <TextBlock x:Name="OccupancyTextBlock" Text="Occupancy:" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top"/>
 
-        <!-- The ListView -->
-        <ListView x:Name="GuestSummaryListView" Margin="20,50,20,20">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" />
-                    <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
-                    <GridViewColumn Header="Room" DisplayMemberBinding="{Binding AssignedRoomNumber}" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-    </Grid>
-</TabItem>
-
+                    <!-- The ListView -->
+                    <ListView x:Name="GuestSummaryListView" Margin="20,50,20,20">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" />
+                                <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
+                                <GridViewColumn Header="Room" DisplayMemberBinding="{Binding AssignedRoomNumber}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
             <TabItem Header="Insert new Group">
                 <Grid>
                     <ListView x:Name="listViewElement" ItemsSource="{Binding Groups}" Background="LightGray" Margin="10">
@@ -46,7 +44,7 @@
                                 <GridViewColumn Header="Actions">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Grid>
+                                            <Grid ToolTipService.ShowOnDisabled="True">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto"/>
                                                     <RowDefinition Height="Auto"/>
@@ -77,7 +75,13 @@
                                                 <!-- Row for buttons inside a GroupBox -->
                                                 <GroupBox Header="Options" Grid.Row="2" Margin="3,0,85,3">
                                                     <StackPanel Orientation="Horizontal">
-                                                        <Button Content="➕" Click="AddNewGuestButton_Click" Margin="5" Background="Transparent"/>
+                                                        <Button Content="➕" Click="AddNewGuestButton_Click" Margin="5" Background="Transparent">
+                                                            <!-- Set a tooltip for the button -->
+                                                            <Button.ToolTip>
+                                                                <ToolTip x:Name="AddNewGuestButtonToolTip" Content="Add guest"/>
+                                                            </Button.ToolTip>
+                                                        </Button>
+
                                                         <Button Content="🛠" Click="GroupSettingsButton_Click" Margin="5"/>
                                                         <Button Content="❌" Click="RemoveGroupButton_Click" Margin="5"/>
                                                     </StackPanel>
@@ -96,6 +100,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        
+
     </Grid>
 </Window>

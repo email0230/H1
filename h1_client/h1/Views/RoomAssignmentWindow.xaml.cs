@@ -42,7 +42,7 @@ namespace h1.Views
         {
             var hotelRoomsFull = DBMethods.GetFullListOfRooms();
             double percentage = GetOccupancyDecimalValue(hotelRoomsFull) * 100;
-            OccupancyTextBlock.Text = $"Occupancy: {percentage}%";
+            OccupancyTextBlock.Text = $"Occupancy: {percentage}%"; //todo: this occupancy display gets broken on hotel resets, fix it
         }
 
         private double GetOccupancyDecimalValue(List<Room> inputList)
@@ -198,7 +198,7 @@ namespace h1.Views
             }
         }
 
-        private void AddNewGuestButton_Click(object sender, RoutedEventArgs e)
+        private void AddNewGuestButton_Click(object sender, RoutedEventArgs e) //todo: this method is an unacceptable mess, sort it out :)
         {
             Group selected = GetSelectedGroup();
             if (selected == null)
@@ -213,7 +213,7 @@ namespace h1.Views
                 return;
             }
 
-            if(selected.WantGroupToStayTogether && selected.Guests.Count >= GetBiggestRoomCapacity())
+            if (selected.WantGroupToStayTogether && selected.Guests.Count >= GetBiggestRoomCapacity())
             {
                 //todo: make this line do nothing and skip to line 239. and generally make this less repetitive
             }
@@ -378,11 +378,6 @@ namespace h1.Views
         }
 
         #endregion
-
-        //todo:
-        /* possible dropdown, to hide guests?
-         */
-
 
         //todo: remove redundant code
         private void DisableAddingToATicket()

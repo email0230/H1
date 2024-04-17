@@ -229,7 +229,7 @@ namespace h1.Views
             {
                 DisableAddButton(sender);
             }
-            else //todo: this is the default option, it might be prudent to limit instantiating needlessly
+            else 
             {
                 if (!((Button)sender).IsEnabled)
                 {
@@ -398,22 +398,6 @@ namespace h1.Views
         }
 
         #endregion
-
-        //todo: remove redundant code
-        private void DisableAddingToATicket()
-        {
-            
-        }
-
-        private bool CheckIfGroupSizeAboveMax(Group? group)
-        {
-            if (group.Guests.Count > GetBiggestRoomCapacity())
-            {
-                return true;
-            }
-            
-            return false;
-        }
 
         private int GetBiggestRoomCapacity()
         {

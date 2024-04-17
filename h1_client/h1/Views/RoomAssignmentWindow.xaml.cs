@@ -198,8 +198,15 @@ namespace h1.Views
             }
         }
 
-        private void AddNewGuestButton_Click(object sender, RoutedEventArgs e) //todo: this method is an unacceptable mess, sort it out :)
+        private void AddNewGuestButton_Click(object sender, RoutedEventArgs e)
         {
+            // Check if the button does not belong to the correct group ticket
+            if (!ButtonBelongsToCorrectGroupTicket(sender))
+            {
+                MessageBox.Show("Please select the group before adding more guests to it.", "Group Selection Required", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
             Group selected = GetSelectedGroup();
             if (selected == null)
             {
@@ -207,34 +214,47 @@ namespace h1.Views
                 return;
             }
 
-            if (!ButtonBelongsToCorrectGroupTicket(sender))
+            bool groupAtCapacity = IsKeepTogetherGroupAtCapacity(selected);
+            if (groupAtCapacity)
             {
-                MessageBox.Show("Please select the group before adding more guests to it.", "Group Selection Required", MessageBoxButton.OK, MessageBoxImage.Information);
+                DisableAddButton(sender);
                 return;
             }
-
-            if (selected.WantGroupToStayTogether && selected.Guests.Count >= GetBiggestRoomCapacity())
-            {
-                //todo: make this line do nothing and skip to line 239. and generally make this less repetitive
-            }
+            //todo: handle enabling the button again once the group becomes elligible for more guests
 
             AddBlankGuestToGroupTicket();
 
-            //lock button afterwards if at capacity
-            if (selected.WantGroupToStayTogether && selected.Guests.Count >= GetBiggestRoomCapacity())
+            groupAtCapacity = IsKeepTogetherGroupAtCapacity(selected); //check again after adding a guest
+            if (groupAtCapacity)
             {
-                ToolTipService.SetShowOnDisabled((Button)sender, true); //jank
-
-                //todo: create a warning tooltip explaining that a group cannot be bigger than 1 room, AND still want to be together
-                ((Button)sender).ToolTip = "no bueno max group size reached!";
-                ((Button)sender).IsEnabled = false;
+                DisableAddButton(sender);
             }
-            else
+            else //todo: this is the default option, it might be prudent to limit instantiating needlessly
             {
-                ((Button)sender).IsEnabled = true;
-                ((Button)sender).ToolTip = "Add Guest";
+                if (!((Button)sender).IsEnabled)
+                {
+                    EnableAddButton(sender);
+                }
             }
         }
+
+        private bool IsKeepTogetherGroupAtCapacity(Group group) => group.WantGroupToStayTogether && group.Guests.Count >= GetBiggestRoomCapacity();
+
+        private static void EnableAddButton(object sender)
+        {
+            ((Button)sender).IsEnabled = true;
+            ((Button)sender).ToolTip = "Add Guest";
+        }
+
+        private static void DisableAddButton(object sender)
+        {
+            ToolTipService.SetShowOnDisabled((Button)sender, true);
+            ((Button)sender).ToolTip = "No bueno. Max group size reached!";
+
+            // Disable the button
+            ((Button)sender).IsEnabled = false;
+        }
+
 
         private void AddBlankGuestToGroupTicket()
         {
@@ -382,13 +402,7 @@ namespace h1.Views
         //todo: remove redundant code
         private void DisableAddingToATicket()
         {
-            foreach (var group in Groups)
-            {
-                if (group.Guests.Count >= GetBiggestRoomCapacity() && group.WantGroupToStayTogether)
-                {
-                    
-                }
-            }
+            
         }
 
         private bool CheckIfGroupSizeAboveMax(Group? group)

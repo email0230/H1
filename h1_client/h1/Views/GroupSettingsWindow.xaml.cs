@@ -41,11 +41,7 @@ namespace h1.Views
             return false;
         }
 
-        private int GetBiggestRoomCapacity()
-        {
-            //todo: implement this :D
-            return 3;
-        }
+        private int GetBiggestRoomCapacity() => DBMethods.GetFullListOfRooms().Max(room => room.Capacity); //todo: maybe deal with the duplicate in roomassignment
 
         private void TurnOffTogetherCheckbox(Group a)
         {

@@ -41,7 +41,8 @@ namespace h1.Views
         private void HandleOccupancyDisplay()
         {
             var hotelRoomsFull = DBMethods.GetFullListOfRooms();
-            double percentage = GetOccupancyDecimalValue(hotelRoomsFull) * 100;
+            double percentage = Math.Truncate(GetOccupancyDecimalValue(hotelRoomsFull) * 100);
+            
             OccupancyTextBlock.Text = $"Occupancy: {percentage}%"; //todo: this occupancy display gets broken on hotel resets, fix it
         }
 
@@ -399,11 +400,6 @@ namespace h1.Views
 
         #endregion
 
-        private int GetBiggestRoomCapacity()
-        {
-            //todo: implement this :D
-            return 3;
-        }
-
+        private int GetBiggestRoomCapacity() => DBMethods.GetFullListOfRooms().Max(room => room.Capacity); //todo: move this to a more reasonable place in the code
     }
 }

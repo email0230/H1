@@ -28,18 +28,19 @@ namespace h1
             collection.InsertOne(guest);
         }
 
-        public static void StoreHotel(string jsonInput)
-        {
-            HotelDataCollection.DeleteMany(FilterDefinition<BsonDocument>.Empty);
-
-            BsonDocument bsonDocument = BsonDocument.Parse(jsonInput);
-            HotelDataCollection.InsertOne(bsonDocument);
-        }
-
         public static void StoreHotel(Hotel input)
         {
             string jsonHotel = Newtonsoft.Json.JsonConvert.SerializeObject(input);
-            StoreHotel(jsonHotel);
+            StoreHotel(jsonHotel); //easy to miss, this is the same method, different overload
+        }
+
+        public static void StoreHotel(string jsonInput)
+        {
+            HotelDataCollection.DeleteMany(FilterDefinition<BsonDocument>.Empty);
+            RemoveRooms(); //placed here as an attempt to remove bleeding occupancy over resets
+
+            BsonDocument bsonDocument = BsonDocument.Parse(jsonInput);
+            HotelDataCollection.InsertOne(bsonDocument);
         }
 
         public static BsonDocument GetHotel()
@@ -49,20 +50,15 @@ namespace h1
 
         public static void StoreRooms(List<Room> rooms)
         {
-            // Convert the list of Room objects to a list of BsonDocument
-            //List<BsonDocument> bsonDocuments = rooms.Select(room => room.ToBsonDocument()).ToList();
-
-            // Clear the collection
-            HotelRoomCollection.DeleteMany(FilterDefinition<Room>.Empty);
-
-            // Insert the list of BsonDocument into the collection
-            //HotelRoomCollection.InsertMany(bsonDocuments);
+            RemoveRooms();
 
             foreach (var room in rooms)
             {
                 HotelRoomCollection.InsertOne(room);
             }
         }
+
+        private static void RemoveRooms() => HotelRoomCollection.DeleteMany(FilterDefinition<Room>.Empty);
 
         public static List<Guest> GetGuests() => GuestCollection.Find(new BsonDocument()).ToList();
 

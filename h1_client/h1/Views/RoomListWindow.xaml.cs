@@ -3,7 +3,9 @@ using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -37,7 +39,14 @@ namespace h1.Views
         private void GetHotelOccupancyStatus() //duplicate of the one in assignment window TODO: make this better :)
         {
             var hotelRoomsFull = DBMethods.GetFullListOfRooms();
-            double percentage = GetOccupancyDecimalValue(hotelRoomsFull) * 100;
+            double percentage = Math.Truncate(GetOccupancyDecimalValue(hotelRoomsFull) * 100);
+            // handle the roomlist not being initialized right after a hotel creation
+            if (Double.IsNaN(percentage) || Double.IsInfinity(percentage))
+            {
+                NumericalDisplay.Text = string.Empty;
+                return;
+            }
+
             NumericalDisplay.Text = $"Occupancy: {percentage}%";
         }
 
@@ -66,11 +75,12 @@ namespace h1.Views
         {
             DebugPrintRoomStatus();
 
-            hotel.LastModifiedDate = DateTime.Now; //so that db may find it, can be removed if a better way of getting most recent hotel is found
+            hotel.LastModifiedDate = DateTime.Now; //todo: remove this, its very likely redundant now
 
             if (true) //TODO: validation
             {
                 DBMethods.StoreHotel(hotel);
+                DBMethods.StoreRooms(hotel.Rooms);
                 Close();
             }
         }

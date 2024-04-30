@@ -29,7 +29,7 @@ namespace h1.Views
 
 		private void AssignRoomButton_Click(object sender, RoutedEventArgs e)
 		{
-
+            //todo: evaluate and delete this entire view
 		}
 	}
 }

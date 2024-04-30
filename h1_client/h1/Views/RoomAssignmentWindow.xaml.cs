@@ -77,7 +77,7 @@ namespace h1.Views
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             ObservableCollection<Group> formData = Groups;
-            //validate, and send?
+            //todo: add duration of stay from groupstaywindow to every guest here!
             
             //TODO: remove these two debug methods
             DebugPrintGroupsVarStatus();
@@ -396,5 +396,12 @@ namespace h1.Views
         }
 
         #endregion
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            GroupStayDurationWindow durationWindow = new GroupStayDurationWindow();
+            durationWindow.DataContext = Groups;
+            durationWindow.ShowDialog();
+        }
     }
 }

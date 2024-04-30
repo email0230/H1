@@ -94,7 +94,7 @@
                     </ListView>
 
                     <Button Content="Add New Group 👨‍👩‍👦" Click="AddNewObjectButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
-                    <Button x:Name="DebugButtonElement" Content="Debug display group object" Background="Orange" Click="DebugButtonClicked" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="175,0,0,11" FontWeight="Bold"/>
+                    <Button Content="Length of Stay 📅" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="122,0,0,10" Click="Button_Click"/>
                     <Button x:Name="SendButton" Content="Send" Click="SendButton_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
                 </Grid>
             </TabItem>

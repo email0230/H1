@@ -28,7 +28,6 @@ namespace h1.Views
         {
             if (DataContext is RoomSettingsWindow roomSettingsViewModel)
             {
-                //todo: clean up haha
                 Close();
             }
 

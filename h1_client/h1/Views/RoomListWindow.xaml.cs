@@ -40,6 +40,7 @@ namespace h1.Views
         {
             var hotelRoomsFull = DBMethods.GetFullListOfRooms();
             double percentage = Math.Truncate(GetOccupancyDecimalValue(hotelRoomsFull) * 100);
+
             // handle the roomlist not being initialized right after a hotel creation
             if (Double.IsNaN(percentage) || Double.IsInfinity(percentage))
             {
@@ -66,7 +67,6 @@ namespace h1.Views
             }
             catch (DivideByZeroException ex)
             {
-                Debug.WriteLine("occupancy returned zero -_-: " + ex.Message); //todo: remove this too :D
                 return double.NaN;
             }
         }
@@ -75,9 +75,9 @@ namespace h1.Views
         {
             DebugPrintRoomStatus();
 
-            hotel.LastModifiedDate = DateTime.Now; //todo: remove this, its very likely redundant now
+            hotel.LastModifiedDate = DateTime.Now;
 
-            if (true) //TODO: validation
+            if (true)
             {
                 DBMethods.StoreHotel(hotel);
                 DBMethods.StoreRooms(hotel.Rooms);

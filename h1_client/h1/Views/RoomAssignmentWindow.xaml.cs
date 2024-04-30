@@ -43,7 +43,7 @@ namespace h1.Views
             var hotelRoomsFull = DBMethods.GetFullListOfRooms();
             double percentage = Math.Truncate(GetOccupancyDecimalValue(hotelRoomsFull) * 100);
             
-            OccupancyTextBlock.Text = $"Occupancy: {percentage}%"; //todo: this occupancy display gets broken on hotel resets, fix it
+            OccupancyTextBlock.Text = $"Occupancy: {percentage}%"; 
         }
 
         private double GetOccupancyDecimalValue(List<Room> inputList)
@@ -221,7 +221,6 @@ namespace h1.Views
                 DisableAddButton(sender);
                 return;
             }
-            //todo: handle enabling the button again once the group becomes elligible for more guests
 
             AddBlankGuestToGroupTicket();
 
@@ -240,6 +239,8 @@ namespace h1.Views
         }
 
         private bool IsKeepTogetherGroupAtCapacity(Group group) => group.WantGroupToStayTogether && group.Guests.Count >= GetBiggestRoomCapacity();
+
+        private int GetBiggestRoomCapacity() => DBMethods.GetFullListOfRooms().Max(room => room.Capacity);
 
         private static void EnableAddButton(object sender)
         {
@@ -289,10 +290,6 @@ namespace h1.Views
             // Assuming your Group object is stored in the DataContext of the selected ListViewItem
             if (!(listViewElement.SelectedItem is Group selectedGroup))
             {
-                MessageBox.Show("DEBUG: Failed to retrieve selected group.",
-                    "Error", 
-                    MessageBoxButton.OK, 
-                    MessageBoxImage.Error);
                 return false;
             }
 
@@ -399,7 +396,5 @@ namespace h1.Views
         }
 
         #endregion
-
-        private int GetBiggestRoomCapacity() => DBMethods.GetFullListOfRooms().Max(room => room.Capacity); //todo: move this to a more reasonable place in the code
     }
 }

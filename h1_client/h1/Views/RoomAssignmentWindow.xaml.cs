@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using Newtonsoft.Json;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -27,6 +28,9 @@ namespace h1.Views
     public partial class RoomAssignmentWindow : Window
 	{
 		Hotel hotel = Hotel.GetInstance();
+
+        private DateTime ArrivalDate;
+        private DateTime DepartureDate;
 
         public ObservableCollection<Group> Groups { get; set; } = new ObservableCollection<Group>();
 
@@ -397,11 +401,21 @@ namespace h1.Views
 
         #endregion
 
+        
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             GroupStayDurationWindow durationWindow = new GroupStayDurationWindow();
-            durationWindow.DataContext = Groups;
+
+            durationWindow.PassDatesEvent += EventUpdate;
+
             durationWindow.ShowDialog();
+        }
+
+        private void EventUpdate(DateTime a, DateTime d)
+        {
+            ArrivalDate = a;
+            DepartureDate = d;
         }
     }
 }

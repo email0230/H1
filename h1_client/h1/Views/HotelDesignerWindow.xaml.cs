@@ -105,7 +105,10 @@ namespace h1.Views
             hotel.LastModifiedDate = DateTime.Now;
             hotel.Rooms = GetRooms();
 
-            if (FormValidator.ValidateHotelForm(name, RoomsFor1PersonTextBox.Text, RoomsFor2PersonsTextBox.Text, RoomsFor3PersonsTextBox.Text))
+            if (FormValidator.ValidateHotelForm(name,
+                                                RoomsFor1PersonTextBox.Text,
+                                                RoomsFor2PersonsTextBox.Text,
+                                                RoomsFor3PersonsTextBox.Text))
             {
                 DBMethods.StoreHotel(hotel);
                 

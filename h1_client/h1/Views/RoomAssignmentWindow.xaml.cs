@@ -29,8 +29,8 @@ namespace h1.Views
 	{
 		Hotel hotel = Hotel.GetInstance();
 
-        private DateTime ArrivalDate;
-        private DateTime DepartureDate;
+        private DateTime? ArrivalDate;
+        private DateTime? DepartureDate;
 
         public ObservableCollection<Group> Groups { get; set; } = new ObservableCollection<Group>();
 
@@ -52,21 +52,15 @@ namespace h1.Views
 
         private double GetOccupancyDecimalValue(List<Room> inputList)
         {
-            int totalCapacity = 0, totalOccupancy = 0;
-
-            foreach (var room in inputList)
-            {
-                totalCapacity += room.Capacity;
-                totalOccupancy += room.Occupancy;
-            }
+            var (occupancy, capacity) = DBMethods.GetHotelOccupancyAndCapacity();
 
             try
             {
-                return Math.Round((double)totalOccupancy / totalCapacity, 2);
+                return Math.Round((double)occupancy / capacity, 2);
             }
             catch (DivideByZeroException ex)
             {
-                Debug.WriteLine("occupancy returned zero -_-: " + ex.Message); //todo: remove this :D
+                Debug.WriteLine("error! msg: " + ex.Message); //todo: remove this :D
                 return double.NaN;
             }
         }
@@ -81,27 +75,50 @@ namespace h1.Views
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             ObservableCollection<Group> formData = Groups;
-            //todo: add duration of stay from groupstaywindow to every guest here!
-            
-            //TODO: remove these two debug methods
-            DebugPrintGroupsVarStatus();
-            DebugPrintGroupProperties();
 
+            if (FormValidator.ValidateGroupsFormData(ArrivalDate.HasValue,
+                                                     DepartureDate.HasValue,
+                                                     formData))
+            {
+                AssignDatesToGuests(formData);
+                BuildSolutionAndStore(formData);
+
+                Close();
+            }
+        }
+
+        private void AssignDatesToGuests(ObservableCollection<Group> formData)
+        {
+            //add duration of stay from groupstaywindow to every guest here!
+            //todo: verify wether this always happens before or after validation
+            foreach (Group group in formData)
+            {
+                foreach (var guest in group.Guests)
+                {
+                    guest.ArrivalDate = ArrivalDate;
+                    guest.DepartureDate = DepartureDate;
+                }
+            }
+        }
+
+        private void BuildSolutionAndStore(ObservableCollection<Group> formData)
+        {
             SolutionInputBuilder builder = new SolutionInputBuilder();
             var rawRooms = hotel.Rooms;
-            //List<Room> cleanRooms = RemoveInvalidRooms(rawRooms);
             string query = builder.GenerateQuery(formData, rawRooms); //here, rooms passed might need to get checked for any disabled rooms!!
+
             List<Tuple<int, int>> solution = DLVHandler.GetSolutionFromSolver(query);
 
             MatchGuestsToRooms(solution, builder.GetGuestDict());
 
+            SaveDataToDB();
+        }
+
+        private void SaveDataToDB()
+        {
             DBMethods.StoreHotel(hotel);
-
             var rooms = hotel.Rooms;
-            DebugCheckIfRoomsInHotelHaveGuests(rooms);
             DBMethods.StoreRooms(rooms);
-
-            Close();
         }
 
         private void MatchGuestsToRooms(List<Tuple<int, int>> solution, Dictionary<Guest, int> dictionary)
@@ -155,8 +172,6 @@ namespace h1.Views
         } 
 
         #endregion
-
-        
 
         private void AddNewObjectButton_Click(object sender, RoutedEventArgs e)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -95,6 +96,21 @@ namespace h1
             List<Room> output;
             output = HotelRoomCollection.Find(new BsonDocument()).ToList();
             return output;
+        }
+
+
+        public static (int occupancy, int capacity) GetHotelOccupancyAndCapacity()
+        {
+            List<Room> rooms = GetFullListOfRooms();
+            int totalCapacity = 0, totalOccupancy = 0;
+
+            foreach (var room in rooms)
+            {
+                totalCapacity += room.Capacity;
+                totalOccupancy += room.Occupancy;
+            }
+
+            return (totalOccupancy, totalCapacity);
         }
     }
 }

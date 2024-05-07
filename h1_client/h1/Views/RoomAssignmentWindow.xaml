@@ -30,6 +30,8 @@
                                 <GridViewColumn Header="Last Name" DisplayMemberBinding="{Binding LastName}" />
                                 <GridViewColumn Header="First Name" DisplayMemberBinding="{Binding FirstName}" />
                                 <GridViewColumn Header="Room" DisplayMemberBinding="{Binding AssignedRoomNumber}" />
+                                <GridViewColumn Header="Arrives" DisplayMemberBinding="{Binding ArrivalDate}" />
+                                <GridViewColumn Header="Depearts" DisplayMemberBinding="{Binding DepartureDate}" />
                             </GridView>
                         </ListView.View>
                     </ListView>

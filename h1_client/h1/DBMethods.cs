@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Xml.Linq;
 using h1.Models;
 using MongoDB.Bson;
@@ -17,7 +18,6 @@ namespace h1
         #region Fields 
         static MongoClient client = new MongoClient();
         static IMongoDatabase database = client.GetDatabase("h1_db");
-        //static IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>("testCollection");
         static IMongoCollection<Guest> GuestCollection = database.GetCollection<Guest>("GuestCollection");
         static IMongoCollection<BsonDocument> HotelDataCollection = database.GetCollection<BsonDocument>("HotelDataCollection");
         static IMongoCollection<Room> HotelRoomCollection = database.GetCollection<Room>("HotelRoomCollection");
@@ -39,9 +39,51 @@ namespace h1
         {
             HotelDataCollection.DeleteMany(FilterDefinition<BsonDocument>.Empty);
             RemoveRooms(); //placed here as an attempt to remove bleeding occupancy over resets
+            StoreRooms(RemoveDepartedGuests());
 
             BsonDocument bsonDocument = BsonDocument.Parse(jsonInput);
             HotelDataCollection.InsertOne(bsonDocument);
+        }
+
+        private static List<Room> RemoveDepartedGuests()
+        {
+            DateTime departureDate = DateTime.Now; 
+
+            var filter = Builders<Guest>.Filter.Lt("DepartureDate", departureDate);
+            List<Guest> guests = GuestCollection.Find(filter).ToList();
+            List<Room> allRooms = GetFullListOfRooms();
+
+            if (guests.Count == 0)
+            {
+                return allRooms; //no valid guests found, continue as normal
+            }
+
+            GuestCollection.DeleteMany(filter); //remove from guest collection
+
+            MessageBox.Show($"{guests.Count} guests have departed, and have been removed from the app.",
+                            "Guests were removed.",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+            
+            for (int i = 0; i < guests.Count; i++)
+            {
+                Guest checkedGuest = guests[i];
+                Room? roomWithGuest = allRooms.FirstOrDefault(room => room.Guests.Any(guest => guest._id == checkedGuest._id));
+                if (roomWithGuest != null)
+                {
+                    Debug.WriteLine($"Guest found in room {roomWithGuest.Id}");
+                    if (roomWithGuest.RemoveGuest(checkedGuest)) //remove from the granular room list
+                    {
+                        Debug.Write("Guest removed successfully.");
+                    }
+                    else
+                    {
+                        Debug.WriteLine("ERROR: Guest removal unsuccessful!");
+                    }
+                }
+            }
+
+            return allRooms;
         }
 
         public static BsonDocument GetHotel()
@@ -51,6 +93,11 @@ namespace h1
 
         public static void StoreRooms(List<Room> rooms)
         {
+            if (rooms == null)
+            {
+                throw new NullReferenceException();
+            }
+
             RemoveRooms();
 
             foreach (var room in rooms)
@@ -61,7 +108,13 @@ namespace h1
 
         private static void RemoveRooms() => HotelRoomCollection.DeleteMany(FilterDefinition<Room>.Empty);
 
-        public static List<Guest> GetGuests() => GuestCollection.Find(new BsonDocument()).ToList();
+        public static List<Guest> GetGuests()
+        {
+            var a = GuestCollection.Find(new BsonDocument()).ToList();
+            StoreRooms(RemoveDepartedGuests());
+
+            return a;
+        }
 
         public static void StoreGuest(Guest guest) => GuestCollection.InsertOne(guest);
 

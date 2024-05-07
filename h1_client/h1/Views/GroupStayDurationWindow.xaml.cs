@@ -15,32 +15,12 @@ using System.Windows.Shapes;
 
 namespace h1.Views
 {
-    /// <summary>
-    /// Interaction logic for GroupStayDurationWindow.xaml
-    /// </summary>
-    /// 
-
-
-
-    public class DateSelectedEventArgs : EventArgs //todo: extract this to its own file
-    {
-        public DateTime Arrival { get; }
-        public DateTime Departure { get; }
-
-        public DateSelectedEventArgs(DateTime arrival, DateTime departure)
-        {
-            Arrival = arrival;
-            Departure = departure;
-        }
-    }
-
     public partial class GroupStayDurationWindow : Window
     {
         public DateTime arrival { get; set; }
         public DateTime departure { get; set; }
 
         public Action<DateTime, DateTime> PassDatesEvent;
-
 
         public GroupStayDurationWindow()
         {
@@ -71,7 +51,7 @@ namespace h1.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            arrival = Arrival_picker.SelectedDate ?? DateTime.Now; //todo: handle these defaults
+            arrival = Arrival_picker.SelectedDate ?? DateTime.Now;
             departure = Departure_picker.SelectedDate ?? DateTime.Now.AddDays(1);
 
             if (PassDatesEvent != null) 

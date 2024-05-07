@@ -53,17 +53,11 @@ namespace h1.Views
 
         private double GetOccupancyDecimalValue(List<Room> inputList)
         {
-            int totalCapacity = 0, totalOccupancy = 0;
-
-            foreach (var room in inputList)
-            {
-                totalCapacity += room.Capacity;
-                totalOccupancy += room.Occupancy;
-            }
+            var (occupancy, capacity) = DBMethods.GetHotelOccupancyAndCapacity();
 
             try
             {
-                return Math.Round((double)totalOccupancy / totalCapacity, 2);
+                return Math.Round((double)occupancy / capacity, 2);
             }
             catch (DivideByZeroException ex)
             {

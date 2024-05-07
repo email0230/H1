@@ -76,16 +76,17 @@ namespace h1.Models
 
 		public bool RemoveGuest(Guest guest)
 		{
-			if (Guests.Contains(guest))
-			{
-				Guests.Remove(guest);
-				return true; // Guest removed successfully
-			}
-			else
-			{
-				return false; // Guest not found in the room
-			}
-		}
+            Guest? guestToRemove = Guests.FirstOrDefault(g => g._id == guest._id);
+            if (guestToRemove != null)
+            {
+                Guests.Remove(guestToRemove);
+                return true; // Guest removed successfully
+            }
+            else
+            {
+                return false; // Guest not found in the room
+            }
+        }
 
 		public List<Guest> GetGuests()
 		{

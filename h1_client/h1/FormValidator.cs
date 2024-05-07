@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Accessibility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -65,12 +66,40 @@ namespace h1
 				return false;
             }
 
-            return true; // All validation checks pass
+            return true;
 		}
 
-        private static void ShowNoRoomsErrorPrompt()
-        {
-            MessageBox.Show("A hotel must have some rooms.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-    }
+		private static void ShowNoRoomsErrorPrompt()
+		{
+			MessageBox.Show("A hotel must have some rooms.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		}
+
+		public static bool ValidateGroupsFormData(bool arrHasValue, bool depHasValue, System.Collections.ObjectModel.ObservableCollection<Models.Group> formData) //checking before sending to solver
+		{
+            //check if length of stay determined
+            if (!arrHasValue || !depHasValue)
+            {
+                MessageBox.Show("Please determine the length of stay.", "Date Selection Required", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+			int guestCount = 0;
+            foreach (var group in formData)
+            {
+                guestCount += group.Guests.Count(); //todo: check if count is updated dynamically, and not always 3 (should be ok though)
+            }
+
+            //check if the incoming guests wont put the hotel over capacity
+            var (occupancy, capacity) = DBMethods.GetHotelOccupancyAndCapacity();
+
+			if (occupancy + guestCount > capacity)
+			{
+				MessageBox.Show($"Cant add {guestCount} guests, current hotel capacity {occupancy}/{capacity}.", "No vacancy", MessageBoxButton.OK, MessageBoxImage.Error);
+				return false;
+			}
+
+			//all good, continue
+			return true;
+		}
+	}
 }

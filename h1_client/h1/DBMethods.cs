@@ -118,30 +118,6 @@ namespace h1
 
         public static void StoreGuest(Guest guest) => GuestCollection.InsertOne(guest);
 
-        //TODO: find a use for this one, or delete it
-        public static void DeleteGuest(Guest guest)
-        {
-            // Check if the guest has a valid _id
-            if (guest._id == ObjectId.Empty)
-            {
-                // Handle the case where the guest doesn't have a valid _id
-                throw new InvalidOperationException("Guest _id is not valid for deletion.");
-            }
-
-            // Create a filter to find the guest by _id
-            var filter = Builders<Guest>.Filter.Eq(g => g._id, guest._id);
-
-            // Delete the guest from the guest collection
-            DeleteResult result = GuestCollection.DeleteOne(filter);
-
-            // Check if the deletion was successful
-            if (result.DeletedCount == 0)
-            {
-                // Handle the case where the guest was not found for deletion
-                throw new InvalidOperationException($"Guest with _id {guest._id} not found for deletion.");
-            }
-        }
-
         public static void DeleteAllGuests() => GuestCollection.DeleteMany(FilterDefinition<Guest>.Empty);
 
         public static List<Room> GetFullListOfRooms()

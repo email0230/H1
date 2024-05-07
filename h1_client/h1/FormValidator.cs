@@ -86,7 +86,7 @@ namespace h1
 			int guestCount = 0;
             foreach (var group in formData)
             {
-                guestCount += group.Guests.Count(); //todo: check if count is updated dynamically, and not always 3 (should be ok though)
+                guestCount += group.Guests.Count();
             }
 
             //check if the incoming guests wont put the hotel over capacity

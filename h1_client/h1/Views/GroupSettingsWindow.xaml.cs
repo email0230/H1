@@ -41,7 +41,7 @@ namespace h1.Views
             return false;
         }
 
-        private int GetBiggestRoomCapacity() => DBMethods.GetFullListOfRooms().Max(room => room.Capacity); //todo: maybe deal with the duplicate in roomassignment
+        private int GetBiggestRoomCapacity() => DBMethods.GetFullListOfRooms().Max(room => room.Capacity);
 
         private void TurnOffTogetherCheckbox(Group a)
         {
@@ -51,14 +51,8 @@ namespace h1.Views
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Handle saving changes made in the settings window
-            // You can access the Group object through the DataContext property
             if (DataContext is Group group)
             {
-                // Perform any additional logic or validation if needed
-                // Save changes, update database, etc.
-
-                // Close the window
                 Close();
             }
         }

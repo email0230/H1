@@ -60,7 +60,6 @@ namespace h1.Views
             }
             catch (DivideByZeroException ex)
             {
-                Debug.WriteLine("error! msg: " + ex.Message); //todo: remove this :D
                 return double.NaN;
             }
         }
@@ -89,8 +88,6 @@ namespace h1.Views
 
         private void AssignDatesToGuests(ObservableCollection<Group> formData)
         {
-            //add duration of stay from groupstaywindow to every guest here!
-            //todo: verify wether this always happens before or after validation
             foreach (Group group in formData)
             {
                 foreach (var guest in group.Guests)

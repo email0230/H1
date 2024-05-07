@@ -20,14 +20,12 @@ namespace h1.Models
         {
             get
             {
-                //TODO: simplify/cut out useless checks
-                if (this.Guests?.Any() == true)
+                if (Guests != null || Guests.Count > 0)
                 {
-                    return this.Guests.Count();
+                    return Guests.Count();
                 }
                 else
                 {
-                    // Default occupancy if no Guests property or empty list
                     return _occupancy;
                 }
             }

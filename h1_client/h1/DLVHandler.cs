@@ -100,7 +100,7 @@ namespace h1
 
                     process.WaitForExit();
 
-                    //todo: this one might need to go for release
+                    //for debugging
                     int exitCode = process.ExitCode;
                     Debug.WriteLine($"Process exited with code {exitCode}");
                 }

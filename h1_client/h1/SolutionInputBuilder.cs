@@ -190,8 +190,6 @@ namespace h1
             }
         }
 
-        //todo: handle guests coming in over capacity
-
         public static string BuildRooms(List<Room> rooms)
         {
             StringBuilder output = new StringBuilder();

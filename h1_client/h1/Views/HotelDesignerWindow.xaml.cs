@@ -112,7 +112,7 @@ namespace h1.Views
             {
                 DBMethods.StoreHotel(hotel);
                 
-                if (PromptForRoomEdit()) //todo: move this later, after any potential errors would pop up
+                if (PromptForRoomEdit())
                     SummonRoomList();
                 Close();
             }

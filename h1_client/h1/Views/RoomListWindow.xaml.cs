@@ -36,7 +36,7 @@ namespace h1.Views
 
         //todo: make sure this looks alright after removing the debug buttons row
 
-        private void GetHotelOccupancyStatus() //duplicate of the one in assignment window TODO: make this better :)
+        private void GetHotelOccupancyStatus()
         {
             var hotelRoomsFull = DBMethods.GetFullListOfRooms();
             double percentage = Math.Truncate(GetOccupancyDecimalValue(hotelRoomsFull) * 100);

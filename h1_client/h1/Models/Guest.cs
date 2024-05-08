@@ -42,10 +42,9 @@ namespace h1.Models
         public DateTime? DepartureDate { get; set; }
         //IMPORTANT: two datetime propertie above are absolutely neccessary, change it to requires instead of nullable after testing is done!
         public int? AssignedRoomNumber { get; set; }
-        //other properties might also need to use onpropchanged, but only if they are meant to be displayed in a UI
 
-        #region Less important properties
-        public int? Phone { get; set; }
+        #region Less important properties todo: they are unused and you should strongly consider removing those
+        public int? Phone { get; set; } 
         public string? Email { get; set; }
         public DateTime? DateOfBirth { get; set; }
         #endregion

@@ -27,7 +27,7 @@ namespace h1.Views
             group = inputGroup;
             if (CheckIfGroupSizeAboveMax(group))
             {
-                TurnOffTogetherCheckbox(group); //check if this instatiates properly
+                TurnOffTogetherCheckbox(group);
             }
         }
 

@@ -31,7 +31,6 @@ namespace h1
             StringBuilder output = new StringBuilder();
             output.AppendLine("% AUTOMATICALLY GENERATED | GUEST GROUPS\n");
 
-            // Append the outputs directly to the StringBuilder
             output.AppendLine(BuildGroups(inputGroupCollection));
             output.AppendLine(BuildGroupProps(inputGroupCollection));
             output.AppendLine(BuildTogetherStatements(inputGroupCollection));
@@ -145,7 +144,6 @@ namespace h1
         #region room handling
         public static string ParseRoomsToString(List<Room> rooms)
         {
-
             //RemoveOccupiedRooms();
 
             StringBuilder output = new StringBuilder();
@@ -157,7 +155,7 @@ namespace h1
             return output.ToString();
         }
 
-        public static void RemoveOccupiedRooms()
+        public static void RemoveOccupiedRooms() //todo: remove this if youre not gonna use it
         {
             throw new NotImplementedException();
         }
@@ -203,15 +201,6 @@ namespace h1
 
             return output.ToString();
         }
-
-        //private static bool RoomIsOccupied(Room room)
-        //{
-        //    if (room.Guests.Count != 0)
-        //    {
-        //        return false;
-        //    }
-        //    return true;
-        //}
         #endregion
 
         public string GenerateQuery(ObservableCollection<Group> input, List<Room> rooms)

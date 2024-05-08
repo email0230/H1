@@ -58,13 +58,6 @@ namespace h1.Models
             GroupName = groupName;
         }
 
-        //public bool CheckIfGuestExists(Guest input)
-        //{
-        //    foreach (Guest g in Guests)
-        //        if (input == g)
-        //            return true;
-        //    return false;
-        //}
         public bool CheckIfGuestExists(Guest input)
         {
             return Guests.Any(g => g == input);

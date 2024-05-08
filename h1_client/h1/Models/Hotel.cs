@@ -76,21 +76,17 @@ namespace h1.Models
 
 			return counts;
 		}
+
         public Room FindRoomById(int roomId)
         {
-            // Iterate through all rooms in the hotel
             foreach (var room in Rooms)
             {
-                // Check if the current room's RoomId matches the given roomId
                 if (room.Id == roomId)
                 {
-                    // Return the room if found
                     return room;
                 }
             }
-
-            // Return null if no room with the specified roomId is found
-            return null;
+            return null; //todo: handle this
         }
     }
 

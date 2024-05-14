@@ -96,6 +96,11 @@ namespace h1.Models
 			return Guests.Count >= 1;
 		}
 
+        public void ResetIncrement()
+        {
+            INCREMENT = 1;
+        }
+
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

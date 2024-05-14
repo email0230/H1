@@ -58,7 +58,7 @@ namespace h1.Views
                 SubmitHotelForm();
             }
         }
-        private List<Room> GetRooms()
+        private List<Room> BuildBlankRooms()
         {
             string roomsFor1Person = RoomsFor1PersonTextBox.Text;
             string roomsFor2Persons = RoomsFor2PersonsTextBox.Text;
@@ -66,12 +66,12 @@ namespace h1.Views
 
             List<Room> roomsList = new List<Room>();
 
+            ResetRoomIndexing();
+
             if (int.TryParse(roomsFor1Person, out int rooms1Person) &&
                 int.TryParse(roomsFor2Persons, out int rooms2Persons) &&
                 int.TryParse(roomsFor3Persons, out int rooms3Persons))
             {
-                
-
                 for (int i = 0; i < rooms1Person; i++)
                 {
                     Room room = new Room { Capacity = 1 };
@@ -96,14 +96,18 @@ namespace h1.Views
             return roomsList;
         }
 
-      
+        private void ResetRoomIndexing()
+        {
+            Room a = new Room();
+            a.ResetIncrement();
+        }
 
         private void SubmitHotelForm()
         {
             string name = HotelNameTextBox.Text;
             hotel.Name = name;
             hotel.LastModifiedDate = DateTime.Now;
-            hotel.Rooms = GetRooms();
+            hotel.Rooms = BuildBlankRooms();
 
             if (FormValidator.ValidateHotelForm(name,
                                                 RoomsFor1PersonTextBox.Text,

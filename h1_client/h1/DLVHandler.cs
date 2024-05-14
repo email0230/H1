@@ -12,7 +12,6 @@ namespace h1
         #region Constants
         private static readonly string QUERY_FILEPATH = @"dlvStuff/assets/query.dl";
         private static readonly string SOLVER_FILEPATH = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"../", @"../", @"../", @"Assets\", "Solver", "dlv-2.1.2-win64.exe"));
-        private static readonly string FULL_SOLVER_FILEPATH = @"C:\Users\email0230\Documents\GitHub\h1\H1\h1_client\h1\Assets\Solver\dlv-2.1.2-win64.exe"; //todo: consider removing this one
         private static readonly string SOLUTION_FILEPATH = @"dlvStuff/target/solver_output.txt";
         #endregion
 

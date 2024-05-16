@@ -21,6 +21,7 @@ namespace h1.Views
         public DateTime departure { get; set; }
 
         public Action<DateTime, DateTime> PassDatesEvent;
+        private bool ValidDateSelected = true;
 
         public GroupStayDurationWindow()
         {
@@ -46,7 +47,28 @@ namespace h1.Views
 
             TimeSpan difference = departureDate - arrivalDate;
 
-            Days_TextBlock.Text = $"This group will stay for {difference.TotalDays} days";
+            if (difference.TotalDays < 1 || departureDate < DateTime.Now)
+            {
+                Days_TextBlock.Foreground = new SolidColorBrush(Colors.Red); // Sets the text color to red
+                Days_TextBlock.Text = $"Invalid stay duration!";
+                ValidDateSelected = false;
+            }
+            else
+            {
+                Days_TextBlock.Foreground = new SolidColorBrush(Colors.Black);
+                Days_TextBlock.Text = $"This group will stay for {difference.TotalDays} days";
+                ValidDateSelected = true;
+            }
+
+            if (!ValidDateSelected)
+            {
+                AcceptButton.IsEnabled = false;
+            }
+            else
+            {
+                AcceptButton.IsEnabled = true;
+            }
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

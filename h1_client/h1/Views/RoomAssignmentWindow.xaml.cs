@@ -82,6 +82,10 @@ namespace h1.Views
                 AssignDatesToGuests(formData);
                 BuildSolutionAndStore(formData);
 
+                MessageBox.Show($"Guest Assignment successful!",
+                                "Success",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information);
                 Close();
             }
         }

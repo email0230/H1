@@ -23,17 +23,6 @@ namespace h1.Models
             }
         }
 
-        private bool myProperty; //todo: likely to get removed soon
-        public bool MyProperty
-        {
-            get { return myProperty; }
-            set
-            {
-                myProperty = value;
-                OnPropertyChanged();
-            }
-        }
-
         private string? groupName;
         public string? GroupName
         {

@@ -141,7 +141,6 @@ namespace h1.Views
                 {
                     if (kvp.Value == guestNumber)
                     {
-                        // The guest with the matching numerical representation is found
                         AssignGuest(kvp.Key, roomId);
                         break;
                     }

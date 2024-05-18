@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace h1.Models
 {
@@ -58,6 +59,10 @@ namespace h1.Models
             }
 			catch (ArgumentNullException)
             {
+                MessageBox.Show($"Hotel was removed!",
+                    "Retard!",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information); //todo: remove this messagebox, of course
                 counts[0] = 1;
                 counts[1] = 1;
                 counts[2] = 1;
@@ -68,7 +73,7 @@ namespace h1.Models
 
         public Room FindRoomById(int roomId)
         {
-            foreach (var room in Rooms)
+            foreach (var room in Rooms) //todo: use list operators like in other places in code
             {
                 if (room.Id == roomId)
                 {

@@ -51,8 +51,6 @@ namespace h1.Views
             GetHotelOccupancyStatus();
         }
 
-
-
         private void GetHotelOccupancyStatus()
         {
             var hotelRoomsFull = DBMethods.GetFullListOfRooms();

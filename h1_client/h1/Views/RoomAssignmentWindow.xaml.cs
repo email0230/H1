@@ -126,7 +126,7 @@ namespace h1.Views
         private void SaveDataToDB()
         {
             DBMethods.StoreHotel(hotel);
-            var rooms = hotel.Rooms;
+            var rooms = DBMethods.GetFullListOfRooms();
             DBMethods.StoreRooms(rooms);
         }
 

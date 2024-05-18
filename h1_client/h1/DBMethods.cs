@@ -38,17 +38,23 @@ namespace h1
         public static void StoreHotel(string jsonInput)
         {
             HotelDataCollection.DeleteMany(FilterDefinition<BsonDocument>.Empty);
-            RemoveRooms(); //placed here as an attempt to remove bleeding occupancy over resets
-            StoreRooms(RemoveDepartedGuests());
-            
+            //var a = HotelRoomCollection;
 
+            //placed here as an attempt to remove bleeding occupancy over resets
+
+            List<Room> roomsCorrected = RemoveDepartedGuests();
+
+            RemoveRooms();
+
+            StoreRooms(roomsCorrected);
+            
             BsonDocument bsonDocument = BsonDocument.Parse(jsonInput);
             HotelDataCollection.InsertOne(bsonDocument);
         }
 
         private static List<Room> RemoveDepartedGuests()
         {
-            DateTime departureDate = DateTime.Now.AddDays(2);
+            DateTime departureDate = DateTime.Now.AddDays(2); //todo: change this one
 
             var filter = Builders<Guest>.Filter.Lt("DepartureDate", departureDate);
             List<Guest> guests = GuestCollection.Find(filter).ToList();
@@ -58,17 +64,15 @@ namespace h1
             {
                 return allRooms; //no valid guests found, continue as normal
             }
-
-            GuestCollection.DeleteMany(filter); //remove from guest collection
-
-            MessageBox.Show($"{guests.Count} guests have departed, and have been removed from the app.",
-                            "Guests were removed.",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
             
             for (int i = 0; i < guests.Count; i++)
             {
                 Guest checkedGuest = guests[i];
+                foreach (var item in allRooms)
+                {
+                    Debug.WriteLine(item.Id);
+                }
+
                 Room? roomWithGuest = allRooms.FirstOrDefault(room => room.Guests.Any(guest => guest._id == checkedGuest._id));
                 if (roomWithGuest != null)
                 {
@@ -84,6 +88,12 @@ namespace h1
                 }
             }
 
+            MessageBox.Show($"{guests.Count} guests have departed, and have been removed from the app.",
+                            "Guests were removed.",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+
+            GuestCollection.DeleteMany(filter); //remove from guest collection
             return allRooms;
         }
 

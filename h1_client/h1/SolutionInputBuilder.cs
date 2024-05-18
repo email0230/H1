@@ -155,11 +155,6 @@ namespace h1
             return output.ToString();
         }
 
-        public static void RemoveOccupiedRooms() //todo: remove this if youre not gonna use it
-        {
-            throw new NotImplementedException();
-        }
-
         public static string BuildRoomProps(List<Room> rooms)
         {
             StringBuilder output = new StringBuilder();

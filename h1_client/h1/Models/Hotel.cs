@@ -42,7 +42,7 @@ namespace h1.Models
 
 		private static Hotel GetHotelStateFromDB()
 		{
-			BsonDocument hotelString = DBMethods.GetHotel(); //todo: add async to db calls?
+			BsonDocument hotelString = DBMethods.GetHotel();
             Hotel a = hotelString != null ? BsonSerializer.Deserialize<Hotel>(hotelString) : new Hotel();
 
             return a;
@@ -59,10 +59,6 @@ namespace h1.Models
             }
 			catch (ArgumentNullException)
             {
-                MessageBox.Show($"Hotel was removed!",
-                    "Retard!",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information); //todo: remove this messagebox, of course
                 counts[0] = 1;
                 counts[1] = 1;
                 counts[2] = 1;
@@ -71,17 +67,7 @@ namespace h1.Models
 			return counts;
 		}
 
-        public Room FindRoomById(int roomId)
-        {
-            foreach (var room in Rooms) //todo: use list operators like in other places in code
-            {
-                if (room.Id == roomId)
-                {
-                    return room;
-                }
-            }
-            return null; //todo: handle this
-        }
+        public Room? FindRoomById(int id) => Rooms.FirstOrDefault(room => room.Id == id);
     }
 
 }

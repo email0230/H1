@@ -54,7 +54,7 @@ namespace h1
 
         private static List<Room> RemoveDepartedGuests()
         {
-            DateTime departureDate = DateTime.Now.AddDays(2); //todo: change this one
+            DateTime departureDate = DateTime.Now;
 
             var filter = Builders<Guest>.Filter.Lt("DepartureDate", departureDate);
             List<Guest> guests = GuestCollection.Find(filter).ToList();

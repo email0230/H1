@@ -41,38 +41,27 @@ namespace h1.Models
 
 		private static Hotel GetHotelStateFromDB()
 		{
-			BsonDocument hotelString = DBMethods.GetHotel(); //add async to db calls?
-			var a = hotelString != null ? BsonSerializer.Deserialize<Hotel>(hotelString) : null;
-			DebugCheckIfRoomsHaveProps(a);
+			BsonDocument hotelString = DBMethods.GetHotel(); //todo: add async to db calls?
+            Hotel a = hotelString != null ? BsonSerializer.Deserialize<Hotel>(hotelString) : new Hotel();
 
             return a;
 		}
 
-        private static void DebugCheckIfRoomsHaveProps(Hotel? a)
-        {
-            Debug.WriteLine("Debug - displaying room properties");
-            Debug.Indent();
-            foreach (var item in a.Rooms)
-            {
-                Debug.WriteLine($"Room #{item.Id}");
-                Debug.Indent();
-                Debug.WriteLine($"NoiseReduction: {item.NoiseReduction}");
-                Debug.WriteLine($"SecurityFeatures: {item.SecurityFeatures}");
-                Debug.WriteLine($"SmartLighting: {item.SmartLighting}");
-                Debug.WriteLine($"Balcony: {item.Balcony}");
-                Debug.WriteLine($"ModularFurniture: {item.ModularFurniture}");
-                Debug.Unindent();
-            }
-            Debug.Unindent();
-        }
-
         public int[] GetHotelRoomCounts()
 		{
 			int[] counts = new int[3];
-
-			counts[0] = _instance.Rooms.Count(room => room.Capacity == 1);
-			counts[1] = _instance.Rooms.Count(room => room.Capacity == 2);
-			counts[2] = _instance.Rooms.Count(room => room.Capacity == 3);
+            try //handle first start with no hotel instance active
+            {
+                counts[0] = _instance.Rooms.Count(room => room.Capacity == 1);
+                counts[1] = _instance.Rooms.Count(room => room.Capacity == 2);
+                counts[2] = _instance.Rooms.Count(room => room.Capacity == 3);
+            }
+			catch (ArgumentNullException)
+            {
+                counts[0] = 1;
+                counts[1] = 1;
+                counts[2] = 1;
+            }
 
 			return counts;
 		}

@@ -23,7 +23,7 @@ namespace h1.Models
             }
         }
 
-        private bool myProperty; //likely to get removed soon
+        private bool myProperty; //todo: likely to get removed soon
         public bool MyProperty
         {
             get { return myProperty; }

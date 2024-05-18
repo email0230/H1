@@ -43,7 +43,7 @@ namespace h1.Models
         //IMPORTANT: two datetime propertie above are absolutely neccessary, change it to requires instead of nullable after testing is done!
         public int? AssignedRoomNumber { get; set; }
 
-        #region Less important properties todo: they are unused and you should strongly consider removing those
+        #region Less important properties
         public int? Phone { get; set; } 
         public string? Email { get; set; }
         public DateTime? DateOfBirth { get; set; }

@@ -40,6 +40,7 @@ namespace h1
             HotelDataCollection.DeleteMany(FilterDefinition<BsonDocument>.Empty);
             RemoveRooms(); //placed here as an attempt to remove bleeding occupancy over resets
             StoreRooms(RemoveDepartedGuests());
+            
 
             BsonDocument bsonDocument = BsonDocument.Parse(jsonInput);
             HotelDataCollection.InsertOne(bsonDocument);
@@ -47,7 +48,7 @@ namespace h1
 
         private static List<Room> RemoveDepartedGuests()
         {
-            DateTime departureDate = DateTime.Now;
+            DateTime departureDate = DateTime.Now.AddDays(2);
 
             var filter = Builders<Guest>.Filter.Lt("DepartureDate", departureDate);
             List<Guest> guests = GuestCollection.Find(filter).ToList();

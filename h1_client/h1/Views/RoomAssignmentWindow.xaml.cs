@@ -47,6 +47,14 @@ namespace h1.Views
             var hotelRoomsFull = DBMethods.GetFullListOfRooms();
             double percentage = Math.Truncate(GetOccupancyDecimalValue(hotelRoomsFull) * 100);
             
+            if (double.IsNaN(percentage))
+            {
+                MessageBox.Show($"Warning! Rooms not defined properly!\nReturn to Room list to configure them.",
+                                "Rooms undefined",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
+            }
+
             OccupancyTextBlock.Text = $"Occupancy: {percentage}%"; 
         }
 
@@ -186,10 +194,12 @@ namespace h1.Views
         {
             if (sender is Button removeButton && removeButton.DataContext is Group groupToRemove)
             {
-                if (MessageBox.Show($"Are you sure you want to remove the group '{groupToRemove.GroupName}'?", "Confirm Removal", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                if (MessageBox.Show($"Are you sure you want to remove the group '{groupToRemove.GroupName}'?",
+                                    "Confirm Removal",
+                                    MessageBoxButton.YesNo,
+                                    MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
                     Groups.Remove(groupToRemove);
-                    DebugPrintGroupsVarStatus();
                 }
             }
         }
@@ -271,7 +281,7 @@ namespace h1.Views
         private static void DisableAddButton(object sender)
         {
             ToolTipService.SetShowOnDisabled((Button)sender, true);
-            ((Button)sender).ToolTip = "No bueno. Max group size reached!";
+            ((Button)sender).ToolTip = "Max group size reached! Turn off KeepTogether to add more guests to this group!";
 
             // Disable the button
             ((Button)sender).IsEnabled = false;
@@ -286,9 +296,9 @@ namespace h1.Views
             selectedGroup.Guests.Add(newGuest);
         }
 
-        private Group GetSelectedGroup()
+        private Group? GetSelectedGroup()
         {
-            Group selectedGroup = null;
+            Group? selectedGroup = null;
 
             if (listViewElement.SelectedItem != null)
             {
@@ -346,78 +356,6 @@ namespace h1.Views
             return null;
         }
         #endregion
-
-        #region debug
-        //TODO: delete these before release
-
-        private void DebugCheckIfRoomsInHotelHaveGuests(List<Room> input)
-        {
-            foreach (var room in input)
-            {
-                List<Guest> aaa = room.GetGuests();
-
-                Debug.WriteLine($"DISPLAYING ROOM NR {room.Id}");
-                Debug.Indent();
-                foreach (var item in aaa)
-                {
-                    Debug.WriteLine($"found a guest: {item.LastName} {item.FirstName}");
-                }
-                Debug.Unindent();
-            }
-        }
-
-        private void DebugPrintGroupsVarStatus()
-        {
-            Debug.WriteLine("========================debuggin=======================");
-            Debug.WriteLine("ACTIVE GROUPS WITHIN GROUPS - OBSERVABLE COLLECTION");
-            Debug.Indent();
-            foreach (var item in Groups)
-            {
-                Debug.WriteLine($"Amount of guests in group named \"{item.GroupName}\": {item.Guests.Count}");
-                Debug.Indent();
-                foreach (var g in item.Guests)
-                {
-                    Debug.WriteLine($"Guest: {g.FirstName}, {g.LastName}");
-                }
-                Debug.Unindent();
-            }
-            Debug.Unindent();
-            Debug.WriteLine("========================endebuggin=====================");
-        }
-
-        private void DebugButtonClicked(object sender, RoutedEventArgs e) //good candidate to get trashed soonish
-        {
-            var a = Groups;
-            ObservableCollection<Guest>? b = null;
-            foreach (var group in a)
-            {
-                group.Guests = b;
-                string? test = group.ToString();
-            }
-        }
-
-        private void DebugPrintGroupProperties()
-        {
-            Debug.WriteLine("Printing group properties:");
-            Debug.Indent();
-            foreach (var item in Groups)
-            {
-                Debug.WriteLine($"{item.GroupName}");
-                Debug.Indent();
-                Debug.WriteLine($"GroupToStayTogether: {item.WantGroupToStayTogether}");
-                Debug.WriteLine($"NoiseReduction: {item.WantNoiseReduction}");
-                Debug.WriteLine($"SecurityFeatures: {item.WantSecurityFeatures}");
-                Debug.WriteLine($"SmartLighting: {item.WantSmartLighting}");
-                Debug.WriteLine($"Balcony: {item.WantBalcony}");
-                Debug.WriteLine($"ModularFurniture: {item.WantModularFurniture}");
-                Debug.Unindent();
-            }
-            Debug.Unindent();
-        }
-
-        #endregion
-
-        
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {

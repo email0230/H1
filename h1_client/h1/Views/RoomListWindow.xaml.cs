@@ -30,11 +30,28 @@ namespace h1.Views
         public RoomListWindow()
         {
             InitializeComponent();
-            RoomsListView.ItemsSource = hotel.Rooms;
+            List<Room> rooms;
+
+            try
+            {
+                rooms = DBMethods.GetFullListOfRooms();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                rooms = null;
+            }
+
+            if (rooms == null || rooms.Count == 0)
+            {
+                rooms = hotel.Rooms;
+            }
+
+            RoomsListView.ItemsSource = rooms ?? new List<Room>();
             GetHotelOccupancyStatus();
         }
 
-        //todo: make sure this looks alright after removing the debug buttons row
+
 
         private void GetHotelOccupancyStatus()
         {
@@ -67,8 +84,6 @@ namespace h1.Views
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            DebugPrintRoomStatus();
-
             hotel.LastModifiedDate = DateTime.Now;
 
             if (true)
@@ -88,42 +103,5 @@ namespace h1.Views
                 settingsWindow.ShowDialog();
             }
         }
-
-        //all these two functions below are for, is for them to be put in a breakpoint, so i can see their objects directly, and check if everything is in order
-        #region debug
-        //TODO: delete these before release
-        private void debug_rooms_breakpoint_button_Click(object sender, RoutedEventArgs e)
-        {
-            var rooms = hotel.Rooms;
-        }
-
-        private void debug_guests_breakpoint_button_Click(object sender, RoutedEventArgs e)
-        {
-            var guests = DBMethods.GetGuests();
-        }
-
-        private void debug_test_button_3_Click(object sender, RoutedEventArgs e)
-        {
-            DebugPrintRoomStatus();
-        }
-
-        private void DebugPrintRoomStatus()
-        {
-            Debug.WriteLine("Debug - displaying room properties");
-            Debug.Indent();
-            foreach (var item in hotel.Rooms)
-            {
-                Debug.WriteLine($"Room #{item.Id}");
-                Debug.Indent();
-                Debug.WriteLine($"NoiseReduction: {item.NoiseReduction}");
-                Debug.WriteLine($"SecurityFeatures: {item.SecurityFeatures}");
-                Debug.WriteLine($"SmartLighting: {item.SmartLighting}");
-                Debug.WriteLine($"Balcony: {item.Balcony}");
-                Debug.WriteLine($"ModularFurniture: {item.ModularFurniture}");
-                Debug.Unindent();
-            }
-            Debug.Unindent();
-        } 
-        #endregion
     }
 }

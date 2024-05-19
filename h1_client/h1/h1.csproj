@@ -10,6 +10,17 @@
   <ItemGroup>
     <None Remove="Assets\baseline_face_black_24dp.png" />
     <None Remove="Assets\baseline_group_black_24dp.png" />
+    <None Remove="Assets\Solver\dlv-2.1.2-win64.exe" />
+    <None Remove="Assets\Text\dlvModel.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Solver\dlv-2.1.2-win64.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Text\dlvModel.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

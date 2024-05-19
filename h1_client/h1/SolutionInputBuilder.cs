@@ -6,13 +6,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace h1
 {
     internal class SolutionInputBuilder
     {
         #region Constants
-        private static readonly string PROJECT_ROOT = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..");
+        private static readonly string PROJECT_ROOT = Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
         private static readonly string MODEL_FILEPATH = Path.Combine(PROJECT_ROOT, "Assets", "Text", "dlvModel.txt");
         private static readonly int TOGETHER_RULE_WEIGHT = 100;
         private static readonly int NO_TOGETHER_RULE_WEIGHT = 1;

@@ -114,6 +114,7 @@ namespace h1.Views
                                                 RoomsFor2PersonsTextBox.Text,
                                                 RoomsFor3PersonsTextBox.Text))
             {
+                DBMethods.RemoveRooms(); //purge collection on hotel restart
                 DBMethods.StoreHotel(hotel);
                 
                 if (PromptForRoomEdit())

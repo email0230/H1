@@ -38,9 +38,6 @@ namespace h1
         public static void StoreHotel(string jsonInput)
         {
             HotelDataCollection.DeleteMany(FilterDefinition<BsonDocument>.Empty);
-            //var a = HotelRoomCollection;
-
-            //placed here as an attempt to remove bleeding occupancy over resets
 
             List<Room> roomsCorrected = RemoveDepartedGuests();
 
@@ -68,10 +65,6 @@ namespace h1
             for (int i = 0; i < guests.Count; i++)
             {
                 Guest checkedGuest = guests[i];
-                foreach (var item in allRooms)
-                {
-                    Debug.WriteLine(item.Id);
-                }
 
                 Room? roomWithGuest = allRooms.FirstOrDefault(room => room.Guests.Any(guest => guest._id == checkedGuest._id));
                 if (roomWithGuest != null)
@@ -117,7 +110,7 @@ namespace h1
             }
         }
 
-        private static void RemoveRooms() => HotelRoomCollection.DeleteMany(FilterDefinition<Room>.Empty);
+        public static void RemoveRooms() => HotelRoomCollection.DeleteMany(FilterDefinition<Room>.Empty);
 
         public static List<Guest> GetGuests()
         {

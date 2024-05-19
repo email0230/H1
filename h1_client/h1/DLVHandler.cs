@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Windows;
 
 namespace h1
 {
@@ -11,8 +12,11 @@ namespace h1
     {
         #region Constants
         private static readonly string QUERY_FILEPATH = @"dlvStuff/assets/query.dl";
+        private static readonly string QUERY_FILEPATH2 = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"Assets\", "query.dl"));
         private static readonly string SOLVER_FILEPATH = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"../", @"../", @"../", @"Assets\", "Solver", "dlv-2.1.2-win64.exe"));
+        private static readonly string SOLVER_FILEPATH2 = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"Assets\", "Solver", "dlv-2.1.2-win64.exe"));
         private static readonly string SOLUTION_FILEPATH = @"dlvStuff/target/solver_output.txt";
+        private static readonly string SOLUTION_FILEPATH2 = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"Assets\", "solver_output.txt"));
         #endregion
 
         private static void CheckIfFileExists(string path)
@@ -24,15 +28,28 @@ namespace h1
         }
         public static List<Tuple<int, int>> GetSolutionFromSolver(string query)
         {
+            string query_path_variable = QUERY_FILEPATH;
             CheckIfFileExists(QUERY_FILEPATH);
 
+            if (!File.Exists(QUERY_FILEPATH))
+            {
+                query_path_variable = QUERY_FILEPATH2;
+            }
+
             //save query to disk so dlv can read it
-            File.WriteAllText(QUERY_FILEPATH, query);
+            File.WriteAllText(query_path_variable, query);
 
-            string cmd_args = $"--filter=guest_in_room/2 {QUERY_FILEPATH}";
-            StartProcess(SOLVER_FILEPATH, cmd_args, SOLUTION_FILEPATH);
+            string cmd_args = $"--filter=guest_in_room/2 {query_path_variable}";
+            string solution_path = SOLUTION_FILEPATH;
 
-            return InterpretSolution(SOLUTION_FILEPATH);
+            if (!File.Exists(SOLUTION_FILEPATH))
+            {
+                solution_path = SOLUTION_FILEPATH2;
+            }
+
+            StartProcess(SOLVER_FILEPATH, cmd_args, solution_path);
+
+            return InterpretSolution(solution_path);
         }
 
         private static List<Tuple<int, int>> InterpretSolution(string path)
@@ -65,16 +82,26 @@ namespace h1
 
             return pairs;
         }
-
+        
         static void StartProcess(string executablePath, string args, string outputPath) //can be improved tremenodus
         {
+            string path;
+
+            if (!File.Exists(executablePath))
+            {
+                path = SOLVER_FILEPATH2;
+            }
+            else
+            {
+                path = executablePath;
+            }
+
             try
             {
-
-                DebugPaths(executablePath, outputPath);
+                //DebugPaths(path, outputPath);
                 ProcessStartInfo processStartInfo = new ProcessStartInfo
                 {
-                    FileName = executablePath,
+                    FileName = path,
                     Arguments = args,
                     RedirectStandardOutput = true,
                     UseShellExecute = false
@@ -82,9 +109,9 @@ namespace h1
 
                 using (Process process = new Process())
                 {
-                    process.StartInfo = processStartInfo;
+                    process.StartInfo = processStartInfo;  
                     process.Start();
-
+                    
                     using (StreamWriter writer = new StreamWriter(outputPath))
                     {
                         while (!process.StandardOutput.EndOfStream)
@@ -104,17 +131,8 @@ namespace h1
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"An error occurred: {ex.Message}");
                 throw;
             }
-        }
-
-        private static void DebugPaths(string executablePath, string outputPath)
-        {
-            Debug.WriteLine("PATHS AS SEEN IN THE PROCESS RUNNING DLV:");
-            Debug.Indent();
-            Debug.WriteLine($"exe: {executablePath}");
-            Debug.WriteLine($"output: {outputPath}");
         }
     }
 }

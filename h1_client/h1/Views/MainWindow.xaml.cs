@@ -34,12 +34,6 @@ namespace h1
             //DBMethods.DebugMethod();
         }
 
-		private void Button_Click_1(object sender, RoutedEventArgs e)
-		{
-			AddUserWindow addUserWindow = new AddUserWindow();
-			addUserWindow.Show();
-		}
-
 		private void HotelDesignerButton_Click(object sender, RoutedEventArgs e)
 		{
             //check if hotel exists yet

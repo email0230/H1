@@ -26,28 +26,28 @@ namespace h1.Views
     public partial class RoomListWindow : Window
     {
         Hotel hotel = Hotel.GetInstance();
-
+        List<Room> roomsFull = new List<Room>();
         public RoomListWindow()
         {
             InitializeComponent();
-            List<Room> rooms;
+            //List<Room> rooms;
 
             try
             {
-                rooms = DBMethods.GetFullListOfRooms();
+                roomsFull = DBMethods.GetFullListOfRooms();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                rooms = null;
+                roomsFull = null;
             }
 
-            if (rooms == null || rooms.Count == 0)
+            if (roomsFull == null || roomsFull.Count == 0)
             {
-                rooms = hotel.Rooms;
+                roomsFull = hotel.Rooms;
             }
 
-            RoomsListView.ItemsSource = rooms ?? new List<Room>();
+            RoomsListView.ItemsSource = roomsFull ?? new List<Room>();
             GetHotelOccupancyStatus();
         }
 
@@ -83,7 +83,7 @@ namespace h1.Views
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             hotel.LastModifiedDate = DateTime.Now;
-
+            hotel.Rooms = roomsFull;
             if (true)
             {
                 DBMethods.StoreHotel(hotel);

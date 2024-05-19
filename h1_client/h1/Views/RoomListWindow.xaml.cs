@@ -30,7 +30,6 @@ namespace h1.Views
         public RoomListWindow()
         {
             InitializeComponent();
-            //List<Room> rooms;
 
             try
             {

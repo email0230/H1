@@ -134,7 +134,7 @@ namespace h1
 
         public static (int occupancy, int capacity) GetHotelOccupancyAndCapacity()
         {
-            List<Room> rooms = GetFullListOfRooms();
+            List<Room> rooms = Hotel.GetInstance().Rooms;
             int totalCapacity = 0, totalOccupancy = 0;
 
             foreach (var room in rooms)

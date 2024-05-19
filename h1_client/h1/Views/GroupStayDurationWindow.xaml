@@ -15,7 +15,7 @@
             <!-- New row for the readonly text area -->
         </Grid.RowDefinitions>
         <Grid Background="LightGray" Height="30">
-            <TextBlock Text="Title Bar" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock Text="Select dates of stay" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Grid>
 
         <!-- Date Selection Fields -->

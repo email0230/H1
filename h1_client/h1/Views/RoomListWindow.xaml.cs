@@ -82,13 +82,32 @@ namespace h1.Views
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             hotel.LastModifiedDate = DateTime.Now;
-            hotel.Rooms = roomsFull;
+            hotel.Rooms = OverwriteRoomProps(hotel.Rooms, roomsFull);
             if (true)
             {
                 DBMethods.StoreHotel(hotel);
                 DBMethods.StoreRooms(hotel.Rooms);
                 Close();
             }
+        }
+
+        private List<Room> OverwriteRoomProps(List<Room> initial, List<Room> updated)
+        {
+            var updatedDict = updated.ToDictionary(room => room.Id);
+
+            foreach (var room in initial)
+            {
+                if (updatedDict.TryGetValue(room.Id, out var updatedRoom))
+                {
+                    room.NoiseReduction = updatedRoom.NoiseReduction;
+                    room.SecurityFeatures = updatedRoom.SecurityFeatures;
+                    room.SmartLighting = updatedRoom.SmartLighting;
+                    room.Balcony = updatedRoom.Balcony;
+                    room.ModularFurniture = updatedRoom.ModularFurniture;
+                }
+            }
+
+            return initial;
         }
 
         private void RoomSettingsButton_Click(object sender, RoutedEventArgs e)

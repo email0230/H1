@@ -28,12 +28,6 @@ namespace h1
         {
             InitializeComponent();
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //DBMethods.DebugMethod();
-        }
-
 		private void HotelDesignerButton_Click(object sender, RoutedEventArgs e)
 		{
             //check if hotel exists yet
@@ -68,12 +62,5 @@ namespace h1
             RoomListWindow listWindow = new RoomListWindow();
             listWindow.Show();
         }
-
-        private void debugDlvButton_Click(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-
     }
 }
